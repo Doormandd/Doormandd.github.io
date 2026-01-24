@@ -1,0 +1,24 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>技术 - 分类 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/categories/technology/</link>
+        <description>技术 - 分类 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 25 Jan 2025 20:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/categories/technology/" rel="self" type="application/rss+xml" /><item>
+    <title>GIS地理信息系统介绍</title>
+    <link>https://Doormandd.github.io/posts/gis-introduction/</link>
+    <pubDate>Sat, 25 Jan 2025 20:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/gis-introduction/</guid>
+    <description><![CDATA[<p>GIS（Geographic Information System，地理信息系统）是一种用于采集、存储、管理、分析和显示地理空间数据的计算机系统。它将地理数据与属性数据相结合，通过地图、图表和报表等形式直观地展示空间信息。</p>]]></description>
+</item>
+<item>
+    <title>Hugo 技术分享</title>
+    <link>https://Doormandd.github.io/posts/tech-post/</link>
+    <pubDate>Mon, 22 Jan 2024 10:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/tech-post/</guid>
+    <description><![CDATA[<p>这是一篇关于 Hugo 静态网站生成器的技术分享文章。</p>]]></description>
+</item>
+</channel>
+</rss>

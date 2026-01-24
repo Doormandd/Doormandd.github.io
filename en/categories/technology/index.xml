@@ -1,0 +1,24 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Technology - Category - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/en/categories/technology/</link>
+        <description>Technology - Category - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 25 Jan 2025 20:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/en/categories/technology/" rel="self" type="application/rss+xml" /><item>
+    <title>Introduction to Geographic Information Systems (GIS)</title>
+    <link>https://Doormandd.github.io/en/posts/gis-introduction/</link>
+    <pubDate>Sat, 25 Jan 2025 20:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/gis-introduction/</guid>
+    <description><![CDATA[<p>GIS (Geographic Information System) is a computer system designed to capture, store, manage, analyze, and display spatially referenced data. It combines geographic data with attribute data, presenting spatial information intuitively through maps, charts, and reports.</p>]]></description>
+</item>
+<item>
+    <title>Hugo Tech Share</title>
+    <link>https://Doormandd.github.io/en/posts/tech-post/</link>
+    <pubDate>Mon, 22 Jan 2024 10:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/tech-post/</guid>
+    <description><![CDATA[<p>This is a technical sharing article about Hugo static site generator.</p>]]></description>
+</item>
+</channel>
+</rss>
