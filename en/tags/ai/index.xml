@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>AI - Tag - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/en/tags/ai/</link>
+        <description>AI - Tag - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 01 Feb 2025 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/en/tags/ai/" rel="self" type="application/rss+xml" /><item>
+    <title>Andrew Ng: Agent Workflows and Four Main Design Patterns</title>
+    <link>https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/</link>
+    <pubDate>Sat, 01 Feb 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/agent-workflow/01-andrew-ng.jpg" referrerpolicy="no-referrer">
+            </div><p>In this sharing session, Professor Andrew Ng introduced the development trends of Agents and four main Agent design patterns. These design patterns represent significant progress in the field of artificial intelligence and will dramatically expand the capabilities of AI.</p>]]></description>
+</item>
+</channel>
+</rss>

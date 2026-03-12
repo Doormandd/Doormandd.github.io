@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>吴恩达分享：Agent Workflow与四种主流设计模式 - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="吴恩达分享：Agent Workflow与四种主流设计模式">
+  <meta property="og:description" content="在本次分享中，吴恩达教授介绍了Agent（智能代理）的发展趋势，以及四种主要的Agent设计模式。这些设计模式代表了人工智能领域的重要进展，将大幅扩展AI的能力边界。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-01T00:00:00+08:00">
+    <meta property="article:modified_time" content="2025-02-01T00:00:00+08:00">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="Agent">
+    <meta property="article:tag" content="吴恩达">
+    <meta property="article:tag" content="LLM">
+    <meta property="article:tag" content="人工智能">
+    <meta property="article:tag" content="工作流">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="吴恩达分享：Agent Workflow与四种主流设计模式">
+  <meta name="twitter:description" content="在本次分享中，吴恩达教授介绍了Agent（智能代理）的发展趋势，以及四种主要的Agent设计模式。这些设计模式代表了人工智能领域的重要进展，将大幅扩展AI的能力边界。">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/" /><link rel="prev" href="https://Doormandd.github.io/posts/gis-introduction/" /><link rel="next" href="https://Doormandd.github.io/posts/yolov8-phone-holder-detection/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "吴恩达分享：Agent Workflow与四种主流设计模式",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/posts\/agent-workflow-andrew-ng\/"
+        },"genre": "posts","keywords": "AI, Agent, 吴恩达, LLM, 人工智能, 工作流","wordcount":  197 ,
+        "url": "https:\/\/Doormandd.github.io\/posts\/agent-workflow-andrew-ng\/","datePublished": "2025-02-01T00:00:00+08:00","dateModified": "2025-02-01T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="查看所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="按标签浏览文章"> 标签 </a><a class="menu-item" href="/categories/" title="按分类浏览文章"> 分类 </a><a class="menu-item" href="/about/" title="关于本站"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/agent-workflow-andrew-ng/">English</option><option value="/posts/agent-workflow-andrew-ng/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="查看所有文章">所有文章</a><a class="menu-item" href="/tags/" title="按标签浏览文章">标签</a><a class="menu-item" href="/categories/" title="按分类浏览文章">分类</a><a class="menu-item" href="/about/" title="关于本站">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/agent-workflow-andrew-ng/">English</option><option value="/posts/agent-workflow-andrew-ng/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">吴恩达分享：Agent Workflow与四种主流设计模式</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>技术</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-02-01">2025-02-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;约 197 字&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/01-andrew-ng.jpg"
+        data-srcset="/images/agent-workflow/01-andrew-ng.jpg, /images/agent-workflow/01-andrew-ng.jpg 1.5x, /images/agent-workflow/01-andrew-ng.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/01-andrew-ng.jpg"
+        title="/images/agent-workflow/01-andrew-ng.jpg" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景介绍">背景介绍</a></li>
+    <li><a href="#四种主要的agent设计模式">四种主要的Agent设计模式</a>
+      <ul>
+        <li><a href="#1-反思reflection">1. 反思（Reflection）</a></li>
+        <li><a href="#2-工具使用tool-use">2. 工具使用（Tool use）</a></li>
+        <li><a href="#3-规划planning">3. 规划（Planning）</a></li>
+        <li><a href="#4-多agent协作multi-agent-collaboration">4. 多Agent协作（Multi-agent Collaboration）</a></li>
+      </ul>
+    </li>
+    <li><a href="#核心洞察">核心洞察</a>
+      <ul>
+        <li><a href="#1-性能超越模型本身">1. 性能超越模型本身</a></li>
+        <li><a href="#2-需要改变使用习惯">2. 需要改变使用习惯</a></li>
+        <li><a href="#3-代币生成速度的重要性">3. 代币生成速度的重要性</a></li>
+      </ul>
+    </li>
+    <li><a href="#未来展望">未来展望</a>
+      <ul>
+        <li><a href="#总结">总结</a></li>
+        <li><a href="#通向agi的旅程">通向AGI的旅程</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考阅读">参考阅读</a>
+      <ul>
+        <li><a href="#学术论文">学术论文</a></li>
+        <li><a href="#开源项目">开源项目</a></li>
+      </ul>
+    </li>
+    <li><a href="#资源下载">资源下载</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>在本次分享中，吴恩达教授介绍了Agent（智能代理）的发展趋势，以及四种主要的Agent设计模式。这些设计模式代表了人工智能领域的重要进展，将大幅扩展AI的能力边界。</p>
+<h2 id="背景介绍">背景介绍</h2>
+<p>吴恩达教授在中国红杉AI活动上分享了关于Agent的前沿洞察。他指出，与传统使用LLM（大语言模型）的方式不同，Agent的工作流程更加迭代和对话式。这意味着AI不再是简单的一次性输出答案，而是能够思考、反思、修订并逐步完善结果。</p>
+<h2 id="四种主要的agent设计模式">四种主要的Agent设计模式</h2>
+<p>吴恩达介绍了四种关键的Agent设计模式：</p>
+<h3 id="1-反思reflection">1. 反思（Reflection）</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/01-andrew-ng.jpg"
+        data-srcset="/images/agent-workflow/01-andrew-ng.jpg, /images/agent-workflow/01-andrew-ng.jpg 1.5x, /images/agent-workflow/01-andrew-ng.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/01-andrew-ng.jpg"
+        title="/images/agent-workflow/01-andrew-ng.jpg" /></p>
+<p>让Agent利用并优化自己生成的输出。这是<strong>最重要的设计模式</strong>之一。LLM可以查看自己的输出，进行批判，然后修改。</p>
+<p><strong>实际效果</strong>：通过让LLM思考→生成→批判→修订的循环，可以显著提高输出质量。即使使用较旧的模型，通过反思模式也能达到接近最新模型的效果。</p>
+<p><strong>相关研究</strong>：</p>
+<ul>
+<li>Self-Refine: Towards Reflexive Language Models</li>
+<li>Reflexion: Language Agents with Verbal Reinforcement Learning</li>
+<li>OpenAI的o1系列模型已内置此功能</li>
+</ul>
+<h3 id="2-工具使用tool-use">2. 工具使用（Tool use）</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/02-four-design-patterns.jpg"
+        data-srcset="/images/agent-workflow/02-four-design-patterns.jpg, /images/agent-workflow/02-four-design-patterns.jpg 1.5x, /images/agent-workflow/02-four-design-patterns.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/02-four-design-patterns.jpg"
+        title="/images/agent-workflow/02-four-design-patterns.jpg" /></p>
+<p>LLM生成代码，调用API进行实际操作。这使得AI能够扩展其能力边界，执行复杂的任务。</p>
+<p><strong>典型应用</strong>：</p>
+<ul>
+<li>网络搜索和信息分析</li>
+<li>图像处理和对象检测</li>
+<li>调用外部API完成任务</li>
+</ul>
+<p><strong>发展历程</strong>：早期工具使用主要集中在计算机视觉领域，因为当时的LLM无法理解图片。现在GPT-4等多模态模型的出现，让工具使用更加广泛和强大。</p>
+<h3 id="3-规划planning">3. 规划（Planning）</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/06-planning-example.jpg"
+        data-srcset="/images/agent-workflow/06-planning-example.jpg, /images/agent-workflow/06-planning-example.jpg 1.5x, /images/agent-workflow/06-planning-example.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/06-planning-example.jpg"
+        title="/images/agent-workflow/06-planning-example.jpg" /></p>
+<p>让Agent处理复杂任务并按计划执行。Agent可以将大任务分解为多个步骤，逐步完成。</p>
+<p><strong>示例</strong>：生成一张图片，要求女孩在读书，姿势与示例图片中的男孩相同，并用语音描述图片。Agent需要：</p>
+<ol>
+<li>确定男孩的姿势</li>
+<li>找到正确的姿势模型</li>
+<li>合成女孩图片</li>
+<li>使用图像检测</li>
+<li>使用文本转语音</li>
+</ol>
+<p><strong>特点</strong>：虽然不总是可靠，但当它工作时效果惊人。失败时Agent可以尝试其他方法，具有自愈能力。</p>
+<h3 id="4-多agent协作multi-agent-collaboration">4. 多Agent协作（Multi-agent Collaboration）</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/07-multiagent-collaboration.jpg"
+        data-srcset="/images/agent-workflow/07-multiagent-collaboration.jpg, /images/agent-workflow/07-multiagent-collaboration.jpg 1.5x, /images/agent-workflow/07-multiagent-collaboration.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/07-multiagent-collaboration.jpg"
+        title="/images/agent-workflow/07-multiagent-collaboration.jpg" /></p>
+<p>多个Agent扮演不同角色合作完成任务。这模拟了真实团队的工作方式。</p>
+<p><strong>性能提升</strong>（Du et al., 2023）：</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>单个Agent</th>
+<th>多Agent协作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Biographies</td>
+<td>66.0%</td>
+<td>73.8%</td>
+</tr>
+<tr>
+<td>MMLU</td>
+<td>63.9%</td>
+<td>71.1%</td>
+</tr>
+<tr>
+<td>Chess move</td>
+<td>29.3%</td>
+<td>45.2%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际应用</strong>：ChatDev项目模拟了软件公司，Agent分别扮演CEO、软件工程师、产品经理、测试员等角色，能够协作开发复杂的软件程序。</p>
+<h2 id="核心洞察">核心洞察</h2>
+<h3 id="1-性能超越模型本身">1. 性能超越模型本身</h3>
+<p><strong>令人惊讶的发现</strong>：使用代理工作流的GPT-3.5，在某些任务上表现优于零样本的GPT-4。</p>
+<p><strong>编码基准测试（HumanEval）</strong>：</p>
+<ul>
+<li>GPT-3.5（零样本）：48%正确率</li>
+<li>GPT-4（零样本）：67.7%正确率</li>
+<li><strong>GPT-3.5（代理工作流）：&gt;67.7%正确率</strong></li>
+</ul>
+<h3 id="2-需要改变使用习惯">2. 需要改变使用习惯</h3>
+<p><strong>从即时反馈到耐心等待</strong>：</p>
+<ul>
+<li>传统网络搜索：期望30分钟内得到响应</li>
+<li>Agent工作流：可能需要几小时甚至更长时间</li>
+</ul>
+<p><strong>建议</strong>：学会把任务委托给AI代理并耐心等待，不要像要求人类一样要求即时反馈。</p>
+<h3 id="3-代币生成速度的重要性">3. 代币生成速度的重要性</h3>
+<p><strong>关键结论</strong>：快速代币生成非常重要。即使在较低质量的LLM上，生成更多代币可以获得与高质量LLM较少代币相当的结果。</p>
+<h2 id="未来展望">未来展望</h2>
+<h3 id="总结">总结</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/08-conclusion.jpg"
+        data-srcset="/images/agent-workflow/08-conclusion.jpg, /images/agent-workflow/08-conclusion.jpg 1.5x, /images/agent-workflow/08-conclusion.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/08-conclusion.jpg"
+        title="/images/agent-workflow/08-conclusion.jpg" /></p>
+<p>吴恩达的四个核心观点：</p>
+<ol>
+<li><strong>任务范围大幅扩展</strong>：因为代理工作流，AI能够完成的任务在未来几年将大幅扩展</li>
+<li><strong>学会委托</strong>：我们习惯于把任务委托给AI代理并耐心等待响应</li>
+<li><strong>速度很重要</strong>：快速代币生成，即使从较低质量的LLM生成更多代币也能得到好的结果</li>
+<li><strong>无需等待新模型</strong>：如果你正在等待GPT-5/Claude 4/Gemini 2.0，可能已经可以通过代理推理在早期模型上获得类似性能</li>
+</ol>
+<h3 id="通向agi的旅程">通向AGI的旅程</h3>
+<p>吴恩达坦言，通往AGI（通用人工智能）的道路感觉更像是一个<strong>旅程而不是一个目的地</strong>。但这四种Agent工作流可能会帮助我们在漫长的旅途中向前迈出一大步。</p>
+<p><strong>技术现实</strong>：这些设计模式并不总是完美工作，有时失败，有时令人惊讶。但技术正在不断进步，每一次改进都让AI变得更加强大。</p>
+<h2 id="参考阅读">参考阅读</h2>
+<h3 id="学术论文">学术论文</h3>
+<ul>
+<li><strong>Gorill</strong>: Large Language Model Connected with Massive APIs, Patil et al. (2023)</li>
+<li><strong>MM-REACT</strong>: Prompting ChatGPT for Multimodal Reasoning and Action, Yang et al. (2023)</li>
+<li><strong>Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</strong>, Wei et al. (2022)</li>
+<li><strong>HuggingGPT</strong>: Solving AI Tasks with ChatGPT and its Friends in Hugging Face, Shen et al. (2023)</li>
+<li><strong>Communicative Agents for Software Development</strong>, Qian et al. (2023)</li>
+<li><strong>AutoGen</strong>: Enabling Next-Gen LLM Applications via Multi-Agent Conversation, Wu et al. (2023)</li>
+</ul>
+<h3 id="开源项目">开源项目</h3>
+<ul>
+<li><strong>ChatDev</strong>: Multi-agent system for software development</li>
+<li><strong>OpenAI o1</strong>: Built-in reflection capability</li>
+<li>各种Agent框架支持工具使用和规划</li>
+</ul>
+<h2 id="资源下载">资源下载</h2>
+<p>📄 <strong><a href="/files/agent-workflow-andrew-ng.pdf" rel="">下载完整PDF版本</a></strong></p>
+<p>PDF包含完整的演讲内容、所有幻灯片和示例代码，适合深入研究和分享。</p>
+<hr>
+<p><strong>特别感谢</strong>：Joaquin Dominguez和John Santerre对数据分析的帮助。</p>
+<p><strong>作者</strong>：Andrew Ng（吴恩达）</p>
+<p><strong>分享日期</strong>：2025年2月1日</p>
+<p><strong>标签</strong>：#AI #Agent #吴恩达 #LLM #人工智能 #工作流</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2025-02-01</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/agent-workflow-andrew-ng/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/" data-title="吴恩达分享：Agent Workflow与四种主流设计模式" data-hashtags="AI,Agent,吴恩达,LLM,人工智能,工作流"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/" data-hashtag="AI"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/" data-title="吴恩达分享：Agent Workflow与四种主流设计模式"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/" data-title="吴恩达分享：Agent Workflow与四种主流设计模式"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/posts/agent-workflow-andrew-ng/" data-title="吴恩达分享：Agent Workflow与四种主流设计模式" data-image="/images/agent-workflow/01-andrew-ng.jpg"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/ai/">AI</a>,&nbsp;<a href="/tags/agent/">Agent</a>,&nbsp;<a href="/tags/%E5%90%B4%E6%81%A9%E8%BE%BE/">吴恩达</a>,&nbsp;<a href="/tags/llm/">LLM</a>,&nbsp;<a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>,&nbsp;<a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/">工作流</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/gis-introduction/" class="prev" rel="prev" title="GIS地理信息系统介绍"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>GIS地理信息系统介绍</a>
+            <a href="/posts/yolov8-phone-holder-detection/" class="next" rel="next" title="YOLOv8手机支架检测项目实战">YOLOv8手机支架检测项目实战<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

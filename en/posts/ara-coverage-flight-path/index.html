@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool">
+  <meta property="og:description" content="Project Overview Ara Coverage Flight Path is a web-based UAV flight path planning tool developed with CesiumJS. It provides an intuitive visualization interface to help users quickly plan efficient flight paths for various aerial photogrammetry and remote sensing applications.
+Core Features 1. ROI Drawing Interactive polygon drawing support Real-time coordinate and area calculation display Flexible editing and adjustment capabilities 2. Intelligent Path Planning Automatic longest flight edge identification Bounding rectangle coverage generation Z-shaped flight path optimization 3.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-03-09T00:00:00+08:00">
+    <meta property="article:modified_time" content="2024-03-09T00:00:00+08:00">
+    <meta property="article:tag" content="CesiumJS">
+    <meta property="article:tag" content="UAV">
+    <meta property="article:tag" content="Aerial Survey">
+    <meta property="article:tag" content="Path Planning">
+    <meta property="article:tag" content="GIS">
+    <meta property="article:tag" content="WebGIS">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool">
+  <meta name="twitter:description" content="Project Overview Ara Coverage Flight Path is a web-based UAV flight path planning tool developed with CesiumJS. It provides an intuitive visualization interface to help users quickly plan efficient flight paths for various aerial photogrammetry and remote sensing applications.
+Core Features 1. ROI Drawing Interactive polygon drawing support Real-time coordinate and area calculation display Flexible editing and adjustment capabilities 2. Intelligent Path Planning Automatic longest flight edge identification Bounding rectangle coverage generation Z-shaped flight path optimization 3.">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" /><link rel="prev" href="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" /><link rel="next" href="https://Doormandd.github.io/en/posts/gis-introduction/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/en\/posts\/ara-coverage-flight-path\/"
+        },"genre": "posts","keywords": "CesiumJS, UAV, Aerial Survey, Path Planning, GIS, WebGIS","wordcount":  723 ,
+        "url": "https:\/\/Doormandd.github.io\/en\/posts\/ara-coverage-flight-path\/","datePublished": "2024-03-09T00:00:00+08:00","dateModified": "2024-03-09T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/" title="View all posts"> Posts </a><a class="menu-item" href="/en/tags/" title="Browse by tags"> Tags </a><a class="menu-item" href="/en/categories/" title="Browse by categories"> Categories </a><a class="menu-item" href="/en/about/" title="About this site"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/ara-coverage-flight-path/" selected>English</option><option value="/posts/ara-coverage-flight-path/">简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="View all posts">Posts</a><a class="menu-item" href="/en/tags/" title="Browse by tags">Tags</a><a class="menu-item" href="/en/categories/" title="Browse by categories">Categories</a><a class="menu-item" href="/en/about/" title="About this site">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/ara-coverage-flight-path/" selected>English</option><option value="/posts/ara-coverage-flight-path/">简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/en/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Technology</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-03-09">2024-03-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;723 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#project-overview">Project Overview</a></li>
+    <li><a href="#core-features">Core Features</a>
+      <ul>
+        <li><a href="#1-roi-drawing">1. ROI Drawing</a></li>
+        <li><a href="#2-intelligent-path-planning">2. Intelligent Path Planning</a></li>
+        <li><a href="#3-professional-parameter-configuration">3. Professional Parameter Configuration</a></li>
+        <li><a href="#4-path-clipping-optimization">4. Path Clipping Optimization</a></li>
+      </ul>
+    </li>
+    <li><a href="#technical-implementation">Technical Implementation</a>
+      <ul>
+        <li><a href="#technology-stack">Technology Stack</a></li>
+        <li><a href="#architecture-design">Architecture Design</a></li>
+      </ul>
+    </li>
+    <li><a href="#application-scenarios">Application Scenarios</a>
+      <ul>
+        <li><a href="#1-agricultural-surveying">1. Agricultural Surveying</a></li>
+        <li><a href="#2-urban-planning">2. Urban Planning</a></li>
+        <li><a href="#3-environmental-monitoring">3. Environmental Monitoring</a></li>
+        <li><a href="#4-infrastructure-inspection">4. Infrastructure Inspection</a></li>
+      </ul>
+    </li>
+    <li><a href="#demo-experience">Demo Experience</a>
+      <ul>
+        <li><a href="#quick-experience-steps">Quick Experience Steps</a></li>
+      </ul>
+    </li>
+    <li><a href="#project-highlights">Project Highlights</a>
+      <ul>
+        <li><a href="#1-professional-geographic-calculations">1. Professional Geographic Calculations</a></li>
+        <li><a href="#2-intuitive-user-interface">2. Intuitive User Interface</a></li>
+        <li><a href="#3-efficient-path-algorithms">3. Efficient Path Algorithms</a></li>
+        <li><a href="#4-open-technical-architecture">4. Open Technical Architecture</a></li>
+      </ul>
+    </li>
+    <li><a href="#technical-challenges-and-solutions">Technical Challenges and Solutions</a>
+      <ul>
+        <li><a href="#1-complex-geometry-calculations">1. Complex Geometry Calculations</a></li>
+        <li><a href="#2-path-optimization-algorithm">2. Path Optimization Algorithm</a></li>
+        <li><a href="#3-user-interaction-experience">3. User Interaction Experience</a></li>
+      </ul>
+    </li>
+    <li><a href="#detailed-feature-description">Detailed Feature Description</a>
+      <ul>
+        <li><a href="#survey-area-drawing-and-management">Survey Area Drawing and Management</a></li>
+        <li><a href="#intelligent-path-generation">Intelligent Path Generation</a></li>
+        <li><a href="#sensor-parameter-calculation">Sensor Parameter Calculation</a></li>
+        <li><a href="#path-clipping-optimization">Path Clipping Optimization</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-plans">Future Plans</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="project-overview">Project Overview</h2>
+<p>Ara Coverage Flight Path is a web-based UAV flight path planning tool developed with CesiumJS. It provides an intuitive visualization interface to help users quickly plan efficient flight paths for various aerial photogrammetry and remote sensing applications.</p>
+<h2 id="core-features">Core Features</h2>
+<h3 id="1-roi-drawing">1. ROI Drawing</h3>
+<ul>
+<li>Interactive polygon drawing support</li>
+<li>Real-time coordinate and area calculation display</li>
+<li>Flexible editing and adjustment capabilities</li>
+</ul>
+<h3 id="2-intelligent-path-planning">2. Intelligent Path Planning</h3>
+<ul>
+<li>Automatic longest flight edge identification</li>
+<li>Bounding rectangle coverage generation</li>
+<li>Z-shaped flight path optimization</li>
+</ul>
+<h3 id="3-professional-parameter-configuration">3. Professional Parameter Configuration</h3>
+<ul>
+<li>Customizable sensor parameters</li>
+<li>Ground Sampling Distance (GSD) calculation</li>
+<li>Forward/side overlap settings</li>
+</ul>
+<h3 id="4-path-clipping-optimization">4. Path Clipping Optimization</h3>
+<ul>
+<li>Smart ROI-based path clipping</li>
+<li>Precise intersection calculation</li>
+<li>Visualized clipping effects</li>
+</ul>
+<h2 id="technical-implementation">Technical Implementation</h2>
+<h3 id="technology-stack">Technology Stack</h3>
+<ul>
+<li><strong>Frontend Framework</strong>: Vanilla JavaScript + HTML5</li>
+<li><strong>3D Visualization</strong>: CesiumJS 1.115</li>
+<li><strong>Geometry Algorithms</strong>: Custom geographic calculation library</li>
+<li><strong>UI Design</strong>: Responsive layout + modern interaction</li>
+</ul>
+<h3 id="architecture-design">Architecture Design</h3>
+<p>Modular architecture ensures code maintainability and extensibility:</p>
+<ul>
+<li><code>app.js</code> - Main application logic</li>
+<li><code>geometry-utils.js</code> - Geographic geometry calculations</li>
+<li><code>flight-path.js</code> - Flight route generation algorithms</li>
+<li><code>sensor-utils.js</code> - Sensor parameter calculations</li>
+<li><code>ui-manager.js</code> - User interface management</li>
+</ul>
+<h2 id="application-scenarios">Application Scenarios</h2>
+<h3 id="1-agricultural-surveying">1. Agricultural Surveying</h3>
+<ul>
+<li>Crop growth monitoring</li>
+<li>Irrigation system planning</li>
+<li>Precision agriculture management</li>
+</ul>
+<h3 id="2-urban-planning">2. Urban Planning</h3>
+<ul>
+<li>Building 3D modeling</li>
+<li>Urban renewal monitoring</li>
+<li>Infrastructure planning</li>
+</ul>
+<h3 id="3-environmental-monitoring">3. Environmental Monitoring</h3>
+<ul>
+<li>Forest resource surveys</li>
+<li>Water pollution monitoring</li>
+<li>Natural disaster assessment</li>
+</ul>
+<h3 id="4-infrastructure-inspection">4. Infrastructure Inspection</h3>
+<ul>
+<li>Power line inspection</li>
+<li>Pipeline detection</li>
+<li>Road network monitoring</li>
+</ul>
+<h2 id="demo-experience">Demo Experience</h2>
+<p>We provide a complete online demo, allowing you to experience the powerful features of Ara Coverage Flight Path without installing any software:</p>
+<p>🔗 <a href="/demo/ara-flight-planner/" rel=""><strong>Online Demo</strong></a></p>
+<h3 id="quick-experience-steps">Quick Experience Steps</h3>
+<ol>
+<li>Open the demo page</li>
+<li>Click &ldquo;Start Drawing Polygon&rdquo; to create a survey area</li>
+<li>Adjust sensor parameters and overlap settings</li>
+<li>Generate and optimize flight paths</li>
+<li>View path clipping effects</li>
+</ol>
+<!-- raw HTML omitted -->
+<h2 id="project-highlights">Project Highlights</h2>
+<h3 id="1-professional-geographic-calculations">1. Professional Geographic Calculations</h3>
+<ul>
+<li>Precise spherical geometry calculations</li>
+<li>Earth curvature compensation algorithms</li>
+<li>Polygon area calculations</li>
+</ul>
+<h3 id="2-intuitive-user-interface">2. Intuitive User Interface</h3>
+<ul>
+<li>Responsive design adapting to various devices</li>
+<li>Intuitive drag-and-drop interaction</li>
+<li>Real-time visual feedback</li>
+</ul>
+<h3 id="3-efficient-path-algorithms">3. Efficient Path Algorithms</h3>
+<ul>
+<li>Automated path generation</li>
+<li>Optimal overlap calculation</li>
+<li>Smart path clipping</li>
+</ul>
+<h3 id="4-open-technical-architecture">4. Open Technical Architecture</h3>
+<ul>
+<li>Modular design</li>
+<li>Easy to extend</li>
+<li>Complete API documentation</li>
+</ul>
+<h2 id="technical-challenges-and-solutions">Technical Challenges and Solutions</h2>
+<h3 id="1-complex-geometry-calculations">1. Complex Geometry Calculations</h3>
+<p><strong>Challenge</strong>: Polygon operations and line segment intersection calculations in spherical coordinate systems
+<strong>Solution</strong>: Combining CesiumJS built-in geometry functions with custom algorithms to ensure calculation accuracy</p>
+<h3 id="2-path-optimization-algorithm">2. Path Optimization Algorithm</h3>
+<p><strong>Challenge</strong>: Minimizing flight distance while ensuring complete coverage
+<strong>Solution</strong>: Implementing Z-shaped path algorithm with ROI clipping functionality for path optimization</p>
+<h3 id="3-user-interaction-experience">3. User Interaction Experience</h3>
+<p><strong>Challenge</strong>: Providing intuitive 2D drawing experience in 3D environment
+<strong>Solution</strong>: Smart terrain following and visual cue system</p>
+<h2 id="detailed-feature-description">Detailed Feature Description</h2>
+<h3 id="survey-area-drawing-and-management">Survey Area Drawing and Management</h3>
+<p>The system supports flexible survey area drawing methods where users can create polygon vertices by clicking on the map to define the Region of Interest (ROI). After drawing is complete, the system automatically calculates and displays the survey area&rsquo;s coordinate information and area size, supporting multiple area units (square meters, acres, square kilometers).</p>
+<h3 id="intelligent-path-generation">Intelligent Path Generation</h3>
+<p>Based on the survey area ROI, the system automatically identifies the longest edge as the main flight direction and generates a bounding rectangle covering the entire survey area. Users can precisely control flight path generation based on sensor parameters (such as pixel size, focal length, etc.) and flight requirements (such as overlap).</p>
+<h3 id="sensor-parameter-calculation">Sensor Parameter Calculation</h3>
+<p>The tool includes a professional sensor parameter calculation module that supports automatic calculation of flight altitude and ground coverage range based on ground sampling distance (GSD), sensor dimensions, pixel count, focal length, and other parameters, ensuring the accuracy and quality of aerial photography data.</p>
+<h3 id="path-clipping-optimization">Path Clipping Optimization</h3>
+<p>For irregularly shaped survey areas, the system provides intelligent path clipping functionality that can automatically identify and retain flight path segments within the ROI area, reducing unnecessary flight distance and time, improving operational efficiency.</p>
+<!-- raw HTML omitted -->
+<h2 id="future-plans">Future Plans</h2>
+<ul>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> Multi-survey area management support</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> Add terrain analysis functionality</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> Implement path export to standard formats</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> Add cloud storage support</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> Develop mobile application</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>The Ara Coverage Flight Path project demonstrates the application potential of modern WebGIS technology in professional fields. By combining the powerful 3D visualization capabilities of CesiumJS with custom geographic algorithms, we have created a functionally complete, user-friendly aerial survey planning tool.</p>
+<p>This project not only solves practical aerial survey planning needs but also provides valuable technical references for WebGIS developers. Professional geometric algorithms, intuitive user interface, and efficient path planning capabilities make it a practical tool in the UAV aerial survey field.</p>
+<hr>
+<p><strong>Related Tags</strong>: #CesiumJS #UAV #AerialSurvey #PathPlanning #GIS #WebGIS</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-03-09</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/en/posts/ara-coverage-flight-path/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool" data-hashtags="CesiumJS,UAV,Aerial Survey,Path Planning,GIS,WebGIS"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" data-hashtag="CesiumJS"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/cesiumjs/">CesiumJS</a>,&nbsp;<a href="/en/tags/uav/">UAV</a>,&nbsp;<a href="/en/tags/aerial-survey/">Aerial Survey</a>,&nbsp;<a href="/en/tags/path-planning/">Path Planning</a>,&nbsp;<a href="/en/tags/gis/">GIS</a>,&nbsp;<a href="/en/tags/webgis/">WebGIS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/smart-one-piece-video-analysis/" class="prev" rel="prev" title="Smart Video Analysis System: From Camera AI to UAV Flow Estimation"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Smart Video Analysis System: From Camera AI to UAV Flow Estimation</a>
+            <a href="/en/posts/gis-introduction/" class="next" rel="next" title="Introduction to Geographic Information Systems (GIS)">Introduction to Geographic Information Systems (GIS)<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/en/index.json","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

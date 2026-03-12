@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Object Tracking - Tag - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/en/tags/object-tracking/</link>
+        <description>Object Tracking - Tag - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sun, 04 Feb 2024 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/en/tags/object-tracking/" rel="self" type="application/rss+xml" /><item>
+    <title>Smart Video Analysis System: From Camera AI to UAV Flow Estimation</title>
+    <link>https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/</link>
+    <pubDate>Sun, 04 Feb 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/smart-one-piece/01-reference-image.png" referrerpolicy="no-referrer">
+            </div><p>In this article, I&rsquo;ll share a comprehensive intelligent video analysis system that integrates multiple computer vision techniques, including camera AI fusion, UAV flow estimation, image registration, video frame extraction, and more.</p>]]></description>
+</item>
+</channel>
+</rss>

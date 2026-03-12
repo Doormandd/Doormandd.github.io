@@ -1,0 +1,25 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>工业安全 - 标签 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/</link>
+        <description>工业安全 - 标签 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 20 Sep 2025 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+    <title>Safety Helmet YOLO：基于深度学习的安全帽检测系统</title>
+    <link>https://Doormandd.github.io/posts/safety-helmet-yolo-detection/</link>
+    <pubDate>Sat, 20 Sep 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/safety-helmet-yolo-detection/</guid>
+    <description><![CDATA[<h2 id="项目概述">项目概述</h2>
+<p>Safety Helmet YOLO 是一个基于深度学习的安全帽检测系统，使用 YOLOv8 架构实现了高精度的实时安全帽检测。该项目旨在提高工业建筑、工厂车间等场景下的工作安全性，通过自动检测工作人员是否佩戴安全帽，实现智能化安全管理。</p>
+<h3 id="项目背景">项目背景</h3>
+<p>在建筑工地、工厂车间、矿山等工业环境中，安全帽是保护工作人员头部安全的重要装备。然而，人工监督所有工作人员的安全帽佩戴情况既不现实也效率低下。通过计算机视觉技术实现自动化安全帽检测，可以：</p>
+<ul>
+<li><strong>实时监控</strong>：24小时不间断监控工作人员的安全状况</li>
+<li><strong>及时预警</strong>：发现未佩戴安全帽的情况立即发出警报</li>
+<li><strong>数据统计</strong>：记录和分析安全帽佩戴率</li>
+<li><strong>降低成本</strong>：减少人工监管的人力成本</li>
+</ul>]]></description>
+</item>
+</channel>
+</rss>

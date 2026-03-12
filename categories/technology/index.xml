@@ -1,0 +1,89 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>技术 - 分类 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/categories/technology/</link>
+        <description>技术 - 分类 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 20 Sep 2025 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/categories/technology/" rel="self" type="application/rss+xml" /><item>
+    <title>Safety Helmet YOLO：基于深度学习的安全帽检测系统</title>
+    <link>https://Doormandd.github.io/posts/safety-helmet-yolo-detection/</link>
+    <pubDate>Sat, 20 Sep 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/safety-helmet-yolo-detection/</guid>
+    <description><![CDATA[<h2 id="项目概述">项目概述</h2>
+<p>Safety Helmet YOLO 是一个基于深度学习的安全帽检测系统，使用 YOLOv8 架构实现了高精度的实时安全帽检测。该项目旨在提高工业建筑、工厂车间等场景下的工作安全性，通过自动检测工作人员是否佩戴安全帽，实现智能化安全管理。</p>
+<h3 id="项目背景">项目背景</h3>
+<p>在建筑工地、工厂车间、矿山等工业环境中，安全帽是保护工作人员头部安全的重要装备。然而，人工监督所有工作人员的安全帽佩戴情况既不现实也效率低下。通过计算机视觉技术实现自动化安全帽检测，可以：</p>
+<ul>
+<li><strong>实时监控</strong>：24小时不间断监控工作人员的安全状况</li>
+<li><strong>及时预警</strong>：发现未佩戴安全帽的情况立即发出警报</li>
+<li><strong>数据统计</strong>：记录和分析安全帽佩戴率</li>
+<li><strong>降低成本</strong>：减少人工监管的人力成本</li>
+</ul>]]></description>
+</item>
+<item>
+    <title>Vibe Coding基础</title>
+    <link>https://Doormandd.github.io/posts/vibe-coding-basics/</link>
+    <pubDate>Fri, 06 Jun 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/vibe-coding-basics/</guid>
+    <description><![CDATA[<p>Vibe Coding是一种创新的技术理念，致力于为用户提供高效、智能的实时监测和可视化解决方案。本文介绍Vibe Coding的核心概念和基础架构。</p>]]></description>
+</item>
+<item>
+    <title>YOLOv8手机支架检测项目实战</title>
+    <link>https://Doormandd.github.io/posts/yolov8-phone-holder-detection/</link>
+    <pubDate>Tue, 04 Feb 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/yolov8-phone-holder-detection/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/yolov8-project/01-training-curves.png" referrerpolicy="no-referrer">
+            </div><p>在本文中，我将分享一个基于YOLOv8的目标检测项目——手机支架检测。这个项目从数据集准备、模型训练到推理部署，完整地展示了如何使用YOLOv8进行实际应用。</p>]]></description>
+</item>
+<item>
+    <title>吴恩达分享：Agent Workflow与四种主流设计模式</title>
+    <link>https://Doormandd.github.io/posts/agent-workflow-andrew-ng/</link>
+    <pubDate>Sat, 01 Feb 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/agent-workflow-andrew-ng/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/agent-workflow/01-andrew-ng.jpg" referrerpolicy="no-referrer">
+            </div><p>在本次分享中，吴恩达教授介绍了Agent（智能代理）的发展趋势，以及四种主要的Agent设计模式。这些设计模式代表了人工智能领域的重要进展，将大幅扩展AI的能力边界。</p>]]></description>
+</item>
+<item>
+    <title>GIS地理信息系统介绍</title>
+    <link>https://Doormandd.github.io/posts/gis-introduction/</link>
+    <pubDate>Sat, 25 Jan 2025 20:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/gis-introduction/</guid>
+    <description><![CDATA[<p>GIS（Geographic Information System，地理信息系统）是一种用于采集、存储、管理、分析和显示地理空间数据的计算机系统。它将地理数据与属性数据相结合，通过地图、图表和报表等形式直观地展示空间信息。</p>]]></description>
+</item>
+<item>
+    <title>Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具</title>
+    <link>https://Doormandd.github.io/posts/ara-coverage-flight-path/</link>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/ara-coverage-flight-path/</guid>
+    <description><![CDATA[项目概述 Ara Coverage Flight Path 是一款基于 CesiumJS 开发的 Web 端无人机航测路径规划工具。它提供了直观的可视化界面，帮助用户快速规划高效的飞行路径，适用于各种航空摄影测量和遥感应用场景。
+核心功能 1. 测区ROI绘制 支持交互式多边形绘制 实时显示坐标和面积计算 灵活的编辑和调整功能 2. 智能路径规划 自动识别最长飞行边 生成边界矩形覆盖区域 Z字形飞行路径优化 3. 专业参数配置 传感器参数自定义 地面采样距离(GSD)计算 航向/旁向重叠度设置 4. 路径裁剪优化 ROI内外路径智能裁剪 精确的交点计算 可视化裁剪效果 技术实现 技术栈 前端框架: 原生 JavaScript + HTML5 3D可视化: CesiumJS 1.115 几何算法: 自定义地理计算库 UI设计: 响应式布局 + 现代交互 架构设计 模块化架构确保代码可维护性和可扩展性：
+app.js - 主应用程序逻辑 geometry-utils.js - 地理几何计算 flight-path.js - 航线生成算法 sensor-utils.js - 传感器参数计算 ui-manager.js - 用户界面管理 应用场景 1. 农业测绘 农作物生长监测 灌溉系统规划 精准农业管理 2.]]></description>
+</item>
+<item>
+    <title>智能视频分析系统：从相机AI到UAV流估计</title>
+    <link>https://Doormandd.github.io/posts/smart-one-piece-video-analysis/</link>
+    <pubDate>Sun, 04 Feb 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/smart-one-piece-video-analysis/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/smart-one-piece/01-reference-image.png" referrerpolicy="no-referrer">
+            </div><p>在本文中，我将分享一个完整的智能视频分析系统，该系统集成了多种计算机视觉技术，包括相机AI融合、UAV流估计、图像配准、视频帧提取等功能。</p>]]></description>
+</item>
+<item>
+    <title>Hugo 技术分享</title>
+    <link>https://Doormandd.github.io/posts/tech-post/</link>
+    <pubDate>Mon, 22 Jan 2024 10:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/tech-post/</guid>
+    <description><![CDATA[<p>这是一篇关于 Hugo 静态网站生成器的技术分享文章。</p>]]></description>
+</item>
+</channel>
+</rss>

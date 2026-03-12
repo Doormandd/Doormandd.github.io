@@ -1,0 +1,80 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Technology - Category - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/en/categories/technology/</link>
+        <description>Technology - Category - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 20 Sep 2025 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/en/categories/technology/" rel="self" type="application/rss+xml" /><item>
+    <title>Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System</title>
+    <link>https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/</link>
+    <pubDate>Sat, 20 Sep 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/</guid>
+    <description><![CDATA[<h2 id="project-overview">Project Overview</h2>
+<p>Safety Helmet YOLO is a deep learning-based safety helmet detection system that implements high-precision real-time safety helmet detection using the YOLOv8 architecture. The project aims to improve work safety in industrial construction, factory workshops, and other scenarios by automatically detecting whether workers are wearing safety helmets, enabling intelligent safety management.</p>
+<h3 id="project-background">Project Background</h3>
+<p>In industrial environments such as construction sites, factory workshops, and mines, safety helmets are essential equipment for protecting workers&rsquo; head safety. However, manually monitoring whether all workers are wearing safety helmets is neither realistic nor efficient. Automated safety helmet detection through computer vision technology can:</p>
+<ul>
+<li><strong>Real-time monitoring</strong>: 24/7 uninterrupted monitoring of workers&rsquo; safety status</li>
+<li><strong>Timely alerts</strong>: Immediate warnings when safety helmet violations are detected</li>
+<li><strong>Data statistics</strong>: Recording and analyzing safety helmet wearing rates</li>
+<li><strong>Cost reduction</strong>: Reducing labor costs for manual supervision</li>
+</ul>]]></description>
+</item>
+<item>
+    <title>YOLOv8 Phone Holder Detection Project</title>
+    <link>https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/</link>
+    <pubDate>Tue, 04 Feb 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/yolov8-project/01-training-curves.png" referrerpolicy="no-referrer">
+            </div><p>In this article, I&rsquo;ll share a complete object detection project using YOLOv8 - Phone Holder Detection. This project covers everything from dataset preparation and model training to inference deployment, demonstrating practical application of YOLOv8.</p>]]></description>
+</item>
+<item>
+    <title>Andrew Ng: Agent Workflows and Four Main Design Patterns</title>
+    <link>https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/</link>
+    <pubDate>Sat, 01 Feb 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/agent-workflow/01-andrew-ng.jpg" referrerpolicy="no-referrer">
+            </div><p>In this sharing session, Professor Andrew Ng introduced the development trends of Agents and four main Agent design patterns. These design patterns represent significant progress in the field of artificial intelligence and will dramatically expand the capabilities of AI.</p>]]></description>
+</item>
+<item>
+    <title>Introduction to Geographic Information Systems (GIS)</title>
+    <link>https://Doormandd.github.io/en/posts/gis-introduction/</link>
+    <pubDate>Sat, 25 Jan 2025 20:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/gis-introduction/</guid>
+    <description><![CDATA[<p>GIS (Geographic Information System) is a computer system designed to capture, store, manage, analyze, and display spatially referenced data. It combines geographic data with attribute data, presenting spatial information intuitively through maps, charts, and reports.</p>]]></description>
+</item>
+<item>
+    <title>Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool</title>
+    <link>https://Doormandd.github.io/en/posts/ara-coverage-flight-path/</link>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/ara-coverage-flight-path/</guid>
+    <description><![CDATA[Project Overview Ara Coverage Flight Path is a web-based UAV flight path planning tool developed with CesiumJS. It provides an intuitive visualization interface to help users quickly plan efficient flight paths for various aerial photogrammetry and remote sensing applications.
+Core Features 1. ROI Drawing Interactive polygon drawing support Real-time coordinate and area calculation display Flexible editing and adjustment capabilities 2. Intelligent Path Planning Automatic longest flight edge identification Bounding rectangle coverage generation Z-shaped flight path optimization 3.]]></description>
+</item>
+<item>
+    <title>Smart Video Analysis System: From Camera AI to UAV Flow Estimation</title>
+    <link>https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/</link>
+    <pubDate>Sun, 04 Feb 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/smart-one-piece/01-reference-image.png" referrerpolicy="no-referrer">
+            </div><p>In this article, I&rsquo;ll share a comprehensive intelligent video analysis system that integrates multiple computer vision techniques, including camera AI fusion, UAV flow estimation, image registration, video frame extraction, and more.</p>]]></description>
+</item>
+<item>
+    <title>Hugo Tech Share</title>
+    <link>https://Doormandd.github.io/en/posts/tech-post/</link>
+    <pubDate>Mon, 22 Jan 2024 10:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/tech-post/</guid>
+    <description><![CDATA[<p>This is a technical sharing article about Hugo static site generator.</p>]]></description>
+</item>
+</channel>
+</rss>

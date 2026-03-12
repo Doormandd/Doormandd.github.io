@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Smart Video Analysis System: From Camera AI to UAV Flow Estimation - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="Smart Video Analysis System: From Camera AI to UAV Flow Estimation">
+  <meta property="og:description" content="In this article, I’ll share a comprehensive intelligent video analysis system that integrates multiple computer vision techniques, including camera AI fusion, UAV flow estimation, image registration, video frame extraction, and more.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-04T00:00:00+08:00">
+    <meta property="article:modified_time" content="2024-02-04T00:00:00+08:00">
+    <meta property="article:tag" content="Computer Vision">
+    <meta property="article:tag" content="Deep Learning">
+    <meta property="article:tag" content="YOLOv8">
+    <meta property="article:tag" content="Optical Flow">
+    <meta property="article:tag" content="Object Tracking">
+    <meta property="article:tag" content="Video Analysis">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Smart Video Analysis System: From Camera AI to UAV Flow Estimation">
+  <meta name="twitter:description" content="In this article, I’ll share a comprehensive intelligent video analysis system that integrates multiple computer vision techniques, including camera AI fusion, UAV flow estimation, image registration, video frame extraction, and more.">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" /><link rel="prev" href="https://Doormandd.github.io/en/posts/learning-post/" /><link rel="next" href="https://Doormandd.github.io/en/posts/ara-coverage-flight-path/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Smart Video Analysis System: From Camera AI to UAV Flow Estimation",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/en\/posts\/smart-one-piece-video-analysis\/"
+        },"genre": "posts","keywords": "Computer Vision, Deep Learning, YOLOv8, Optical Flow, Object Tracking, Video Analysis, Image Registration","wordcount":  1000 ,
+        "url": "https:\/\/Doormandd.github.io\/en\/posts\/smart-one-piece-video-analysis\/","datePublished": "2024-02-04T00:00:00+08:00","dateModified": "2024-02-04T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/" title="View all posts"> Posts </a><a class="menu-item" href="/en/tags/" title="Browse by tags"> Tags </a><a class="menu-item" href="/en/categories/" title="Browse by categories"> Categories </a><a class="menu-item" href="/en/about/" title="About this site"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/smart-one-piece-video-analysis/" selected>English</option><option value="/posts/smart-one-piece-video-analysis/">简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="View all posts">Posts</a><a class="menu-item" href="/en/tags/" title="Browse by tags">Tags</a><a class="menu-item" href="/en/categories/" title="Browse by categories">Categories</a><a class="menu-item" href="/en/about/" title="About this site">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/smart-one-piece-video-analysis/" selected>English</option><option value="/posts/smart-one-piece-video-analysis/">简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Smart Video Analysis System: From Camera AI to UAV Flow Estimation</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/en/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Technology</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-02-04">2024-02-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1000 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/smart-one-piece/01-reference-image.png"
+        data-srcset="/images/smart-one-piece/01-reference-image.png, /images/smart-one-piece/01-reference-image.png 1.5x, /images/smart-one-piece/01-reference-image.png 2x"
+        data-sizes="auto"
+        alt="/images/smart-one-piece/01-reference-image.png"
+        title="/images/smart-one-piece/01-reference-image.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#project-background">Project Background</a>
+      <ul>
+        <li><a href="#why-multi-technique-fusion">Why Multi-Technique Fusion?</a></li>
+      </ul>
+    </li>
+    <li><a href="#core-modules">Core Modules</a>
+      <ul>
+        <li><a href="#1-camera-ai-fusion-system">1. Camera AI Fusion System</a></li>
+        <li><a href="#2-uav-flow-estimation">2. UAV Flow Estimation</a></li>
+        <li><a href="#3-image-registration-tool">3. Image Registration Tool</a></li>
+        <li><a href="#4-video-frame-extraction-tool">4. Video Frame Extraction Tool</a></li>
+      </ul>
+    </li>
+    <li><a href="#technology-stack">Technology Stack</a>
+      <ul>
+        <li><a href="#core-technologies">Core Technologies</a></li>
+        <li><a href="#algorithms">Algorithms</a></li>
+      </ul>
+    </li>
+    <li><a href="#dataset">Dataset</a>
+      <ul>
+        <li><a href="#test-videos">Test Videos</a></li>
+        <li><a href="#reference-image">Reference Image</a></li>
+      </ul>
+    </li>
+    <li><a href="#project-highlights">Project Highlights</a>
+      <ul>
+        <li><a href="#1-modular-design">1. Modular Design</a></li>
+        <li><a href="#2-interactive-visualization">2. Interactive Visualization</a></li>
+        <li><a href="#3-complete-algorithm-implementation">3. Complete Algorithm Implementation</a></li>
+        <li><a href="#4-practical-features">4. Practical Features</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#environment-setup">Environment Setup</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#running-uav-flow-estimation">Running UAV Flow Estimation</a></li>
+      </ul>
+    </li>
+    <li><a href="#application-scenarios">Application Scenarios</a>
+      <ul>
+        <li><a href="#1-uav-surveillance">1. UAV Surveillance</a></li>
+        <li><a href="#2-intelligent-transportation">2. Intelligent Transportation</a></li>
+        <li><a href="#3-video-analytics">3. Video Analytics</a></li>
+        <li><a href="#4-image-mosaicing">4. Image Mosaicing</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-improvements">Future Improvements</a></li>
+    <li><a href="#github-repository">GitHub Repository</a>
+      <ul>
+        <li><a href="#project-includes">Project Includes</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>In this article, I&rsquo;ll share a comprehensive intelligent video analysis system that integrates multiple computer vision techniques, including camera AI fusion, UAV flow estimation, image registration, video frame extraction, and more.</p>
+<h2 id="project-background">Project Background</h2>
+<p>With the growing demand for video surveillance and analysis, traditional single algorithms can no longer meet the requirements of complex scenarios. This project integrates multiple advanced computer vision techniques to build a comprehensive video analysis system capable of handling various scenarios from UAV surveillance to intelligent transportation.</p>
+<h3 id="why-multi-technique-fusion">Why Multi-Technique Fusion?</h3>
+<ul>
+<li><strong>Enhanced Robustness</strong>: Single techniques may fail in certain scenarios; multiple techniques complement each other</li>
+<li><strong>Improved Accuracy</strong>: Combine advantages of different algorithms to enhance overall performance</li>
+<li><strong>Extended Application Scope</strong>: From simple object detection to complex motion analysis</li>
+<li><strong>Flexible Deployment</strong>: Different modules can be used independently or in combination</li>
+</ul>
+<hr>
+<h2 id="core-modules">Core Modules</h2>
+<h3 id="1-camera-ai-fusion-system">1. Camera AI Fusion System</h3>
+<p><strong>Feature Description</strong>:
+Camera AI fusion system is a comprehensive video processing framework that integrates YOLO object detection, homography transformation, bounding box processing, and more.</p>
+<p><strong>Key Features</strong>:</p>
+<ul>
+<li>✅ Video capture and processing</li>
+<li>✅ YOLOv8 model loading and inference</li>
+<li>✅ Load homography matrix from JSON file</li>
+<li>✅ Bounding box coordinate transformation</li>
+<li>✅ Perspective transformation and rotation</li>
+<li>✅ Dual video window display (original frame + transformed result)</li>
+<li>✅ Track visualization and tracking display</li>
+</ul>
+<p><strong>Technical Implementation</strong>:</p>
+<ul>
+<li>OpenCV for video I/O</li>
+<li>Ultralytics YOLOv8 for object detection</li>
+<li>NumPy for matrix operations</li>
+<li>ByteTrack algorithm for object tracking</li>
+</ul>
+<h3 id="2-uav-flow-estimation">2. UAV Flow Estimation</h3>
+<p><strong>Feature Description</strong>:
+UAV flow estimation module is specialized for drone video analysis, implementing optical flow-based motion estimation and object tracking.</p>
+<p><strong>Key Features</strong>:</p>
+<ul>
+<li>✅ Lucas-Kanade sparse optical flow estimation</li>
+<li>✅ YOLO object detection and tracking</li>
+<li>✅ VPS dataset class mapping (pedestrian, bicycle, car, truck, etc.)</li>
+<li>✅ Track drawing and visualization</li>
+<li>✅ Auto-generate unique colors for each track ID</li>
+<li>✅ Homography matrix transformation</li>
+<li>✅ Reference image with 1940x1536 resolution</li>
+</ul>
+<p><strong>Application Scenarios</strong>:</p>
+<ul>
+<li>UAV trajectory analysis</li>
+<li>Motion pattern recognition</li>
+<li>Anomaly behavior detection</li>
+<li>Aerial object counting</li>
+</ul>
+<h3 id="3-image-registration-tool">3. Image Registration Tool</h3>
+<p><strong>Feature Description</strong>:
+Image registration tool provides an interactive interface for manual point selection on source and reference images.</p>
+<p><strong>Key Features</strong>:</p>
+<ul>
+<li>✅ Interactive mouse click selection</li>
+<li>✅ Real-time display of selected points</li>
+<li>✅ RANSAC algorithm for homography matrix computation</li>
+<li>✅ Support for arbitrary number of corresponding points</li>
+<li>✅ Save transformation matrix to JSON file (h.json)</li>
+<li>✅ Real-time preview of registration results</li>
+</ul>
+<p><strong>Usage Method</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> image_registration <span style="color:#f92672">import</span> ImageRegistration
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize</span>
+</span></span><span style="display:flex;"><span>reg <span style="color:#f92672">=</span> ImageRegistration(
+</span></span><span style="display:flex;"><span>    source_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;source.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>    reference_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;reference.jpg&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Click 4 points on source image</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Click corresponding 4 points on reference image</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Homography matrix automatically computed and saved to h.json</span>
+</span></span></code></pre></div><h3 id="4-video-frame-extraction-tool">4. Video Frame Extraction Tool</h3>
+<p><strong>Feature Description</strong>:
+Tool for extracting frame images from videos at specified intervals for subsequent analysis or training.</p>
+<p><strong>Key Features</strong>:</p>
+<ul>
+<li>✅ Auto-create output directory</li>
+<li>✅ Configurable extraction interval (default 30 frames)</li>
+<li>✅ Real-time progress logging</li>
+<li>✅ Support for multiple video formats (MOV, MP4, etc.)</li>
+<li>✅ File naming (frame_0000.jpg format)</li>
+</ul>
+<p><strong>Usage Method</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Extract video frames</span>
+</span></span><span style="display:flex;"><span>python extract_img_from_video<span style="color:#f92672">.</span>py
+</span></span></code></pre></div><hr>
+<h2 id="technology-stack">Technology Stack</h2>
+<h3 id="core-technologies">Core Technologies</h3>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OpenCV</strong></td>
+<td>4.x</td>
+<td>Computer vision library</td>
+</tr>
+<tr>
+<td><strong>NumPy</strong></td>
+<td>Latest</td>
+<td>Numerical computing</td>
+</tr>
+<tr>
+<td><strong>PyTorch</strong></td>
+<td>Latest</td>
+<td>Deep learning framework</td>
+</tr>
+<tr>
+<td><strong>Ultralytics YOLOv8</strong></td>
+<td>Latest</td>
+<td>Object detection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="algorithms">Algorithms</h3>
+<ul>
+<li><strong>Lucas-Kanade Optical Flow</strong>: Sparse optical flow estimation</li>
+<li><strong>RANSAC</strong>: Robust homography matrix computation</li>
+<li><strong>ByteTrack</strong>: Object tracking algorithm</li>
+<li><strong>YOLOv8</strong>: Deep learning object detection</li>
+</ul>
+<hr>
+<h2 id="dataset">Dataset</h2>
+<h3 id="test-videos">Test Videos</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>caotangvis.mp4</td>
+<td>105MB</td>
+<td>H.264 encoded, 30fps</td>
+</tr>
+<tr>
+<td>cross.MOV</td>
+<td>27MB</td>
+<td>Cross-shot scene video</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reference-image">Reference Image</h3>
+<ul>
+<li><strong>File</strong>: uav_road_ref.png</li>
+<li><strong>Resolution</strong>: 1940 x 1536 pixels</li>
+<li><strong>Format</strong>: PNG, RGBA</li>
+<li><strong>Purpose</strong>: Reference coordinate system for UAV flow estimation</li>
+</ul>
+<hr>
+<h2 id="project-highlights">Project Highlights</h2>
+<h3 id="1-modular-design">1. Modular Design</h3>
+<p>Each functional module is an independent Python script:</p>
+<ul>
+<li><code>camera_ai_fushion.py</code> - Camera AI fusion</li>
+<li><code>uav_flow_fushion.py</code> - UAV flow estimation</li>
+<li><code>image_registration.py</code> - Image registration</li>
+<li><code>extract_img_from_video.py</code> - Video frame extraction</li>
+</ul>
+<h3 id="2-interactive-visualization">2. Interactive Visualization</h3>
+<ul>
+<li>Dual window display for source image and registration result</li>
+<li>Real-time track drawing</li>
+<li>Color-coded track IDs</li>
+<li>Clear bounding box visualization</li>
+</ul>
+<h3 id="3-complete-algorithm-implementation">3. Complete Algorithm Implementation</h3>
+<ul>
+<li>
+<p><strong>Optical Flow Estimation</strong>: Lucas-Kanade algorithm</p>
+<ul>
+<li>Feature point detection (GoodFeaturesToTrack)</li>
+<li>21x21 pixel window</li>
+<li>Max pyramid levels: 3</li>
+</ul>
+</li>
+<li>
+<p><strong>Homography Transformation</strong>: RANSAC algorithm</p>
+<ul>
+<li>Robust estimation</li>
+<li>Support for arbitrary point numbers</li>
+</ul>
+</li>
+<li>
+<p><strong>Object Tracking</strong>: ByteTrack integration</p>
+<ul>
+<li>VPS dataset support</li>
+<li>Multi-class detection</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-practical-features">4. Practical Features</h3>
+<ul>
+<li><strong>Video Frame Extraction</strong>: Automated frame extraction</li>
+<li><strong>Configuration</strong>: JSON format for storing transformation matrices</li>
+<li><strong>Output Format</strong>: FourCC-compatible video encoding</li>
+</ul>
+<hr>
+<h2 id="usage">Usage</h2>
+<h3 id="environment-setup">Environment Setup</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install dependencies</span>
+</span></span><span style="display:flex;"><span>pip install opencv-python numpy torch ultralytics
+</span></span></code></pre></div><h3 id="quick-start">Quick Start</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 1. Extract video frames</span>
+</span></span><span style="display:flex;"><span>python extract_img_from_video<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. Image registration</span>
+</span></span><span style="display:flex;"><span>python image_registration<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. UAV flow estimation</span>
+</span></span><span style="display:flex;"><span>python uav_flow_fushion<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. Camera AI fusion</span>
+</span></span><span style="display:flex;"><span>python camera_ai_fushion<span style="color:#f92672">.</span>py
+</span></span></code></pre></div><h3 id="running-uav-flow-estimation">Running UAV Flow Estimation</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> uav_flow_fushion <span style="color:#f92672">import</span> UAVFlowGeo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize</span>
+</span></span><span style="display:flex;"><span>uav_flow <span style="color:#f92672">=</span> UAVFlowGeo(
+</span></span><span style="display:flex;"><span>    video_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cross.MOV&#34;</span>,
+</span></span><span style="display:flex;"><span>    ref_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;uav_road_ref.png&#34;</span>,
+</span></span><span style="display:flex;"><span>    homography_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;h.json&#34;</span>,
+</span></span><span style="display:flex;"><span>    model_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;best.pt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run flow estimation</span>
+</span></span><span style="display:flex;"><span>uav_flow<span style="color:#f92672">.</span>run()
+</span></span></code></pre></div><hr>
+<h2 id="application-scenarios">Application Scenarios</h2>
+<h3 id="1-uav-surveillance">1. UAV Surveillance</h3>
+<ul>
+<li>Real-time trajectory tracking</li>
+<li>Motion pattern analysis</li>
+<li>Anomaly behavior detection</li>
+</ul>
+<h3 id="2-intelligent-transportation">2. Intelligent Transportation</h3>
+<ul>
+<li>Vehicle detection and classification</li>
+<li>Traffic flow analysis</li>
+<li>Congestion detection</li>
+</ul>
+<h3 id="3-video-analytics">3. Video Analytics</h3>
+<ul>
+<li>Multi-view fusion</li>
+<li>Motion understanding</li>
+<li>Scene parsing</li>
+</ul>
+<h3 id="4-image-mosaicing">4. Image Mosaicing</h3>
+<ul>
+<li>Multi-view image alignment</li>
+<li>Perspective correction</li>
+<li>Scene reconstruction</li>
+</ul>
+<hr>
+<h2 id="future-improvements">Future Improvements</h2>
+<ul>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Deep Learning Optical Flow</strong>: Use neural networks to replace traditional optical flow algorithms</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Real-time Optimization</strong>: GPU acceleration for all modules</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Automatic Feature Matching</strong>: SIFT, SURF automatic point detection</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>End-to-End Training</strong>: Train end-to-end video understanding models</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Mobile Deployment</strong>: TensorFlow Lite or PyTorch Mobile</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Multi-Model Integration</strong>: Integrate more pre-trained models</li>
+</ul>
+<hr>
+<h2 id="github-repository">GitHub Repository</h2>
+<p>Complete project code, documentation, and examples have been uploaded to GitHub:</p>
+<p>🔗 <strong><a href="https://github.com/Doormandd/Smart-One-Piece-Video-Analysis" target="_blank" rel="noopener noreffer ">Smart One Piece Video Analysis</a></strong></p>
+<h3 id="project-includes">Project Includes</h3>
+<ul>
+<li>✅ Bilingual documentation (README.md)</li>
+<li>✅ Complete code implementations</li>
+<li>✅ Multiple functional modules</li>
+<li>✅ Test videos and reference images</li>
+<li>✅ Detailed algorithm explanations</li>
+<li>✅ Usage examples</li>
+</ul>
+<hr>
+<h2 id="conclusion">Conclusion</h2>
+<p>Through this project, I&rsquo;ve successfully built a multi-functional intelligent video analysis system that integrates advanced techniques like optical flow estimation, object detection, image registration, and more. The modular design allows each function to be used independently or in combination, providing flexible solutions for different application scenarios.</p>
+<p>Core advantages of the project:</p>
+<ol>
+<li><strong>Comprehensive Technology</strong>: Complete tech stack from basic image processing to deep learning</li>
+<li><strong>High Practicality</strong>: Each module has clear interfaces and usage instructions</li>
+<li><strong>Rich Visualization</strong>: Extensive visualization features help understand algorithm outputs</li>
+<li><strong>Extensibility</strong>: Modular design facilitates adding new features</li>
+</ol>
+<p>If you have any questions or suggestions about the project, feel free to open an Issue or Pull Request on GitHub!</p>
+<hr>
+<p><strong>Related Tags</strong>: #ComputerVision #DeepLearning #YOLOv8 #OpticalFlow #ObjectTracking #VideoAnalysis #ImageRegistration #SmartSystem</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-02-04</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/en/posts/smart-one-piece-video-analysis/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" data-title="Smart Video Analysis System: From Camera AI to UAV Flow Estimation" data-hashtags="Computer Vision,Deep Learning,YOLOv8,Optical Flow,Object Tracking,Video Analysis,Image Registration"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" data-hashtag="Computer Vision"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" data-title="Smart Video Analysis System: From Camera AI to UAV Flow Estimation"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" data-title="Smart Video Analysis System: From Camera AI to UAV Flow Estimation"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/en/posts/smart-one-piece-video-analysis/" data-title="Smart Video Analysis System: From Camera AI to UAV Flow Estimation" data-image="/images/smart-one-piece/01-reference-image.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/computer-vision/">Computer Vision</a>,&nbsp;<a href="/en/tags/deep-learning/">Deep Learning</a>,&nbsp;<a href="/en/tags/yolov8/">YOLOv8</a>,&nbsp;<a href="/en/tags/optical-flow/">Optical Flow</a>,&nbsp;<a href="/en/tags/object-tracking/">Object Tracking</a>,&nbsp;<a href="/en/tags/video-analysis/">Video Analysis</a>,&nbsp;<a href="/en/tags/image-registration/">Image Registration</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/learning-post/" class="prev" rel="prev" title="Web Development Learning Notes"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Web Development Learning Notes</a>
+            <a href="/en/posts/ara-coverage-flight-path/" class="next" rel="next" title="Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool">Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/en/index.json","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

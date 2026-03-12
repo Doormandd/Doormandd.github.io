@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>目标跟踪 - 标签 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/tags/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/</link>
+        <description>目标跟踪 - 标签 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sun, 04 Feb 2024 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/tags/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/" rel="self" type="application/rss+xml" /><item>
+    <title>智能视频分析系统：从相机AI到UAV流估计</title>
+    <link>https://Doormandd.github.io/posts/smart-one-piece-video-analysis/</link>
+    <pubDate>Sun, 04 Feb 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/smart-one-piece-video-analysis/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/smart-one-piece/01-reference-image.png" referrerpolicy="no-referrer">
+            </div><p>在本文中，我将分享一个完整的智能视频分析系统，该系统集成了多种计算机视觉技术，包括相机AI融合、UAV流估计、图像配准、视频帧提取等功能。</p>]]></description>
+</item>
+</channel>
+</rss>

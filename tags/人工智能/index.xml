@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>人工智能 - 标签 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/</link>
+        <description>人工智能 - 标签 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 01 Feb 2025 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="self" type="application/rss+xml" /><item>
+    <title>吴恩达分享：Agent Workflow与四种主流设计模式</title>
+    <link>https://Doormandd.github.io/posts/agent-workflow-andrew-ng/</link>
+    <pubDate>Sat, 01 Feb 2025 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/agent-workflow-andrew-ng/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/agent-workflow/01-andrew-ng.jpg" referrerpolicy="no-referrer">
+            </div><p>在本次分享中，吴恩达教授介绍了Agent（智能代理）的发展趋势，以及四种主要的Agent设计模式。这些设计模式代表了人工智能领域的重要进展，将大幅扩展AI的能力边界。</p>]]></description>
+</item>
+</channel>
+</rss>
