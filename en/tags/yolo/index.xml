@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>YOLO - Tag - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/en/tags/yolo/</link>
+        <description>YOLO - Tag - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sun, 12 Oct 2025 20:09:10 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/en/tags/yolo/" rel="self" type="application/rss+xml" /><item>
+    <title>YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project</title>
+    <link>https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/</link>
+    <pubDate>Sun, 12 Oct 2025 20:09:10 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/</guid>
+    <description><![CDATA[Project Overview This project implements a real-time drone object tracking system that combines multiple state-of-the-art computer vision techniques. The system processes video frames from drones in real-time, detects vehicles using YOLO, tracks them across frames using DeepOCSORT (an improved version of DeepSORT), and visualizes results through a WebSocket-based interface.
+Key Features Real-time Object Detection YOLO (You Only Look Once) for fast and accurate object detection Specialized for vehicle detection (cars in VisDrone dataset) Configurable confidence threshold for optimal detection performance Efficient filtering of invalid detections based on size and aspect ratio Advanced Object Tracking DeepOCSORT tracking algorithm from BoxMOT framework ReID (Re-identification) features using OSNet-x0.]]></description>
+</item>
+</channel>
+</rss>

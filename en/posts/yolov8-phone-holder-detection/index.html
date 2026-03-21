@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>YOLOv8 Phone Holder Detection Project - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="YOLOv8 Phone Holder Detection Project">
+  <meta property="og:description" content="In this article, I’ll share a complete object detection project using YOLOv8 - Phone Holder Detection. This project covers everything from dataset preparation and model training to inference deployment, demonstrating practical application of YOLOv8.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-04T00:00:00+08:00">
+    <meta property="article:modified_time" content="2025-02-04T00:00:00+08:00">
+    <meta property="article:tag" content="YOLOv8">
+    <meta property="article:tag" content="Object Detection">
+    <meta property="article:tag" content="Deep Learning">
+    <meta property="article:tag" content="Computer Vision">
+    <meta property="article:tag" content="Project Sharing">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="YOLOv8 Phone Holder Detection Project">
+  <meta name="twitter:description" content="In this article, I’ll share a complete object detection project using YOLOv8 - Phone Holder Detection. This project covers everything from dataset preparation and model training to inference deployment, demonstrating practical application of YOLOv8.">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" /><link rel="prev" href="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" /><link rel="next" href="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "YOLOv8 Phone Holder Detection Project",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/en\/posts\/yolov8-phone-holder-detection\/"
+        },"genre": "posts","keywords": "YOLOv8, Object Detection, Deep Learning, Computer Vision, Project Sharing","wordcount":  836 ,
+        "url": "https:\/\/Doormandd.github.io\/en\/posts\/yolov8-phone-holder-detection\/","datePublished": "2025-02-04T00:00:00+08:00","dateModified": "2025-02-04T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/" title="View all posts"> Posts </a><a class="menu-item" href="/en/tags/" title="Browse by tags"> Tags </a><a class="menu-item" href="/en/categories/" title="Browse by categories"> Categories </a><a class="menu-item" href="/en/about/" title="About this site"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/yolov8-phone-holder-detection/" selected>English</option><option value="/posts/yolov8-phone-holder-detection/">简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="View all posts">Posts</a><a class="menu-item" href="/en/tags/" title="Browse by tags">Tags</a><a class="menu-item" href="/en/categories/" title="Browse by categories">Categories</a><a class="menu-item" href="/en/about/" title="About this site">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/yolov8-phone-holder-detection/" selected>English</option><option value="/posts/yolov8-phone-holder-detection/">简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">YOLOv8 Phone Holder Detection Project</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/en/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Technology</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-02-04">2025-02-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;836 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/yolov8-project/01-training-curves.png"
+        data-srcset="/images/yolov8-project/01-training-curves.png, /images/yolov8-project/01-training-curves.png 1.5x, /images/yolov8-project/01-training-curves.png 2x"
+        data-sizes="auto"
+        alt="/images/yolov8-project/01-training-curves.png"
+        title="/images/yolov8-project/01-training-curves.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#project-background">Project Background</a>
+      <ul>
+        <li><a href="#why-phone-holder-detection">Why Phone Holder Detection?</a></li>
+        <li><a href="#why-yolov8">Why YOLOv8?</a></li>
+      </ul>
+    </li>
+    <li><a href="#dataset-preparation">Dataset Preparation</a>
+      <ul>
+        <li><a href="#dataset-statistics">Dataset Statistics</a></li>
+        <li><a href="#annotation-process">Annotation Process</a></li>
+        <li><a href="#dataset-structure">Dataset Structure</a></li>
+      </ul>
+    </li>
+    <li><a href="#model-training">Model Training</a>
+      <ul>
+        <li><a href="#environment-setup">Environment Setup</a></li>
+        <li><a href="#training-command">Training Command</a></li>
+        <li><a href="#training-parameters">Training Parameters</a></li>
+      </ul>
+    </li>
+    <li><a href="#training-results">Training Results</a>
+      <ul>
+        <li><a href="#performance-metrics">Performance Metrics</a></li>
+        <li><a href="#confusion-matrix-analysis">Confusion Matrix Analysis</a></li>
+        <li><a href="#training-batch-visualization">Training Batch Visualization</a></li>
+      </ul>
+    </li>
+    <li><a href="#model-characteristics">Model Characteristics</a>
+      <ul>
+        <li><a href="#1-high-accuracy-performance">1. High Accuracy Performance</a></li>
+        <li><a href="#2-lightweight-model">2. Lightweight Model</a></li>
+        <li><a href="#3-easy-integration">3. Easy Integration</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#python-api-usage">Python API Usage</a></li>
+      </ul>
+    </li>
+    <li><a href="#project-highlights">Project Highlights</a>
+      <ul>
+        <li><a href="#1-high-quality-dataset">1. High-Quality Dataset</a></li>
+        <li><a href="#2-excellent-training-results">2. Excellent Training Results</a></li>
+        <li><a href="#3-practical-utility">3. Practical Utility</a></li>
+        <li><a href="#4-complete-documentation">4. Complete Documentation</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-improvements">Future Improvements</a></li>
+    <li><a href="#github-repository">GitHub Repository</a>
+      <ul>
+        <li><a href="#project-includes">Project Includes</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>In this article, I&rsquo;ll share a complete object detection project using YOLOv8 - Phone Holder Detection. This project covers everything from dataset preparation and model training to inference deployment, demonstrating practical application of YOLOv8.</p>
+<h2 id="project-background">Project Background</h2>
+<h3 id="why-phone-holder-detection">Why Phone Holder Detection?</h3>
+<p>Phone holders are common everyday items, but automated detection has significant applications in smart warehousing, item classification, and more. By training a specialized model to detect phone holders, we can:</p>
+<ul>
+<li>Automate inventory management</li>
+<li>Enable smart item sorting</li>
+<li>Implement visual quality inspection</li>
+<li>Apply security monitoring</li>
+</ul>
+<h3 id="why-yolov8">Why YOLOv8?</h3>
+<p>YOLOv8 (You Only Look Once version 8) by Ultralytics is the latest object detection architecture with advantages over previous versions:</p>
+<ul>
+<li><strong>Best balance of speed and accuracy</strong>: Provides real-time inference speed while maintaining high accuracy</li>
+<li><strong>Easy to use</strong>: Unified CLI and clean API</li>
+<li><strong>Model diversity</strong>: Offers multiple sizes: nano, small, medium, large, extra-large</li>
+<li><strong>Active community</strong>: Rich documentation and continuously updated ecosystem</li>
+</ul>
+<hr>
+<h2 id="dataset-preparation">Dataset Preparation</h2>
+<h3 id="dataset-statistics">Dataset Statistics</h3>
+<p>I built a dataset with 58 images using Label Studio professional annotation tool:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset Split</th>
+<th>Image Count</th>
+<th>Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training set</td>
+<td>44 images</td>
+<td>75.86%</td>
+</tr>
+<tr>
+<td>Validation set</td>
+<td>7 images</td>
+<td>12.07%</td>
+</tr>
+<tr>
+<td>Test set</td>
+<td>7 images</td>
+<td>12.07%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="annotation-process">Annotation Process</h3>
+<ol>
+<li><strong>Data Collection</strong>: Captured phone holder images from various angles and lighting conditions</li>
+<li><strong>Label Studio Annotation</strong>:
+<ul>
+<li>Created &ldquo;phone holder&rdquo; category</li>
+<li>Drew bounding boxes</li>
+<li>Exported YOLO format annotation files</li>
+</ul>
+</li>
+<li><strong>Dataset Split</strong>: Partitioned data into train/validation/test sets with 75%/15%/10% ratio</li>
+</ol>
+<h3 id="dataset-structure">Dataset Structure</h3>
+<pre tabindex="0"><code>data/
+├── classes.txt              # Class definitions
+├── phoneholder.yaml         # Dataset configuration
+├── images/               # Image files
+│   ├── train/           # 44 images
+│   ├── val/             # 7 images
+│   └── test/           # 7 images
+└── labels/               # YOLO format annotations
+    ├── train/
+    ├── val/
+    └── test/
+</code></pre><hr>
+<h2 id="model-training">Model Training</h2>
+<h3 id="environment-setup">Environment Setup</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Install YOLOv8</span>
+</span></span><span style="display:flex;"><span>pip install ultralytics
+</span></span></code></pre></div><h3 id="training-command">Training Command</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yolo detect train data<span style="color:#f92672">=</span>data/phoneholder.yaml model<span style="color:#f92672">=</span>yolov8n.pt epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">32</span> imgsz<span style="color:#f92672">=</span><span style="color:#ae81ff">640</span>
+</span></span></code></pre></div><h3 id="training-parameters">Training Parameters</h3>
+<ul>
+<li><code>data</code>: Dataset configuration file path</li>
+<li><code>model</code>: Pre-trained YOLOv8n (nano) model</li>
+<li><code>epochs</code>: 32 training epochs</li>
+<li><code>imgsz</code>: Input image size 640x640</li>
+</ul>
+<hr>
+<h2 id="training-results">Training Results</h2>
+<h3 id="performance-metrics">Performance Metrics</h3>
+<p>After 32 epochs of training, the model achieved excellent performance:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precision</strong></td>
+<td>99.975%</td>
+<td>Ratio of correctly detected positive samples among all detected positives</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>100%</td>
+<td>Ratio of correctly detected positive samples among all actual positives</td>
+</tr>
+<tr>
+<td><strong><a href="mailto:mAP@0.5" rel="">mAP@0.5</a></strong></td>
+<td>83.348%</td>
+<td>Mean average precision at IoU threshold 0.5</td>
+</tr>
+<tr>
+<td><strong><a href="mailto:mAP@0.5" rel="">mAP@0.5</a>:0.95</strong></td>
+<td>78.834%</td>
+<td>Mean average precision at IoU thresholds 0.5 to 0.95</td>
+</tr>
+</tbody>
+</table>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/yolov8-project/01-training-curves.png"
+        data-srcset="/images/yolov8-project/01-training-curves.png, /images/yolov8-project/01-training-curves.png 1.5x, /images/yolov8-project/01-training-curves.png 2x"
+        data-sizes="auto"
+        alt="/images/yolov8-project/01-training-curves.png"
+        title="/images/yolov8-project/01-training-curves.png" /></p>
+<h3 id="confusion-matrix-analysis">Confusion Matrix Analysis</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/yolov8-project/02-confusion-matrix.png"
+        data-srcset="/images/yolov8-project/02-confusion-matrix.png, /images/yolov8-project/02-confusion-matrix.png 1.5x, /images/yolov8-project/02-confusion-matrix.png 2x"
+        data-sizes="auto"
+        alt="/images/yolov8-project/02-confusion-matrix.png"
+        title="/images/yolov8-project/02-confusion-matrix.png" /></p>
+<p>The confusion matrix shows model performance on the validation set with almost no false positives or false negatives.</p>
+<h3 id="training-batch-visualization">Training Batch Visualization</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/yolov8-project/04-training-batch.jpg"
+        data-srcset="/images/yolov8-project/04-training-batch.jpg, /images/yolov8-project/04-training-batch.jpg 1.5x, /images/yolov8-project/04-training-batch.jpg 2x"
+        data-sizes="auto"
+        alt="/images/yolov8-project/04-training-batch.jpg"
+        title="/images/yolov8-project/04-training-batch.jpg" /></p>
+<p>Batch visualization during training shows feature representations learned by the model.</p>
+<hr>
+<h2 id="model-characteristics">Model Characteristics</h2>
+<h3 id="1-high-accuracy-performance">1. High Accuracy Performance</h3>
+<ul>
+<li><strong>99.975% precision</strong>: Almost zero false positives</li>
+<li><strong>100% recall</strong>: No false negatives</li>
+<li>This is excellent performance for single-class object detection</li>
+</ul>
+<h3 id="2-lightweight-model">2. Lightweight Model</h3>
+<ul>
+<li><strong>best.pt file size</strong>: Only 6.0MB</li>
+<li>Suitable for edge device deployment (Raspberry Pi, Jetson Nano, etc.)</li>
+<li>Fast inference, suitable for real-time applications</li>
+</ul>
+<h3 id="3-easy-integration">3. Easy Integration</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> ultralytics <span style="color:#f92672">import</span> YOLO
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load model</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> YOLO(<span style="color:#e6db74">&#39;best.pt&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Inference</span>
+</span></span><span style="display:flex;"><span>results <span style="color:#f92672">=</span> model(<span style="color:#e6db74">&#39;image.jpg&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get results</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> results:
+</span></span><span style="display:flex;"><span>    boxes <span style="color:#f92672">=</span> r<span style="color:#f92672">.</span>boxes
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> box <span style="color:#f92672">in</span> boxes:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Class: </span><span style="color:#e6db74">{</span>int(box<span style="color:#f92672">.</span>cls[<span style="color:#ae81ff">0</span>])<span style="color:#e6db74">}</span><span style="color:#e6db74">, Conf: </span><span style="color:#e6db74">{</span>float(box<span style="color:#f92672">.</span>conf[<span style="color:#ae81ff">0</span>])<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><hr>
+<h2 id="usage">Usage</h2>
+<h3 id="quick-start">Quick Start</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 1. Clone the project</span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/Doormandd/YOLOv8-Phone-Holder-Detection.git
+</span></span><span style="display:flex;"><span>cd YOLOv8-Phone-Holder-Detection
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. Install dependencies</span>
+</span></span><span style="display:flex;"><span>pip install ultralytics
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. Run inference</span>
+</span></span><span style="display:flex;"><span>yolo predict model<span style="color:#f92672">=</span>best.pt source<span style="color:#f92672">=</span>test_image.jpg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. Use GPU acceleration</span>
+</span></span><span style="display:flex;"><span>yolo predict model<span style="color:#f92672">=</span>best.pt source<span style="color:#f92672">=</span>test_image.jpg device<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><h3 id="python-api-usage">Python API Usage</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> ultralytics <span style="color:#f92672">import</span> YOLO
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load model</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> YOLO(<span style="color:#e6db74">&#39;best.pt&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Read image</span>
+</span></span><span style="display:flex;"><span>image <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>imread(<span style="color:#e6db74">&#39;test_image.jpg&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Perform inference</span>
+</span></span><span style="display:flex;"><span>results <span style="color:#f92672">=</span> model(image)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Process results</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> result <span style="color:#f92672">in</span> results:
+</span></span><span style="display:flex;"><span>    boxes <span style="color:#f92672">=</span> result<span style="color:#f92672">.</span>boxes
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Draw detection boxes on image</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> box <span style="color:#f92672">in</span> boxes:
+</span></span><span style="display:flex;"><span>        x1, y1, x2, y2 <span style="color:#f92672">=</span> box<span style="color:#f92672">.</span>xyxy[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        conf <span style="color:#f92672">=</span> float(box<span style="color:#f92672">.</span>conf[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        cls <span style="color:#f92672">=</span> int(box<span style="color:#f92672">.</span>cls[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Draw</span>
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>putText(image, <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Phone Holder </span><span style="color:#e6db74">{</span>conf<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, 
+</span></span><span style="display:flex;"><span>                   (int(x1), int(y1)<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>), 
+</span></span><span style="display:flex;"><span>                   cv2<span style="color:#f92672">.</span>FONT_HERSHEY_SIMPLEX, <span style="color:#ae81ff">0.5</span>, (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Show results</span>
+</span></span><span style="display:flex;"><span>cv2<span style="color:#f92672">.</span>imshow(<span style="color:#e6db74">&#39;Detection&#39;</span>, image)
+</span></span><span style="display:flex;"><span>cv2<span style="color:#f92672">.</span>waitKey(<span style="color:#ae81ff">0</span>)
+</span></span></code></pre></div><hr>
+<h2 id="project-highlights">Project Highlights</h2>
+<h3 id="1-high-quality-dataset">1. High-Quality Dataset</h3>
+<ul>
+<li>Professional annotation tool Label Studio</li>
+<li>Accurate bounding box annotations</li>
+<li>Diverse shooting scenarios</li>
+</ul>
+<h3 id="2-excellent-training-results">2. Excellent Training Results</h3>
+<ul>
+<li>Precision nearly 100%</li>
+<li>Perfect 100% recall</li>
+<li>Good model convergence</li>
+</ul>
+<h3 id="3-practical-utility">3. Practical Utility</h3>
+<ul>
+<li>Small model (6.0MB)</li>
+<li>Fast inference speed</li>
+<li>Easy integration into existing systems</li>
+</ul>
+<h3 id="4-complete-documentation">4. Complete Documentation</h3>
+<ul>
+<li>Detailed README documentation</li>
+<li>Bilingual (Chinese/English) instructions</li>
+<li>Complete code examples</li>
+</ul>
+<hr>
+<h2 id="future-improvements">Future Improvements</h2>
+<ul>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Expand dataset</strong>: Add more scenes and different angle images</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Test different models</strong>: Compare YOLOv8n/s/m/l/x performance</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Model optimization</strong>: Try quantization, pruning and other compression techniques</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Data augmentation</strong>: Add rotation, scaling, color jitter and other augmentation strategies</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Real-time application</strong>: Integrate into video stream real-time detection system</li>
+</ul>
+<hr>
+<h2 id="github-repository">GitHub Repository</h2>
+<p>Complete project code, dataset configuration, training results, and detailed documentation have been uploaded to GitHub:</p>
+<p>🔗 <strong><a href="https://github.com/Doormandd/YOLOv8-Phone-Holder-Detection" target="_blank" rel="noopener noreffer ">YOLOv8-Phone-Holder-Detection</a></strong></p>
+<h3 id="project-includes">Project Includes</h3>
+<ul>
+<li>✅ Complete README documentation (bilingual)</li>
+<li>✅ Trained model file (best.pt)</li>
+<li>✅ Dataset configuration and annotation files</li>
+<li>✅ Training results and visualization charts</li>
+<li>✅ Detailed usage instructions and code examples</li>
+</ul>
+<hr>
+<h2 id="conclusion">Conclusion</h2>
+<p>Through this project, I successfully trained a high-precision phone holder detection model. YOLOv8&rsquo;s ease of use and powerful performance make object detection tasks simple and efficient. I hope this project helps developers learning computer vision and object detection.</p>
+<p>If you have any questions or suggestions about the project, feel free to open an Issue or Pull Request on GitHub!</p>
+<hr>
+<p><strong>Related Tags</strong>: #YOLOv8 #ObjectDetection #DeepLearning #ComputerVision #ProjectSharing</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-02-04</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/en/posts/yolov8-phone-holder-detection/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" data-title="YOLOv8 Phone Holder Detection Project" data-hashtags="YOLOv8,Object Detection,Deep Learning,Computer Vision,Project Sharing"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" data-hashtag="YOLOv8"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" data-title="YOLOv8 Phone Holder Detection Project"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" data-title="YOLOv8 Phone Holder Detection Project"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" data-title="YOLOv8 Phone Holder Detection Project" data-image="/images/yolov8-project/01-training-curves.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/yolov8/">YOLOv8</a>,&nbsp;<a href="/en/tags/object-detection/">Object Detection</a>,&nbsp;<a href="/en/tags/deep-learning/">Deep Learning</a>,&nbsp;<a href="/en/tags/computer-vision/">Computer Vision</a>,&nbsp;<a href="/en/tags/project-sharing/">Project Sharing</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/agent-workflow-andrew-ng/" class="prev" rel="prev" title="Andrew Ng: Agent Workflows and Four Main Design Patterns"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Andrew Ng: Agent Workflows and Four Main Design Patterns</a>
+            <a href="/en/posts/safety-helmet-yolo-detection/" class="next" rel="next" title="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System">Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/en/index.json","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

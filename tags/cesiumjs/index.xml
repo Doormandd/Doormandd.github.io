@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>CesiumJS - 标签 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/tags/cesiumjs/</link>
+        <description>CesiumJS - 标签 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/tags/cesiumjs/" rel="self" type="application/rss+xml" /><item>
+    <title>Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具</title>
+    <link>https://Doormandd.github.io/posts/ara-coverage-flight-path/</link>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/ara-coverage-flight-path/</guid>
+    <description><![CDATA[项目概述 Ara Coverage Flight Path 是一款基于 CesiumJS 开发的 Web 端无人机航测路径规划工具。它提供了直观的可视化界面，帮助用户快速规划高效的飞行路径，适用于各种航空摄影测量和遥感应用场景。
+核心功能 1. 测区ROI绘制 支持交互式多边形绘制 实时显示坐标和面积计算 灵活的编辑和调整功能 2. 智能路径规划 自动识别最长飞行边 生成边界矩形覆盖区域 Z字形飞行路径优化 3. 专业参数配置 传感器参数自定义 地面采样距离(GSD)计算 航向/旁向重叠度设置 4. 路径裁剪优化 ROI内外路径智能裁剪 精确的交点计算 可视化裁剪效果 技术实现 技术栈 前端框架: 原生 JavaScript + HTML5 3D可视化: CesiumJS 1.115 几何算法: 自定义地理计算库 UI设计: 响应式布局 + 现代交互 架构设计 模块化架构确保代码可维护性和可扩展性：
+app.js - 主应用程序逻辑 geometry-utils.js - 地理几何计算 flight-path.js - 航线生成算法 sensor-utils.js - 传感器参数计算 ui-manager.js - 用户界面管理 应用场景 1. 农业测绘 农作物生长监测 灌溉系统规划 精准农业管理 2.]]></description>
+</item>
+</channel>
+</rss>

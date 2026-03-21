@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目 - DR&#39;s个人网页</title><meta name="Description" content="基于 YOLO 检测、DeepOCSORT 跟踪和 BoxMOT 框架的实时无人机目标跟踪系统，配备 WebSocket 服务器。"><meta property="og:url" content="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目">
+  <meta property="og:description" content="基于 YOLO 检测、DeepOCSORT 跟踪和 BoxMOT 框架的实时无人机目标跟踪系统，配备 WebSocket 服务器。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-10-12T20:09:10+08:00">
+    <meta property="article:modified_time" content="2025-10-12T20:09:10+08:00">
+    <meta property="article:tag" content="YOLO">
+    <meta property="article:tag" content="DeepSORT">
+    <meta property="article:tag" content="目标跟踪">
+    <meta property="article:tag" content="无人机">
+    <meta property="article:tag" content="WebSocket">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目">
+  <meta name="twitter:description" content="基于 YOLO 检测、DeepOCSORT 跟踪和 BoxMOT 框架的实时无人机目标跟踪系统，配备 WebSocket 服务器。">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" /><link rel="prev" href="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "YOLO+DeepSORT+Hunyuan3D 实现无人机实时目标跟踪项目",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/posts\/yolo-deepsort-hunyuan3d-drone-tracking\/"
+        },"genre": "posts","keywords": "YOLO, DeepSORT, 目标跟踪, 无人机, WebSocket","wordcount":  477 ,
+        "url": "https:\/\/Doormandd.github.io\/posts\/yolo-deepsort-hunyuan3d-drone-tracking\/","datePublished": "2025-10-12T20:09:10+08:00","dateModified": "2025-10-12T20:09:10+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": "基于 YOLO 检测、DeepOCSORT 跟踪和 BoxMOT 框架的实时无人机目标跟踪系统，配备 WebSocket 服务器。"
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="查看所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="按标签浏览文章"> 标签 </a><a class="menu-item" href="/categories/" title="按分类浏览文章"> 分类 </a><a class="menu-item" href="/about/" title="关于本站"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/">English</option><option value="/posts/yolo-deepsort-hunyuan3d-drone-tracking/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="查看所有文章">所有文章</a><a class="menu-item" href="/tags/" title="按标签浏览文章">标签</a><a class="menu-item" href="/categories/" title="按分类浏览文章">分类</a><a class="menu-item" href="/about/" title="关于本站">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/">English</option><option value="/posts/yolo-deepsort-hunyuan3d-drone-tracking/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">YOLO+DeepSORT+Hunyuan3D 实现无人机实时目标跟踪项目</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>计算机视觉</a>&nbsp;<a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>深度学习</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-10-12">2025-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;约 477 字&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#项目概述">项目概述</a></li>
+    <li><a href="#核心特性">核心特性</a>
+      <ul>
+        <li><a href="#实时目标检测">实时目标检测</a></li>
+        <li><a href="#高级目标跟踪">高级目标跟踪</a></li>
+        <li><a href="#实时通信">实时通信</a></li>
+        <li><a href="#用户界面">用户界面</a></li>
+      </ul>
+    </li>
+    <li><a href="#技术架构">技术架构</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#使用方法">使用方法</a>
+      <ul>
+        <li><a href="#1-启动-websocket-服务器">1. 启动 WebSocket 服务器</a></li>
+        <li><a href="#2-打开-demo-演示页面">2. 打开 Demo 演示页面</a></li>
+      </ul>
+    </li>
+    <li><a href="#demo-功能介绍">Demo 功能介绍</a>
+      <ul>
+        <li><a href="#3d-可视化系统">3D 可视化系统</a></li>
+        <li><a href="#demo-文件说明">Demo 文件说明</a></li>
+      </ul>
+    </li>
+    <li><a href="#配置">配置</a></li>
+    <li><a href="#websocket-协议">WebSocket 协议</a>
+      <ul>
+        <li><a href="#客户端到服务器">客户端到服务器</a></li>
+        <li><a href="#服务器到客户端">服务器到客户端</a></li>
+      </ul>
+    </li>
+    <li><a href="#性能优化">性能优化</a>
+      <ul>
+        <li><a href="#检测过滤">检测过滤</a></li>
+        <li><a href="#跟踪配置">跟踪配置</a></li>
+        <li><a href="#可视化">可视化</a></li>
+      </ul>
+    </li>
+    <li><a href="#项目结构">项目结构</a></li>
+    <li><a href="#应用场景">应用场景</a></li>
+    <li><a href="#未来增强">未来增强</a></li>
+    <li><a href="#致谢">致谢</a></li>
+    <li><a href="#许可证">许可证</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="项目概述">项目概述</h2>
+<p>本项目实现了一个实时无人机目标跟踪系统，结合了多种最先进的计算机视觉技术。系统能够实时处理来自无人机的视频帧，使用 YOLO 检测车辆，通过 DeepOCSORT（DeepSORT 的改进版本）在帧间跟踪目标，并通过基于 WebSocket 的接口可视化结果。</p>
+<h2 id="核心特性">核心特性</h2>
+<h3 id="实时目标检测">实时目标检测</h3>
+<ul>
+<li><strong>YOLO (You Only Look Once)</strong> 实现快速准确的目标检测</li>
+<li>专门针对车辆检测（VisDrone 数据集中的汽车）</li>
+<li>可配置的置信度阈值以获得最佳检测性能</li>
+<li>基于尺寸和宽高比的高效无效检测过滤</li>
+</ul>
+<h3 id="高级目标跟踪">高级目标跟踪</h3>
+<ul>
+<li>BoxMOT 框架中的 <strong>DeepOCSORT</strong> 跟踪算法</li>
+<li>使用 OSNet-x0.25-MSMT17 模型的 ReID（重识别）特征</li>
+<li>相机运动补偿以提高跟踪准确性</li>
+<li>自适应加权实现鲁棒的轨迹关联</li>
+<li>可配置参数：最大寿命、最小命中数、IOU 阈值</li>
+</ul>
+<h3 id="实时通信">实时通信</h3>
+<ul>
+<li>用于实时帧处理的 <strong>WebSocket 服务器</strong></li>
+<li>Base64 编码的图像传输</li>
+<li>用于目标选择的双向通信</li>
+<li>基于 JSON 的控制消息协议</li>
+</ul>
+<h3 id="用户界面">用户界面</h3>
+<ul>
+<li>交互式 Web 界面（demo.html）</li>
+<li>实时可视化跟踪结果</li>
+<li>目标选择功能</li>
+<li>轨迹历史可视化</li>
+<li>颜色编码的边界框（普通目标绿色，选中目标红色）</li>
+</ul>
+<h2 id="技术架构">技术架构</h2>
+<pre tabindex="0"><code>客户端（Web 浏览器）
+    ↓ WebSocket (Base64 图像)
+服务器 (track_server.py)
+    ↓ 1. 图像解码
+    ↓ 2. YOLO 检测
+    ↓ 3. DeepOCSORT 跟踪
+    ↓ 4. 可视化
+    ↓ WebSocket (带标注图像的 JSON)
+客户端（显示结果）
+</code></pre><h2 id="安装">安装</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装依赖</span>
+</span></span><span style="display:flex;"><span>pip install -r requirements_boxmot.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载所需模型</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - best.pt (YOLO 检测模型)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - osnet_x0_25_msmt17.pt (ReID 模型)</span>
+</span></span></code></pre></div><h2 id="使用方法">使用方法</h2>
+<h3 id="1-启动-websocket-服务器">1. 启动 WebSocket 服务器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 启动 WebSocket 服务器</span>
+</span></span><span style="display:flex;"><span>python track_server.py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 服务器运行在 ws://localhost:8765</span>
+</span></span></code></pre></div><h3 id="2-打开-demo-演示页面">2. 打开 Demo 演示页面</h3>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>在 Web 浏览器中打开 <code>demo.html</code> 文件，即可看到完整的 3D 模拟和跟踪演示。</p>
+<h2 id="demo-功能介绍">Demo 功能介绍</h2>
+<h3 id="3d-可视化系统">3D 可视化系统</h3>
+<p>本项目包含一个基于 <strong>Cesium</strong> 的 3D 可视化演示系统，提供以下功能：</p>
+<h4 id="主要特性">主要特性</h4>
+<ul>
+<li><strong>3D 地球可视化</strong>：使用 Cesium 实现逼真的 3D 地球和地形渲染</li>
+<li><strong>车辆和无人机模拟</strong>：在 3D 场景中放置和控制车辆及无人机模型</li>
+<li><strong>轨迹规划</strong>：支持自定义轨迹绘制和路径规划</li>
+<li><strong>实时目标跟踪集成</strong>：与 WebSocket 服务器集成，实时显示跟踪结果</li>
+</ul>
+<h4 id="控制面板功能">控制面板功能</h4>
+<ol>
+<li>
+<p><strong>模型管理</strong></p>
+<ul>
+<li>加载和管理 3D 模型（车辆、无人机）</li>
+<li>支持多种车辆模型（如丰田、油罐车等）</li>
+<li>模型预览和选择</li>
+</ul>
+</li>
+<li>
+<p><strong>轨迹编辑</strong></p>
+<ul>
+<li>在 3D 地球上绘制自定义轨迹</li>
+<li>编辑和修改已有轨迹</li>
+<li>轨迹预览功能</li>
+</ul>
+</li>
+<li>
+<p><strong>模拟控制</strong></p>
+<ul>
+<li>启动/暂停模拟</li>
+<li>控制无人机沿轨迹飞行</li>
+<li>实时相机视角切换</li>
+</ul>
+</li>
+<li>
+<p><strong>实时跟踪</strong></p>
+<ul>
+<li>连接到 WebSocket 跟踪服务器</li>
+<li>实时显示检测结果和边界框</li>
+<li>选中特定跟踪目标</li>
+<li>轨迹历史可视化</li>
+</ul>
+</li>
+</ol>
+<h4 id="使用流程">使用流程</h4>
+<ol>
+<li>
+<p><strong>准备环境</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 确保已启动跟踪服务器</span>
+</span></span><span style="display:flex;"><span>python track_server.py
+</span></span></code></pre></div></li>
+<li>
+<p><strong>打开 Demo</strong></p>
+<ul>
+<li>在浏览器中打开 <code>demo.html</code></li>
+<li>系统会自动加载 3D 地球和模型</li>
+</ul>
+</li>
+<li>
+<p><strong>创建场景</strong></p>
+<ul>
+<li>点击&quot;放置目标&quot;按钮，在地球上放置车辆模型</li>
+<li>绘制轨迹路径</li>
+<li>放置无人机 Agent</li>
+</ul>
+</li>
+<li>
+<p><strong>启动跟踪</strong></p>
+<ul>
+<li>点击&quot;连接跟踪服务器&quot;按钮</li>
+<li>系统开始实时传输和处理视频帧</li>
+<li>查看检测结果和跟踪信息</li>
+</ul>
+</li>
+<li>
+<p><strong>交互控制</strong></p>
+<ul>
+<li>点击检测框选择特定目标</li>
+<li>使用鼠标控制 3D 视角</li>
+<li>通过控制面板管理模拟状态</li>
+</ul>
+</li>
+</ol>
+<h4 id="技术实现">技术实现</h4>
+<ul>
+<li><strong>前端框架</strong>：Cesium.js 用于 3D 渲染</li>
+<li><strong>通信协议</strong>：WebSocket 实现实时数据传输</li>
+<li><strong>模型格式</strong>：GLB/GLTF 3D 模型</li>
+<li><strong>相机控制</strong>：支持多视角切换和自由移动</li>
+</ul>
+<h4 id="界面截图说明">界面截图说明</h4>
+<p>Demo 包含两个主要视图：</p>
+<ul>
+<li><strong>主视图</strong>：3D 地球和场景可视化</li>
+<li><strong>预览视图</strong>：无人机相机实时画面</li>
+<li><strong>控制面板</strong>：右侧浮动面板，包含所有控制功能</li>
+</ul>
+<h3 id="demo-文件说明">Demo 文件说明</h3>
+<pre tabindex="0"><code>├── demo.html                # 主演示页面
+├── js/
+│   └── app.js               # 前端逻辑和 WebSocket 客户端
+└── asset/                   # 3D 模型资源
+    ├── agent/
+    │   └── drone.glb        # 无人机模型
+    └── target/
+        ├── oil.glb          # 油罐车模型
+        └── toyo.glb         # 丰田车模型
+</code></pre><h2 id="配置">配置</h2>
+<p><code>track_server.py</code> 中的关键参数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 目标检测类别（VisDrone 数据集）</span>
+</span></span><span style="display:flex;"><span>TARGET_CLASSES <span style="color:#f92672">=</span> [<span style="color:#ae81ff">3</span>]  <span style="color:#75715e"># 3 = 汽车</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># DeepOCSORT 跟踪器参数</span>
+</span></span><span style="display:flex;"><span>tracker <span style="color:#f92672">=</span> DeepOcSort(
+</span></span><span style="display:flex;"><span>    reid_weights<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;osnet_x0_25_msmt17.pt&#39;</span>,
+</span></span><span style="display:flex;"><span>    device<span style="color:#f92672">=</span>device,              <span style="color:#75715e"># 自动检测 CUDA</span>
+</span></span><span style="display:flex;"><span>    half<span style="color:#f92672">=</span>use_half,              <span style="color:#75715e"># GPU 上启用半精度</span>
+</span></span><span style="display:flex;"><span>    delta_t<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,                  <span style="color:#75715e"># 时间增量</span>
+</span></span><span style="display:flex;"><span>    inertia<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,                <span style="color:#75715e"># 惯性权重</span>
+</span></span><span style="display:flex;"><span>    w_association_emb<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>,      <span style="color:#75715e"># ReID 特征权重</span>
+</span></span><span style="display:flex;"><span>    alpha_fixed_emb<span style="color:#f92672">=</span><span style="color:#ae81ff">0.95</span>,       <span style="color:#75715e"># ReID 特征平滑系数</span>
+</span></span><span style="display:flex;"><span>    embedding_off<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,        <span style="color:#75715e"># 启用 ReID 特征</span>
+</span></span><span style="display:flex;"><span>    cmc_off<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,              <span style="color:#75715e"># 启用相机运动补偿</span>
+</span></span><span style="display:flex;"><span>    aw_off<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,               <span style="color:#75715e"># 启用自适应权重</span>
+</span></span><span style="display:flex;"><span>    det_thresh<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,             <span style="color:#75715e"># 检测置信度阈值</span>
+</span></span><span style="display:flex;"><span>    max_age<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>,                <span style="color:#75715e"># 最大丢失帧数（30秒 @ 10fps）</span>
+</span></span><span style="display:flex;"><span>    min_hits<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,                 <span style="color:#75715e"># 最小连续检测帧数</span>
+</span></span><span style="display:flex;"><span>    iou_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>,          <span style="color:#75715e"># IOU 阈值</span>
+</span></span><span style="display:flex;"><span>    asso_func<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;giou&#39;</span>,           <span style="color:#75715e"># 关联函数</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="websocket-协议">WebSocket 协议</h2>
+<h3 id="客户端到服务器">客户端到服务器</h3>
+<ul>
+<li><strong>图像帧</strong>：Base64 编码的 JPEG 图像</li>
+<li><strong>控制消息</strong>：JSON 格式
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;command&#34;</span>: <span style="color:#e6db74">&#34;select_target&#34;</span>, <span style="color:#f92672">&#34;track_id&#34;</span>: <span style="color:#ae81ff">1</span>}
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;command&#34;</span>: <span style="color:#e6db74">&#34;clear_selection&#34;</span>}
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="服务器到客户端">服务器到客户端</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;frame&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;base64_encoded_jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;detections&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;track_id&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;class_id&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;class_name&#34;</span>: <span style="color:#e6db74">&#34;car&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;confidence&#34;</span>: <span style="color:#ae81ff">0.95</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;bbox&#34;</span>: [<span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">1</span>, <span style="color:#960050;background-color:#1e0010">y</span><span style="color:#ae81ff">1</span>, <span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">2</span>, <span style="color:#960050;background-color:#1e0010">y</span><span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;is_selected&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;selected_track_id&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="性能优化">性能优化</h2>
+<h3 id="检测过滤">检测过滤</h3>
+<ul>
+<li>最小尺寸阈值（10px）以消除误报</li>
+<li>宽高比验证（0.1 到 10）以移除无效检测</li>
+<li>坐标有效性检查（NaN/Infinity）</li>
+</ul>
+<h3 id="跟踪配置">跟踪配置</h3>
+<ul>
+<li>ReID 特征用于改进轨迹身份维护</li>
+<li>相机运动补偿适用于移动相机场景</li>
+<li>自适应权重调整实现鲁棒关联</li>
+</ul>
+<h3 id="可视化">可视化</h3>
+<ul>
+<li>JPEG 压缩（质量 70）以高效传输</li>
+<li>轨迹历史限制为最近 30 帧</li>
+<li>颜色编码可视化以便于解释</li>
+</ul>
+<h2 id="项目结构">项目结构</h2>
+<pre tabindex="0"><code>.
+├── track_server.py          # 主 WebSocket 服务器
+├── best.pt                  # YOLO 检测模型
+├── osnet_x0_25_msmt17.pt    # DeepOCSORT 的 ReID 模型
+├── requirements_boxmot.txt  # Python 依赖
+├── demo.html                # 前端演示页面
+├── js/
+│   └── app.js               # 前端 WebSocket 客户端
+├── asset/                   # 用于可视化的 3D 模型
+│   ├── agent/
+│   └── target/
+├── input_tmp/               # 调试：输入帧
+└── detect_tmp/              # 调试：处理后的帧
+</code></pre><h2 id="应用场景">应用场景</h2>
+<ul>
+<li><strong>无人机监控</strong>：实时车辆跟踪用于安全防护</li>
+<li><strong>交通监控</strong>：实时计数和跟踪车辆</li>
+<li><strong>自主导航</strong>：障碍物检测和跟踪</li>
+<li><strong>研究平台</strong>：跟踪算法评估的测试平台</li>
+</ul>
+<h2 id="未来增强">未来增强</h2>
+<ul>
+<li>支持更多目标类别</li>
+<li>多目标跟踪（超越车辆）</li>
+<li>与 Hunyuan3D 的 3D 可视化集成</li>
+<li>移动客户端应用</li>
+<li>跨多架无人机的分布式跟踪</li>
+</ul>
+<h2 id="致谢">致谢</h2>
+<ul>
+<li><strong>YOLO</strong>：Ultralytics 团队</li>
+<li><strong>DeepOCSORT</strong>：BoxMOT 框架</li>
+<li><strong>ReID 模型</strong>：OSNet-x0.25-MSMT17</li>
+<li><strong>VisDrone 数据集</strong>：用于训练和评估</li>
+</ul>
+<h2 id="许可证">许可证</h2>
+<p>详见 LICENSE 文件。</p>
+<hr>
+<p><strong>项目仓库</strong>：<a href="https://github.com/Doormandd/Yolo-DeepSORT-Hunyuan3D" target="_blank" rel="noopener noreffer ">https://github.com/Doormandd/Yolo-DeepSORT-Hunyuan3D</a></p>
+<p><strong>日期</strong>：2025年10月12日</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2025-10-12</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/yolo-deepsort-hunyuan3d-drone-tracking/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目" data-hashtags="YOLO,DeepSORT,目标跟踪,无人机,WebSocket"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-hashtag="YOLO"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/yolo/">YOLO</a>,&nbsp;<a href="/tags/deepsort/">DeepSORT</a>,&nbsp;<a href="/tags/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">目标跟踪</a>,&nbsp;<a href="/tags/%E6%97%A0%E4%BA%BA%E6%9C%BA/">无人机</a>,&nbsp;<a href="/tags/websocket/">WebSocket</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/safety-helmet-yolo-detection/" class="prev" rel="prev" title="Safety Helmet YOLO：基于深度学习的安全帽检测系统"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Safety Helmet YOLO：基于深度学习的安全帽检测系统</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

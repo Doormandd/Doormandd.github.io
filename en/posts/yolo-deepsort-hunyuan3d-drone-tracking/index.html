@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project - DR&#39;s个人网页</title><meta name="Description" content="A real-time drone object tracking system using YOLO detection, DeepOCSORT tracking, and BoxMOT framework with WebSocket server."><meta property="og:url" content="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project">
+  <meta property="og:description" content="A real-time drone object tracking system using YOLO detection, DeepOCSORT tracking, and BoxMOT framework with WebSocket server.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-10-12T20:09:10+08:00">
+    <meta property="article:modified_time" content="2025-10-12T20:09:10+08:00">
+    <meta property="article:tag" content="YOLO">
+    <meta property="article:tag" content="DeepSORT">
+    <meta property="article:tag" content="Object Tracking">
+    <meta property="article:tag" content="Drone">
+    <meta property="article:tag" content="WebSocket">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project">
+  <meta name="twitter:description" content="A real-time drone object tracking system using YOLO detection, DeepOCSORT tracking, and BoxMOT framework with WebSocket server.">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" /><link rel="prev" href="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "YOLO+DeepSORT+Hunyuan3D Real-time Drone Object Tracking Project",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/en\/posts\/yolo-deepsort-hunyuan3d-drone-tracking\/"
+        },"genre": "posts","keywords": "YOLO, DeepSORT, Object Tracking, Drone, WebSocket","wordcount":  972 ,
+        "url": "https:\/\/Doormandd.github.io\/en\/posts\/yolo-deepsort-hunyuan3d-drone-tracking\/","datePublished": "2025-10-12T20:09:10+08:00","dateModified": "2025-10-12T20:09:10+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": "A real-time drone object tracking system using YOLO detection, DeepOCSORT tracking, and BoxMOT framework with WebSocket server."
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/" title="View all posts"> Posts </a><a class="menu-item" href="/en/tags/" title="Browse by tags"> Tags </a><a class="menu-item" href="/en/categories/" title="Browse by categories"> Categories </a><a class="menu-item" href="/en/about/" title="About this site"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" selected>English</option><option value="/posts/yolo-deepsort-hunyuan3d-drone-tracking/">简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="View all posts">Posts</a><a class="menu-item" href="/en/tags/" title="Browse by tags">Tags</a><a class="menu-item" href="/en/categories/" title="Browse by categories">Categories</a><a class="menu-item" href="/en/about/" title="About this site">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" selected>English</option><option value="/posts/yolo-deepsort-hunyuan3d-drone-tracking/">简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">YOLO+DeepSORT+Hunyuan3D Real-time Drone Object Tracking Project</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/en/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/computer-vision/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Computer Vision</a>&nbsp;<a href="/en/categories/deep-learning/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Deep Learning</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-10-12">2025-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;972 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#project-overview">Project Overview</a></li>
+    <li><a href="#key-features">Key Features</a>
+      <ul>
+        <li><a href="#real-time-object-detection">Real-time Object Detection</a></li>
+        <li><a href="#advanced-object-tracking">Advanced Object Tracking</a></li>
+        <li><a href="#real-time-communication">Real-time Communication</a></li>
+        <li><a href="#user-interface">User Interface</a></li>
+      </ul>
+    </li>
+    <li><a href="#technical-architecture">Technical Architecture</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#1-start-websocket-server">1. Start WebSocket Server</a></li>
+        <li><a href="#2-open-demo-page">2. Open Demo Page</a></li>
+      </ul>
+    </li>
+    <li><a href="#demo-features-overview">Demo Features Overview</a>
+      <ul>
+        <li><a href="#3d-visualization-system">3D Visualization System</a></li>
+        <li><a href="#demo-file-structure">Demo File Structure</a></li>
+      </ul>
+    </li>
+    <li><a href="#configuration">Configuration</a></li>
+    <li><a href="#websocket-protocol">WebSocket Protocol</a>
+      <ul>
+        <li><a href="#client-to-server">Client to Server</a></li>
+        <li><a href="#server-to-client">Server to Client</a></li>
+      </ul>
+    </li>
+    <li><a href="#performance-optimization">Performance Optimization</a>
+      <ul>
+        <li><a href="#detection-filtering">Detection Filtering</a></li>
+        <li><a href="#tracking-configuration">Tracking Configuration</a></li>
+        <li><a href="#visualization">Visualization</a></li>
+      </ul>
+    </li>
+    <li><a href="#project-structure">Project Structure</a></li>
+    <li><a href="#applications">Applications</a></li>
+    <li><a href="#future-enhancements">Future Enhancements</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#license">License</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="project-overview">Project Overview</h2>
+<p>This project implements a real-time drone object tracking system that combines multiple state-of-the-art computer vision techniques. The system processes video frames from drones in real-time, detects vehicles using YOLO, tracks them across frames using DeepOCSORT (an improved version of DeepSORT), and visualizes results through a WebSocket-based interface.</p>
+<h2 id="key-features">Key Features</h2>
+<h3 id="real-time-object-detection">Real-time Object Detection</h3>
+<ul>
+<li><strong>YOLO (You Only Look Once)</strong> for fast and accurate object detection</li>
+<li>Specialized for vehicle detection (cars in VisDrone dataset)</li>
+<li>Configurable confidence threshold for optimal detection performance</li>
+<li>Efficient filtering of invalid detections based on size and aspect ratio</li>
+</ul>
+<h3 id="advanced-object-tracking">Advanced Object Tracking</h3>
+<ul>
+<li><strong>DeepOCSORT</strong> tracking algorithm from BoxMOT framework</li>
+<li>ReID (Re-identification) features using OSNet-x0.25-MSMT17 model</li>
+<li>Camera motion compensation for improved tracking accuracy</li>
+<li>Adaptive weighting for robust track association</li>
+<li>Configurable parameters: max age, min hits, IOU threshold</li>
+</ul>
+<h3 id="real-time-communication">Real-time Communication</h3>
+<ul>
+<li><strong>WebSocket server</strong> for real-time frame processing</li>
+<li>Base64-encoded image transmission</li>
+<li>Bidirectional communication for target selection</li>
+<li>JSON-based protocol for control messages</li>
+</ul>
+<h3 id="user-interface">User Interface</h3>
+<ul>
+<li>Interactive web interface (demo.html)</li>
+<li>Real-time visualization of tracking results</li>
+<li>Target selection capability</li>
+<li>Track history trails visualization</li>
+<li>Color-coded bounding boxes (green for normal, red for selected)</li>
+</ul>
+<h2 id="technical-architecture">Technical Architecture</h2>
+<pre tabindex="0"><code>Client (Web Browser)
+    ↓ WebSocket (Base64 images)
+Server (track_server.py)
+    ↓ 1. Image Decoding
+    ↓ 2. YOLO Detection
+    ↓ 3. DeepOCSORT Tracking
+    ↓ 4. Visualization
+    ↓ WebSocket (JSON with annotated image)
+Client (Display results)
+</code></pre><h2 id="installation">Installation</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install dependencies</span>
+</span></span><span style="display:flex;"><span>pip install -r requirements_boxmot.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Download required models</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - best.pt (YOLO detection model)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - osnet_x0_25_msmt17.pt (ReID model)</span>
+</span></span></code></pre></div><h2 id="usage">Usage</h2>
+<h3 id="1-start-websocket-server">1. Start WebSocket Server</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Start WebSocket server</span>
+</span></span><span style="display:flex;"><span>python track_server.py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The server runs on ws://localhost:8765</span>
+</span></span></code></pre></div><h3 id="2-open-demo-page">2. Open Demo Page</h3>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Open <code>demo.html</code> in a web browser to see the complete 3D simulation and tracking demo.</p>
+<h2 id="demo-features-overview">Demo Features Overview</h2>
+<h3 id="3d-visualization-system">3D Visualization System</h3>
+<p>This project includes a <strong>Cesium-based</strong> 3D visualization demo system with the following features:</p>
+<h4 id="key-features-1">Key Features</h4>
+<ul>
+<li><strong>3D Earth Visualization</strong>: Realistic 3D Earth and terrain rendering using Cesium</li>
+<li><strong>Vehicle and Drone Simulation</strong>: Place and control vehicle and drone models in 3D scenes</li>
+<li><strong>Trajectory Planning</strong>: Support for custom trajectory drawing and path planning</li>
+<li><strong>Real-time Object Tracking Integration</strong>: Integrated with WebSocket server to display real-time tracking results</li>
+</ul>
+<h4 id="control-panel-functions">Control Panel Functions</h4>
+<ol>
+<li>
+<p><strong>Model Management</strong></p>
+<ul>
+<li>Load and manage 3D models (vehicles, drones)</li>
+<li>Support for multiple vehicle models (Toyota, oil tanker, etc.)</li>
+<li>Model preview and selection</li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Editing</strong></p>
+<ul>
+<li>Draw custom trajectories on the 3D Earth</li>
+<li>Edit and modify existing trajectories</li>
+<li>Trajectory preview functionality</li>
+</ul>
+</li>
+<li>
+<p><strong>Simulation Control</strong></p>
+<ul>
+<li>Start/pause simulation</li>
+<li>Control drone flight along trajectories</li>
+<li>Real-time camera view switching</li>
+</ul>
+</li>
+<li>
+<p><strong>Real-time Tracking</strong></p>
+<ul>
+<li>Connect to WebSocket tracking server</li>
+<li>Real-time display of detection results and bounding boxes</li>
+<li>Select specific tracking targets</li>
+<li>Track history visualization</li>
+</ul>
+</li>
+</ol>
+<h4 id="usage-workflow">Usage Workflow</h4>
+<ol>
+<li>
+<p><strong>Prepare Environment</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Ensure tracking server is running</span>
+</span></span><span style="display:flex;"><span>python track_server.py
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Open Demo</strong></p>
+<ul>
+<li>Open <code>demo.html</code> in a browser</li>
+<li>System automatically loads 3D Earth and models</li>
+</ul>
+</li>
+<li>
+<p><strong>Create Scene</strong></p>
+<ul>
+<li>Click &ldquo;Place Target&rdquo; button to place vehicle models on Earth</li>
+<li>Draw trajectory paths</li>
+<li>Place drone Agents</li>
+</ul>
+</li>
+<li>
+<p><strong>Start Tracking</strong></p>
+<ul>
+<li>Click &ldquo;Connect Tracking Server&rdquo; button</li>
+<li>System starts real-time frame transmission and processing</li>
+<li>View detection results and tracking information</li>
+</ul>
+</li>
+<li>
+<p><strong>Interactive Control</strong></p>
+<ul>
+<li>Click detection boxes to select specific targets</li>
+<li>Use mouse to control 3D view</li>
+<li>Manage simulation state via control panel</li>
+</ul>
+</li>
+</ol>
+<h4 id="technical-implementation">Technical Implementation</h4>
+<ul>
+<li><strong>Frontend Framework</strong>: Cesium.js for 3D rendering</li>
+<li><strong>Communication Protocol</strong>: WebSocket for real-time data transmission</li>
+<li><strong>Model Format</strong>: GLB/GLTF 3D models</li>
+<li><strong>Camera Control</strong>: Support for multi-view switching and free movement</li>
+</ul>
+<h4 id="interface-overview">Interface Overview</h4>
+<p>Demo includes two main views:</p>
+<ul>
+<li><strong>Main View</strong>: 3D Earth and scene visualization</li>
+<li><strong>Preview View</strong>: Real-time drone camera feed</li>
+<li><strong>Control Panel</strong>: Right floating panel with all control functions</li>
+</ul>
+<h3 id="demo-file-structure">Demo File Structure</h3>
+<pre tabindex="0"><code>├── demo.html                # Main demo page
+├── js/
+│   └── app.js               # Frontend logic and WebSocket client
+└── asset/                   # 3D model resources
+    ├── agent/
+    │   └── drone.glb        # Drone model
+    └── target/
+        ├── oil.glb          # Oil tanker model
+        └── toyo.glb         # Toyota car model
+</code></pre><h2 id="configuration">Configuration</h2>
+<p>Key parameters in <code>track_server.py</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Target detection classes (VisDrone dataset)</span>
+</span></span><span style="display:flex;"><span>TARGET_CLASSES <span style="color:#f92672">=</span> [<span style="color:#ae81ff">3</span>]  <span style="color:#75715e"># 3 = car</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># DeepOCSORT tracker parameters</span>
+</span></span><span style="display:flex;"><span>tracker <span style="color:#f92672">=</span> DeepOcSort(
+</span></span><span style="display:flex;"><span>    reid_weights<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;osnet_x0_25_msmt17.pt&#39;</span>,
+</span></span><span style="display:flex;"><span>    device<span style="color:#f92672">=</span>device,              <span style="color:#75715e"># Auto-detect CUDA</span>
+</span></span><span style="display:flex;"><span>    half<span style="color:#f92672">=</span>use_half,              <span style="color:#75715e"># Enable half precision on GPU</span>
+</span></span><span style="display:flex;"><span>    delta_t<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,                  <span style="color:#75715e"># Time delta</span>
+</span></span><span style="display:flex;"><span>    inertia<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,                <span style="color:#75715e"># Inertia weight</span>
+</span></span><span style="display:flex;"><span>    w_association_emb<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>,      <span style="color:#75715e"># ReID feature weight</span>
+</span></span><span style="display:flex;"><span>    alpha_fixed_emb<span style="color:#f92672">=</span><span style="color:#ae81ff">0.95</span>,       <span style="color:#75715e"># ReID feature smoothing</span>
+</span></span><span style="display:flex;"><span>    embedding_off<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,        <span style="color:#75715e"># Enable ReID features</span>
+</span></span><span style="display:flex;"><span>    cmc_off<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,              <span style="color:#75715e"># Enable camera motion compensation</span>
+</span></span><span style="display:flex;"><span>    aw_off<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,               <span style="color:#75715e"># Enable adaptive weighting</span>
+</span></span><span style="display:flex;"><span>    det_thresh<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,             <span style="color:#75715e"># Detection confidence threshold</span>
+</span></span><span style="display:flex;"><span>    max_age<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>,                <span style="color:#75715e"># Max lost frames (30s @ 10fps)</span>
+</span></span><span style="display:flex;"><span>    min_hits<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,                 <span style="color:#75715e"># Min consecutive detections</span>
+</span></span><span style="display:flex;"><span>    iou_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>,          <span style="color:#75715e"># IOU threshold</span>
+</span></span><span style="display:flex;"><span>    asso_func<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;giou&#39;</span>,           <span style="color:#75715e"># Association function</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="websocket-protocol">WebSocket Protocol</h2>
+<h3 id="client-to-server">Client to Server</h3>
+<ul>
+<li><strong>Image frames</strong>: Base64-encoded JPEG images</li>
+<li><strong>Control messages</strong>: JSON format
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{<span style="color:#f92672">&#34;command&#34;</span>: <span style="color:#e6db74">&#34;select_target&#34;</span>, <span style="color:#f92672">&#34;track_id&#34;</span>: <span style="color:#ae81ff">1</span>}
+</span></span><span style="display:flex;"><span>{<span style="color:#f92672">&#34;command&#34;</span>: <span style="color:#e6db74">&#34;clear_selection&#34;</span>}
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="server-to-client">Server to Client</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;frame&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;image&#34;</span>: <span style="color:#e6db74">&#34;base64_encoded_jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;detections&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;track_id&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;class_id&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;class_name&#34;</span>: <span style="color:#e6db74">&#34;car&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;confidence&#34;</span>: <span style="color:#ae81ff">0.95</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;bbox&#34;</span>: [<span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">1</span>, <span style="color:#960050;background-color:#1e0010">y</span><span style="color:#ae81ff">1</span>, <span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">2</span>, <span style="color:#960050;background-color:#1e0010">y</span><span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;is_selected&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;selected_track_id&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="performance-optimization">Performance Optimization</h2>
+<h3 id="detection-filtering">Detection Filtering</h3>
+<ul>
+<li>Minimum size threshold (10px) to eliminate false positives</li>
+<li>Aspect ratio validation (0.1 to 10) to remove invalid detections</li>
+<li>Coordinate validity checks (NaN/Infinity)</li>
+</ul>
+<h3 id="tracking-configuration">Tracking Configuration</h3>
+<ul>
+<li>ReID features for improved track identity maintenance</li>
+<li>Camera motion compensation for moving camera scenarios</li>
+<li>Adaptive weight adjustment for robust association</li>
+</ul>
+<h3 id="visualization">Visualization</h3>
+<ul>
+<li>JPEG compression (quality 70) for efficient transmission</li>
+<li>Track history limited to last 30 frames</li>
+<li>Color-coded visualization for easy interpretation</li>
+</ul>
+<h2 id="project-structure">Project Structure</h2>
+<pre tabindex="0"><code>.
+├── track_server.py          # Main WebSocket server
+├── best.pt                  # YOLO detection model
+├── osnet_x0_25_msmt17.pt    # ReID model for DeepOCSORT
+├── requirements_boxmot.txt  # Python dependencies
+├── demo.html                # Frontend demo page
+├── js/
+│   └── app.js               # Frontend WebSocket client
+├── asset/                   # 3D models for visualization
+│   ├── agent/
+│   └── target/
+├── input_tmp/               # Debug: input frames
+└── detect_tmp/              # Debug: processed frames
+</code></pre><h2 id="applications">Applications</h2>
+<ul>
+<li><strong>Drone surveillance</strong>: Real-time vehicle tracking for security</li>
+<li><strong>Traffic monitoring</strong>: Count and track vehicles in real-time</li>
+<li><strong>Autonomous navigation</strong>: Obstacle detection and tracking</li>
+<li><strong>Research platform</strong>: Testbed for tracking algorithm evaluation</li>
+</ul>
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ul>
+<li>Support for additional object classes</li>
+<li>Multi-object tracking (beyond vehicles)</li>
+<li>3D visualization integration with Hunyuan3D</li>
+<li>Mobile client application</li>
+<li>Distributed tracking across multiple drones</li>
+</ul>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<ul>
+<li><strong>YOLO</strong>: Ultralytics team</li>
+<li><strong>DeepOCSORT</strong>: BoxMOT framework</li>
+<li><strong>ReID model</strong>: OSNet-x0.25-MSMT17</li>
+<li><strong>VisDrone dataset</strong>: For training and evaluation</li>
+</ul>
+<h2 id="license">License</h2>
+<p>See LICENSE file for details.</p>
+<hr>
+<p><strong>Project Repository</strong>: <a href="https://github.com/Doormandd/Yolo-DeepSORT-Hunyuan3D" target="_blank" rel="noopener noreffer ">https://github.com/Doormandd/Yolo-DeepSORT-Hunyuan3D</a></p>
+<p><strong>Date</strong>: October 12, 2025</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-10-12</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project" data-hashtags="YOLO,DeepSORT,Object Tracking,Drone,WebSocket"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-hashtag="YOLO"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" data-title="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/yolo/">YOLO</a>,&nbsp;<a href="/en/tags/deepsort/">DeepSORT</a>,&nbsp;<a href="/en/tags/object-tracking/">Object Tracking</a>,&nbsp;<a href="/en/tags/drone/">Drone</a>,&nbsp;<a href="/en/tags/websocket/">WebSocket</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/safety-helmet-yolo-detection/" class="prev" rel="prev" title="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/en/index.json","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System">
+  <meta property="og:description" content="Project Overview Safety Helmet YOLO is a deep learning-based safety helmet detection system that implements high-precision real-time safety helmet detection using the YOLOv8 architecture. The project aims to improve work safety in industrial construction, factory workshops, and other scenarios by automatically detecting whether workers are wearing safety helmets, enabling intelligent safety management.
+Project Background In industrial environments such as construction sites, factory workshops, and mines, safety helmets are essential equipment for protecting workers’ head safety. However, manually monitoring whether all workers are wearing safety helmets is neither realistic nor efficient. Automated safety helmet detection through computer vision technology can:
+Real-time monitoring: 24/7 uninterrupted monitoring of workers’ safety status Timely alerts: Immediate warnings when safety helmet violations are detected Data statistics: Recording and analyzing safety helmet wearing rates Cost reduction: Reducing labor costs for manual supervision ">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-20T00:00:00+08:00">
+    <meta property="article:modified_time" content="2025-09-20T00:00:00+08:00">
+    <meta property="article:tag" content="YOLOv8">
+    <meta property="article:tag" content="Object Detection">
+    <meta property="article:tag" content="Deep Learning">
+    <meta property="article:tag" content="Computer Vision">
+    <meta property="article:tag" content="Industrial Safety">
+    <meta property="article:tag" content="Project Share">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System">
+  <meta name="twitter:description" content="Project Overview Safety Helmet YOLO is a deep learning-based safety helmet detection system that implements high-precision real-time safety helmet detection using the YOLOv8 architecture. The project aims to improve work safety in industrial construction, factory workshops, and other scenarios by automatically detecting whether workers are wearing safety helmets, enabling intelligent safety management.
+Project Background In industrial environments such as construction sites, factory workshops, and mines, safety helmets are essential equipment for protecting workers’ head safety. However, manually monitoring whether all workers are wearing safety helmets is neither realistic nor efficient. Automated safety helmet detection through computer vision technology can:
+Real-time monitoring: 24/7 uninterrupted monitoring of workers’ safety status Timely alerts: Immediate warnings when safety helmet violations are detected Data statistics: Recording and analyzing safety helmet wearing rates Cost reduction: Reducing labor costs for manual supervision ">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" /><link rel="prev" href="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" /><link rel="next" href="https://Doormandd.github.io/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/en\/posts\/safety-helmet-yolo-detection\/"
+        },"genre": "posts","keywords": "YOLOv8, Object Detection, Deep Learning, Computer Vision, Industrial Safety, Project Share","wordcount":  1307 ,
+        "url": "https:\/\/Doormandd.github.io\/en\/posts\/safety-helmet-yolo-detection\/","datePublished": "2025-09-20T00:00:00+08:00","dateModified": "2025-09-20T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/" title="View all posts"> Posts </a><a class="menu-item" href="/en/tags/" title="Browse by tags"> Tags </a><a class="menu-item" href="/en/categories/" title="Browse by categories"> Categories </a><a class="menu-item" href="/en/about/" title="About this site"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/safety-helmet-yolo-detection/" selected>English</option><option value="/posts/safety-helmet-yolo-detection/">简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="View all posts">Posts</a><a class="menu-item" href="/en/tags/" title="Browse by tags">Tags</a><a class="menu-item" href="/en/categories/" title="Browse by categories">Categories</a><a class="menu-item" href="/en/about/" title="About this site">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/safety-helmet-yolo-detection/" selected>English</option><option value="/posts/safety-helmet-yolo-detection/">简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/en/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Technology</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-09-20">2025-09-20</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1307 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#project-overview">Project Overview</a>
+      <ul>
+        <li><a href="#project-background">Project Background</a></li>
+      </ul>
+    </li>
+    <li><a href="#technical-solution">Technical Solution</a>
+      <ul>
+        <li><a href="#why-choose-yolov8">Why Choose YOLOv8?</a></li>
+        <li><a href="#system-architecture">System Architecture</a></li>
+      </ul>
+    </li>
+    <li><a href="#dataset-processing">Dataset Processing</a>
+      <ul>
+        <li><a href="#dataset-scale">Dataset Scale</a></li>
+        <li><a href="#dataset-characteristics">Dataset Characteristics</a></li>
+        <li><a href="#labeling-process">Labeling Process</a></li>
+      </ul>
+    </li>
+    <li><a href="#model-training">Model Training</a>
+      <ul>
+        <li><a href="#training-environment-configuration">Training Environment Configuration</a></li>
+        <li><a href="#data-augmentation-strategy">Data Augmentation Strategy</a></li>
+        <li><a href="#training-process">Training Process</a></li>
+      </ul>
+    </li>
+    <li><a href="#experimental-results">Experimental Results</a>
+      <ul>
+        <li><a href="#performance-metrics">Performance Metrics</a></li>
+        <li><a href="#confusion-matrix-analysis">Confusion Matrix Analysis</a></li>
+        <li><a href="#detection-result-visualization">Detection Result Visualization</a></li>
+      </ul>
+    </li>
+    <li><a href="#model-features">Model Features</a>
+      <ul>
+        <li><a href="#1-high-precision-detection">1. High-Precision Detection</a></li>
+        <li><a href="#2-real-time-performance">2. Real-time Performance</a></li>
+        <li><a href="#3-strong-robustness">3. Strong Robustness</a></li>
+      </ul>
+    </li>
+    <li><a href="#practical-applications">Practical Applications</a>
+      <ul>
+        <li><a href="#1-smart-monitoring-system">1. Smart Monitoring System</a></li>
+        <li><a href="#2-mobile-application">2. Mobile Application</a></li>
+        <li><a href="#3-cloud-analysis-platform">3. Cloud Analysis Platform</a></li>
+      </ul>
+    </li>
+    <li><a href="#technical-implementation">Technical Implementation</a>
+      <ul>
+        <li><a href="#core-detection-code">Core Detection Code</a></li>
+        <li><a href="#real-time-video-processing">Real-time Video Processing</a></li>
+      </ul>
+    </li>
+    <li><a href="#deployment-solutions">Deployment Solutions</a>
+      <ul>
+        <li><a href="#1-edge-device-deployment">1. Edge Device Deployment</a></li>
+        <li><a href="#2-cloud-server-deployment">2. Cloud Server Deployment</a></li>
+        <li><a href="#3-mobile-deployment">3. Mobile Deployment</a></li>
+      </ul>
+    </li>
+    <li><a href="#project-open-source">Project Open Source</a>
+      <ul>
+        <li><a href="#project-content">Project Content</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-improvement-directions">Future Improvement Directions</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="project-overview">Project Overview</h2>
+<p>Safety Helmet YOLO is a deep learning-based safety helmet detection system that implements high-precision real-time safety helmet detection using the YOLOv8 architecture. The project aims to improve work safety in industrial construction, factory workshops, and other scenarios by automatically detecting whether workers are wearing safety helmets, enabling intelligent safety management.</p>
+<h3 id="project-background">Project Background</h3>
+<p>In industrial environments such as construction sites, factory workshops, and mines, safety helmets are essential equipment for protecting workers&rsquo; head safety. However, manually monitoring whether all workers are wearing safety helmets is neither realistic nor efficient. Automated safety helmet detection through computer vision technology can:</p>
+<ul>
+<li><strong>Real-time monitoring</strong>: 24/7 uninterrupted monitoring of workers&rsquo; safety status</li>
+<li><strong>Timely alerts</strong>: Immediate warnings when safety helmet violations are detected</li>
+<li><strong>Data statistics</strong>: Recording and analyzing safety helmet wearing rates</li>
+<li><strong>Cost reduction</strong>: Reducing labor costs for manual supervision</li>
+</ul>
+<h2 id="technical-solution">Technical Solution</h2>
+<h3 id="why-choose-yolov8">Why Choose YOLOv8?</h3>
+<p>YOLOv8 (You Only Look Once version 8) is the latest object detection architecture launched by Ultralytics, with the following advantages:</p>
+<ul>
+<li><strong>Best balance of speed and accuracy</strong>: Provides real-time inference speed while maintaining high accuracy</li>
+<li><strong>Easy to use</strong>: Unified command-line interface and concise Python API</li>
+<li><strong>Model diversity</strong>: Multiple sizes available including nano, small, medium, large, and extra-large</li>
+<li><strong>Active community</strong>: Rich documentation and continuously updated ecosystem</li>
+</ul>
+<h3 id="system-architecture">System Architecture</h3>
+<p>The Safety Helmet YOLO system adopts a modular design, mainly including the following components:</p>
+<pre tabindex="0"><code>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ Data Collection │    │ Model Training  │    │ Inference &amp;     │
+│     Layer        │    │     Layer        │    │ Deployment Layer │
+├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+│ • Image Capture │    │ • Data Preproc. │    │ • Real-time      │
+│ • Data Labeling │    │ • Model Training │    │   Inference     │
+│ • Data Augment. │    │ • Performance    │    │ • Visualization  │
+│                 │    │   Evaluation     │    │ • Alert System   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+</code></pre><h2 id="dataset-processing">Dataset Processing</h2>
+<h3 id="dataset-scale">Dataset Scale</h3>
+<p>We have constructed a large-scale safety helmet detection dataset containing 5000 images:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset Split</th>
+<th>Image Count</th>
+<th>Percentage</th>
+<th>Object Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training Set</td>
+<td>3500 images</td>
+<td>70%</td>
+<td>~5000 helmets</td>
+</tr>
+<tr>
+<td>Validation Set</td>
+<td>1000 images</td>
+<td>20%</td>
+<td>~1500 helmets</td>
+</tr>
+<tr>
+<td>Test Set</td>
+<td>500 images</td>
+<td>10%</td>
+<td>~750 helmets</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dataset-characteristics">Dataset Characteristics</h3>
+<ul>
+<li><strong>Diversity</strong>: Contains scenes with different lighting conditions, weather, and seasons</li>
+<li><strong>Authenticity</strong>: From real working environments including construction sites, factory workshops</li>
+<li><strong>Challenging</strong>: Includes complex situations such as small targets, occlusion, multiple angles</li>
+<li><strong>Labeling Quality</strong>: Multiple rounds of manual inspection and verification</li>
+</ul>
+<h3 id="labeling-process">Labeling Process</h3>
+<ol>
+<li><strong>Data Collection</strong>: Collect original image data from multiple industrial scenarios</li>
+<li><strong>Initial Screening</strong>: Remove blurry, overexposed, and severely occluded images</li>
+<li><strong>Professional Labeling</strong>: Precise bounding box annotation using Label Studio</li>
+<li><strong>Quality Check</strong>: Multi-person cross-verification of labeling results</li>
+<li><strong>Data Augmentation</strong>: Increase data diversity through rotation, scaling, color adjustment, etc.</li>
+</ol>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/02-construction-site.png" title="Safety Helmet Dataset Samples" data-thumbnail="/images/safety-helmet-yolo/02-construction-site.png" data-sub-html="<h2>Safety helmet detection samples from real construction sites</h2><p>Safety Helmet Dataset Samples</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/02-construction-site.png"
+            data-srcset="/images/safety-helmet-yolo/02-construction-site.png, /images/safety-helmet-yolo/02-construction-site.png 1.5x, /images/safety-helmet-yolo/02-construction-site.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/02-construction-site.png" />
+    </a><figcaption class="image-caption">Safety helmet detection samples from real construction sites</figcaption>
+    </figure>
+<h2 id="model-training">Model Training</h2>
+<h3 id="training-environment-configuration">Training Environment Configuration</h3>
+<ul>
+<li><strong>Hardware Configuration</strong>: NVIDIA RTX 3080 (10GB VRAM)</li>
+<li><strong>Software Environment</strong>: Python 3.9, PyTorch 2.0, Ultralytics YOLOv8</li>
+<li><strong>Training Parameters</strong>:
+<ul>
+<li>Input size: 640×640 pixels</li>
+<li>Batch size: 16</li>
+<li>Training epochs: 100 epochs</li>
+<li>Learning rate: 0.01</li>
+<li>Optimizer: AdamW</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-augmentation-strategy">Data Augmentation Strategy</h3>
+<p>To improve model generalization, we applied multiple data augmentation techniques:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Data augmentation parameter configuration</span>
+</span></span><span style="display:flex;"><span>augmentation_params <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;hsv_h&#39;</span>: <span style="color:#ae81ff">0.015</span>,        <span style="color:#75715e"># Hue variation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;hsv_s&#39;</span>: <span style="color:#ae81ff">0.7</span>,          <span style="color:#75715e"># Saturation variation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;hsv_v&#39;</span>: <span style="color:#ae81ff">0.4</span>,          <span style="color:#75715e"># Value variation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;degrees&#39;</span>: <span style="color:#ae81ff">0.0</span>,         <span style="color:#75715e"># Rotation angle</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;translate&#39;</span>: <span style="color:#ae81ff">0.1</span>,        <span style="color:#75715e"># Translation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;scale&#39;</span>: <span style="color:#ae81ff">0.5</span>,           <span style="color:#75715e"># Scaling</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;shear&#39;</span>: <span style="color:#ae81ff">0.0</span>,          <span style="color:#75715e"># Shearing</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;perspective&#39;</span>: <span style="color:#ae81ff">0.0</span>,     <span style="color:#75715e"># Perspective transform</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;flipud&#39;</span>: <span style="color:#ae81ff">0.0</span>,         <span style="color:#75715e"># Vertical flip</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;fliplr&#39;</span>: <span style="color:#ae81ff">0.5</span>,         <span style="color:#75715e"># Horizontal flip</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;mosaic&#39;</span>: <span style="color:#ae81ff">1.0</span>,         <span style="color:#75715e"># Mosaic augmentation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;mixup&#39;</span>: <span style="color:#ae81ff">0.0</span>           <span style="color:#75715e"># Mixup augmentation</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="training-process">Training Process</h3>
+<p>The training process adopts a phased learning rate adjustment strategy:</p>
+<ol>
+<li><strong>Warm-up phase</strong> (first 3 epochs): Learning rate gradually increases from 0 to 0.01</li>
+<li><strong>Main training phase</strong> (epochs 4-80): Maintain stable learning rate</li>
+<li><strong>Decay phase</strong> (epochs 81-100): Learning rate gradually decreases to 0.001</li>
+</ol>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/04-training-curves.png" title="Model Training Curves" data-thumbnail="/images/safety-helmet-yolo/04-training-curves.png" data-sub-html="<h2>Training loss and validation metric changes</h2><p>Model Training Curves</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/04-training-curves.png"
+            data-srcset="/images/safety-helmet-yolo/04-training-curves.png, /images/safety-helmet-yolo/04-training-curves.png 1.5x, /images/safety-helmet-yolo/04-training-curves.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/04-training-curves.png" />
+    </a><figcaption class="image-caption">Training loss and validation metric changes</figcaption>
+    </figure>
+<h2 id="experimental-results">Experimental Results</h2>
+<h3 id="performance-metrics">Performance Metrics</h3>
+<p>On the test set, the Safety Helmet YOLO model achieved excellent detection performance:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precision</strong></td>
+<td>96.8%</td>
+<td>Proportion of detected safety helmets that are actually safety helmets</td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>94.2%</td>
+<td>Proportion of all safety helmets that are correctly detected</td>
+</tr>
+<tr>
+<td><strong><a href="mailto:mAP@0.5" rel="">mAP@0.5</a></strong></td>
+<td>95.5%</td>
+<td>Mean average precision at IoU threshold 0.5</td>
+</tr>
+<tr>
+<td><strong><a href="mailto:mAP@0.5" rel="">mAP@0.5</a>:0.95</strong></td>
+<td>78.3%</td>
+<td>Mean average precision at IoU thresholds 0.5 to 0.95</td>
+</tr>
+<tr>
+<td><strong>Inference Speed</strong></td>
+<td>45 FPS</td>
+<td>Real-time detection speed on RTX 3080</td>
+</tr>
+</tbody>
+</table>
+<h3 id="confusion-matrix-analysis">Confusion Matrix Analysis</h3>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/02-confusion-matrix.png" title="Confusion Matrix Analysis" data-thumbnail="/images/safety-helmet-yolo/02-confusion-matrix.png" data-sub-html="<h2>Model classification performance on test set</h2><p>Confusion Matrix Analysis</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/02-confusion-matrix.png"
+            data-srcset="/images/safety-helmet-yolo/02-confusion-matrix.png, /images/safety-helmet-yolo/02-confusion-matrix.png 1.5x, /images/safety-helmet-yolo/02-confusion-matrix.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/02-confusion-matrix.png" />
+    </a><figcaption class="image-caption">Model classification performance on test set</figcaption>
+    </figure>
+<h3 id="detection-result-visualization">Detection Result Visualization</h3>
+<p>The model accurately detects safety helmets in various complex scenarios, including small targets, occlusion, and multiple angles.</p>
+<h2 id="model-features">Model Features</h2>
+<h3 id="1-high-precision-detection">1. High-Precision Detection</h3>
+<ul>
+<li><strong>Small target detection</strong>: Can detect safety helmets at greater distances</li>
+<li><strong>Occlusion handling</strong>: Partially occluded safety helmets can still be detected</li>
+<li><strong>Multi-angle recognition</strong>: Supports safety helmet detection at various angles</li>
+</ul>
+<h3 id="2-real-time-performance">2. Real-time Performance</h3>
+<ul>
+<li><strong>Efficient inference</strong>: Single image detection takes only 22ms</li>
+<li><strong>Lightweight deployment</strong>: Model file is only 6.2MB</li>
+<li><strong>Low resource consumption</strong>: Suitable for edge device deployment</li>
+</ul>
+<h3 id="3-strong-robustness">3. Strong Robustness</h3>
+<ul>
+<li><strong>Light adaptation</strong>: Maintains stable performance under different lighting conditions</li>
+<li><strong>Complex scenes</strong>: Accurate detection in complex background environments</li>
+<li><strong>Multi-scenario application</strong>: Suitable for various scenarios such as construction, factories, and mining</li>
+</ul>
+<h2 id="practical-applications">Practical Applications</h2>
+<h3 id="1-smart-monitoring-system">1. Smart Monitoring System</h3>
+<p>Integration into existing monitoring systems to achieve:</p>
+<ul>
+<li>Real-time safety helmet wearing detection</li>
+<li>Automatic violation behavior alerts</li>
+<li>Historical data recording and statistics</li>
+</ul>
+<h3 id="2-mobile-application">2. Mobile Application</h3>
+<p>Develop mobile applications to provide:</p>
+<ul>
+<li>On-site rapid detection function</li>
+<li>Safety hazard inspection tools</li>
+<li>Instant sharing of inspection results</li>
+</ul>
+<h3 id="3-cloud-analysis-platform">3. Cloud Analysis Platform</h3>
+<p>Build cloud services to support:</p>
+<ul>
+<li>Batch image analysis</li>
+<li>Video stream processing</li>
+<li>API interface services</li>
+</ul>
+<h2 id="technical-implementation">Technical Implementation</h2>
+<h3 id="core-detection-code">Core Detection Code</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> ultralytics <span style="color:#f92672">import</span> YOLO
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SafetyHelmetDetector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, model_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;best.pt&#39;</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Initialize safety helmet detector&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> YOLO(model_path)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">detect</span>(self, image, conf_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">0.25</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Detect safety helmets
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            image: Input image
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            conf_threshold: Confidence threshold
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            list: Detection result list
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        results <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(image, conf<span style="color:#f92672">=</span>conf_threshold)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> results[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>boxes
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">draw_results</span>(self, image, boxes):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Draw detection results on image
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            image: Original image
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            boxes: Detection boxes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            image: Annotated image
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        annotated_image <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> box <span style="color:#f92672">in</span> boxes:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># Get bounding box coordinates</span>
+</span></span><span style="display:flex;"><span>            x1, y1, x2, y2 <span style="color:#f92672">=</span> box<span style="color:#f92672">.</span>xyxy[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>            conf <span style="color:#f92672">=</span> box<span style="color:#f92672">.</span>conf[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># Draw bounding box</span>
+</span></span><span style="display:flex;"><span>            cv2<span style="color:#f92672">.</span>rectangle(annotated_image, 
+</span></span><span style="display:flex;"><span>                        (int(x1), int(y1)), 
+</span></span><span style="display:flex;"><span>                        (int(x2), int(y2)), 
+</span></span><span style="display:flex;"><span>                        (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># Add label</span>
+</span></span><span style="display:flex;"><span>            label <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Safety Hat: </span><span style="color:#e6db74">{</span>conf<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            cv2<span style="color:#f92672">.</span>putText(annotated_image, label,
+</span></span><span style="display:flex;"><span>                       (int(x1), int(y1)<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>),
+</span></span><span style="display:flex;"><span>                       cv2<span style="color:#f92672">.</span>FONT_HERSHEY_SIMPLEX, <span style="color:#ae81ff">0.5</span>,
+</span></span><span style="display:flex;"><span>                       (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> annotated_image
+</span></span></code></pre></div><h3 id="real-time-video-processing">Real-time Video Processing</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">real_time_detection</span>(video_source<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Real-time safety helmet detection&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    detector <span style="color:#f92672">=</span> SafetyHelmetDetector()
+</span></span><span style="display:flex;"><span>    cap <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>VideoCapture(video_source)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        ret, frame <span style="color:#f92672">=</span> cap<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> ret:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Detect safety helmets</span>
+</span></span><span style="display:flex;"><span>        boxes <span style="color:#f92672">=</span> detector<span style="color:#f92672">.</span>detect(frame)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Draw results</span>
+</span></span><span style="display:flex;"><span>        annotated_frame <span style="color:#f92672">=</span> detector<span style="color:#f92672">.</span>draw_results(frame, boxes)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Display results</span>
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>imshow(<span style="color:#e6db74">&#39;Safety Helmet Detection&#39;</span>, annotated_frame)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> cv2<span style="color:#f92672">.</span>waitKey(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span> <span style="color:#f92672">==</span> ord(<span style="color:#e6db74">&#39;q&#39;</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    cap<span style="color:#f92672">.</span>release()
+</span></span><span style="display:flex;"><span>    cv2<span style="color:#f92672">.</span>destroyAllWindows()
+</span></span></code></pre></div><h2 id="deployment-solutions">Deployment Solutions</h2>
+<h3 id="1-edge-device-deployment">1. Edge Device Deployment</h3>
+<ul>
+<li><strong>Hardware requirements</strong>: NVIDIA Jetson Nano/TX2 or similar edge computing devices</li>
+<li><strong>Model optimization</strong>: Use TensorRT for model acceleration</li>
+<li><strong>Power consumption control</strong>: Balance detection accuracy and power consumption</li>
+</ul>
+<h3 id="2-cloud-server-deployment">2. Cloud Server Deployment</h3>
+<ul>
+<li><strong>Containerization</strong>: Use Docker for application packaging</li>
+<li><strong>Load balancing</strong>: Support multi-instance concurrent processing</li>
+<li><strong>Auto-scaling</strong>: Automatically adjust resources based on load</li>
+</ul>
+<h3 id="3-mobile-deployment">3. Mobile Deployment</h3>
+<ul>
+<li><strong>Model compression</strong>: Use quantization techniques to reduce model volume</li>
+<li><strong>Offline inference</strong>: Support local detection in offline environments</li>
+<li><strong>Battery optimization</strong>: Reduce mobile device power consumption</li>
+</ul>
+<h2 id="project-open-source">Project Open Source</h2>
+<p>Complete project code, dataset, and trained models have been open-sourced:</p>
+<p>🔗 <strong><a href="https://github.com/Doormandd/safety-helmet-yolo" target="_blank" rel="noopener noreffer ">Safety Helmet YOLO Project</a></strong></p>
+<h3 id="project-content">Project Content</h3>
+<ul>
+<li>✅ Complete source code (training, inference, validation)</li>
+<li>✅ Pre-trained model weight files</li>
+<li>✅ Complete dataset and annotation files</li>
+<li>✅ Detailed technical documentation and usage instructions</li>
+<li>✅ Multi-platform deployment examples</li>
+</ul>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/03-workers-site.png" title="Real Application Scenario" data-thumbnail="/images/safety-helmet-yolo/03-workers-site.png" data-sub-html="<h2>Actual safety helmet detection scenario at construction sites</h2><p>Real Application Scenario</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/03-workers-site.png"
+            data-srcset="/images/safety-helmet-yolo/03-workers-site.png, /images/safety-helmet-yolo/03-workers-site.png 1.5x, /images/safety-helmet-yolo/03-workers-site.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/03-workers-site.png" />
+    </a><figcaption class="image-caption">Actual safety helmet detection scenario at construction sites</figcaption>
+    </figure>
+<h2 id="future-improvement-directions">Future Improvement Directions</h2>
+<ul>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Multi-class detection</strong>: Extend detection to different types of safety equipment</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Behavior analysis</strong>: Analyze worker behavior patterns</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>Multi-scenario adaptation</strong>: Optimize for different industry scenarios</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>End-to-end solution</strong>: Provide complete intelligent safety monitoring system</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>The Safety Helmet YOLO project successfully achieved high-precision real-time safety helmet detection, providing an effective technical means for industrial safety management. Through the application of deep learning technology, we not only improved the efficiency of safety supervision but also laid the foundation for building intelligent safety production environments.</p>
+<p>This project demonstrates the application potential of computer vision technology in the field of industrial safety, providing valuable technical references and practical experience for relevant practitioners.</p>
+<hr>
+<p><strong>Related Tags</strong>: #YOLOv8 #ObjectDetection #DeepLearning #ComputerVision #IndustrialSafety #ProjectShare</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-09-20</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/en/posts/safety-helmet-yolo-detection/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System" data-hashtags="YOLOv8,Object Detection,Deep Learning,Computer Vision,Industrial Safety,Project Share"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" data-hashtag="YOLOv8"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/en/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO: Deep Learning-based Safety Helmet Detection System"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/yolov8/">YOLOv8</a>,&nbsp;<a href="/en/tags/object-detection/">Object Detection</a>,&nbsp;<a href="/en/tags/deep-learning/">Deep Learning</a>,&nbsp;<a href="/en/tags/computer-vision/">Computer Vision</a>,&nbsp;<a href="/en/tags/industrial-safety/">Industrial Safety</a>,&nbsp;<a href="/en/tags/project-share/">Project Share</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/yolov8-phone-holder-detection/" class="prev" rel="prev" title="YOLOv8 Phone Holder Detection Project"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>YOLOv8 Phone Holder Detection Project</a>
+            <a href="/en/posts/yolo-deepsort-hunyuan3d-drone-tracking/" class="next" rel="next" title="YOLO&#43;DeepSORT&#43;Hunyuan3D Real-time Drone Object Tracking Project">YOLO+DeepSORT+Hunyuan3D Real-time Drone Object Tracking Project<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/en/index.json","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

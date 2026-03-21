@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ara Coverage Flight Path - 无人机航测路径规划工具</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        /* 添加返回链接样式 */
+        .back-link {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateX(-50%) scale(1.05);
+        }
+        .back-link::before {
+            content: "← ";
+        }
+        
+        /* 调整顶部面板位置，避免与返回链接重叠 */
+        #controlPanel {
+            top: 50px;
+        }
+        #surveyPanel {
+            top: 50px;
+        }
+    </style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #cesiumContainer {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 左侧控制面板 */
+        #controlPanel {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        /* 右侧测区列表 */
+        #surveyPanel {
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2196F3;
+            margin: 0 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2196F3;
+        }
+        
+        .control-group {
+            margin-bottom: 12px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-bottom: 8px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        button.active {
+            background: #2196F3;
+        }
+        
+        button.cancel-btn {
+            background: #f44336;
+        }
+        
+        button.cancel-btn:hover {
+            background: #da190b;
+        }
+        
+        .info-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        h1 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        /* 测区条目样式 */
+        .survey-item {
+            background: #F5F5F5;
+            border: 2px solid #E0E0E0;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .survey-item:hover {
+            background: #E3F2FD;
+            border-color: #2196F3;
+        }
+        
+        .survey-item.selected {
+            background: #FFF3E0;
+            border-color: #FF9800;
+        }
+        
+        .survey-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .survey-info {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .survey-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+        
+        .survey-label {
+            color: #999;
+        }
+        
+        .survey-value {
+            font-weight: 500;
+            color: #2196F3;
+        }
+        
+        .delete-btn {
+            width: 100%;
+            padding: 6px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .delete-btn:hover {
+            background: #ff5252;
+        }
+        
+        /* 输入框样式 */
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        /* 滑块样式 */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #2196F3;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #2196F3;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .hint-text {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        /* 坐标显示 */
+        .coordinates-display {
+            background: #F5F5F5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            max-height: 80px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+        
+        /* 清空按钮 */
+        button.clear-all-btn {
+            background: #9C27B0;
+            margin-top: 15px;
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+        }
+        
+        button.clear-all-btn:hover {
+            background: #7B1FA2;
+        }
+        
+        /* 状态提示 */
+        .status-bar {
+            background: #E8F5E9;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 10px;
+            color: #2E7D32;
+            font-size: 12px;
+        }
+        
+        .status-bar.active {
+            background: #E3F2FD;
+            border-color: #2196F3;
+            color: #1565C0;
+        }
+        
+        .status-bar.error {
+            background: #FFEBEE;
+            border-color: #f44336;
+            color: #C62828;
+        }
+        
+        /* 空列表提示 */
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 20px 10px;
+            font-size: 13px;
+        }
+        
+        .empty-state-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回博客文章的链接 -->
+    <a href="/posts/ara-coverage-flight-path/" class="back-link">返回文章</a>
+    
+    <div id="cesiumContainer"></div>
+    
+    <!-- 左侧控制面板 -->
+    <div id="controlPanel">
+        <h1>📋 测区规划</h1>
+        
+        <div class="status-bar" id="statusBar">准备就绪</div>
+        
+        <!-- 步骤1：绘制测区ROI -->
+        <div class="section-title">步骤1️⃣ 绘制测区ROI</div>
+        
+        <div class="control-group">
+            <label>测区名称</label>
+            <input type="text" id="surveyName" placeholder="输入测区名称" value="测区">
+        </div>
+        
+        <button id="drawBtn" onclick="startDrawing()">🖊️ 开始绘制多边形</button>
+        <button id="cancelBtn" class="cancel-btn" onclick="cancelDrawing()" style="display: none;">✕ 取消绘制</button>
+        
+        <div class="control-group" id="drawingHintGroup" style="display: none;">
+            <div class="hint-text">💡 点击场景绘制多边形顶点，右键或按ESC完成</div>
+        </div>
+        
+        <div class="control-group">
+            <label>坐标点数</label>
+            <div style="padding: 8px; background: #F5F5F5; border-radius: 4px; text-align: center; font-weight: bold; color: #2196F3;" id="pointCount">0</div>
+        </div>
+        
+        <div class="control-group">
+            <label>坐标列表</label>
+            <div class="coordinates-display" id="coordinatesList">暂无坐标</div>
+        </div>
+        
+        <button id="saveRoiBtn" onclick="saveROI()" style="display: none;">✓ 保存测区ROI</button>
+        
+        <!-- 步骤2：识别最长边 -->
+        <div class="section-title" style="margin-top: 20px;">步骤2️⃣ 识别最长边</div>
+        <button id="findLongestEdgeBtn" onclick="findAndShowLongestEdge()" disabled>🔍 查找最长边</button>
+        <div class="control-group" id="longestEdgeInfo" style="display: none;">
+            <div style="padding: 8px; background: #E3F2FD; border-radius: 4px; font-size: 12px; color: #1565C0;" id="longestEdgeText">—</div>
+        </div>
+        
+        <!-- 步骤3：生成外包矩形 -->
+        <div class="section-title" style="margin-top: 20px;">步骤3️⃣ 生成外包矩形</div>
+        <button id="generateBoundingBtn" onclick="generateBoundingRect()" disabled>📐 生成外包矩形</button>
+        <div class="control-group" id="boundingRectInfo" style="display: none;">
+            <div style="padding: 8px; background: #F3E5F5; border-radius: 4px; font-size: 12px; color: #7B1FA2;" id="boundingRectText">—</div>
+        </div>
+        
+        <!-- 步骤4：航线规划 -->
+        <div class="section-title" style="margin-top: 20px;">步骤4️⃣ Z字形航线规划</div>
+        
+        <!-- 相机传感器参数 -->
+        <div style="background: #FFF3E0; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            <div style="font-weight: bold; color: #E65100; margin-bottom: 8px; font-size: 13px;">📷 相机传感器参数</div>
+            
+            <div class="control-group">
+                <label>传感器宽度 (mm)</label>
+                <input type="number" id="sensorWidth" value="35.9" step="0.1" oninput="updateFlightParams()">
+            </div>
+            
+            <div class="control-group">
+                <label>传感器高度 (mm)</label>
+                <input type="number" id="sensorHeight" value="24.0" step="0.1" oninput="updateFlightParams()">
+            </div>
+            
+            <div class="control-group">
+                <label>像素宽度 (px)</label>
+                <input type="number" id="pixelWidth" value="6000" step="1" oninput="updateFlightParams()">
+            </div>
+            
+            <div class="control-group">
+                <label>像素高度 (px)</label>
+                <input type="number" id="pixelHeight" value="4000" step="1" oninput="updateFlightParams()">
+            </div>
+            
+            <div class="control-group">
+                <label>焦距 (mm)</label>
+                <input type="number" id="focalLength" value="50" step="0.1" oninput="updateFlightParams()">
+            </div>
+        </div>
+        
+        <!-- GSD参数（可调整） -->
+        <div style="background: #E3F2FD; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            <div style="font-weight: bold; color: #1565C0; margin-bottom: 8px; font-size: 13px;">🎯 地面采样距离</div>
+            
+            <div class="control-group">
+                <label>GSD (mm/px) <span style="color: #FF9800;">可调整</span></label>
+                <input type="number" id="gsd" value="20.0" step="0.1" min="0.1" oninput="updateFlightParams()">
+                <div class="hint-text">💡 调整此值将自动计算飞行高度和覆盖尺寸</div>
+            </div>
+        </div>
+        
+        <!-- 计算结果（只读） -->
+        <div style="background: #F3E5F5; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            <div style="font-weight: bold; color: #6A1B9A; margin-bottom: 8px; font-size: 13px;">📊 自动计算结果</div>
+            
+            <div class="control-group">
+                <label>飞行高度 (米) <span style="color: #666;">只读</span></label>
+                <input type="number" id="flightHeight" value="0" readonly style="background: #EEEEEE; cursor: not-allowed;">
+                <div class="hint-text">由GSD和传感器参数计算得出</div>
+            </div>
+            
+            <div class="control-group">
+                <label>地面覆盖宽度 (米) <span style="color: #666;">只读</span></label>
+                <input type="number" id="rectangleWidth" value="0" readonly style="background: #EEEEEE; cursor: not-allowed;">
+                <div class="hint-text">= 像素宽度 × GSD / 1000</div>
+            </div>
+            
+            <div class="control-group">
+                <label>地面覆盖高度 (米) <span style="color: #666;">只读</span></label>
+                <input type="number" id="rectangleHeight" value="0" readonly style="background: #EEEEEE; cursor: not-allowed;">
+                <div class="hint-text">= 像素高度 × GSD / 1000</div>
+            </div>
+        </div>
+        
+        <!-- 重叠度参数（可调整） -->
+        <div class="control-group">
+            <label>航向重叠度 (%) <span style="color: #FF9800;">可调整</span></label>
+            <input type="number" id="forwardOverlap" value="70" min="0" max="100" step="1">
+        </div>
+        
+        <div class="control-group">
+            <label>旁向重叠度 (%) <span style="color: #FF9800;">可调整</span></label>
+            <input type="number" id="sideOverlap" value="60" min="0" max="100" step="1">
+        </div>
+        
+        <button id="generateFlightPathBtn" onclick="generateFlightPathPlan()" disabled>✈️ 生成航线规划</button>
+        <div class="control-group" id="flightPathInfo" style="display: none;">
+            <div style="padding: 8px; background: #E0F7FA; border-radius: 4px; font-size: 12px; color: #00838F;" id="flightPathText">—</div>
+        </div>
+        
+        <button id="clipFlightPathBtn" onclick="clipFlightPath()" disabled style="margin-top: 5px; background: #FFC107; color: #333;">✂️ 航线裁剪</button>
+        
+        <!-- 显示控制 -->
+        <div class="section-title" style="margin-top: 20px;">⚙️ 显示控制</div>
+        
+        <div class="control-group">
+            <label>裁剪航点大小</label>
+            <input type="range" id="clippedWaypointSize" min="0" max="20" value="8" step="1" oninput="updateClippedWaypointSize(this.value)" style="width: 100%;">
+            <div style="text-align: center; font-size: 12px; color: #666; margin-top: 3px;"><span id="clippedWaypointSizeValue">8</span> px</div>
+        </div>
+        
+        <div class="control-group">
+            <label>裁剪航点编号显示</label>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="toggleClippedWaypointLabels(true)" style="flex: 1; padding: 8px; font-size: 13px;">👁️ 显示</button>
+                <button onclick="toggleClippedWaypointLabels(false)" style="flex: 1; padding: 8px; font-size: 13px; background: #757575;">🚫 隐藏</button>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label>测区ROI透明度</label>
+            <input type="range" id="roiOpacity" min="0" max="100" value="20" step="1" oninput="updateROIOpacity(this.value)" style="width: 100%;">
+            <div style="text-align: center; font-size: 12px; color: #666; margin-top: 3px;"><span id="roiOpacityValue">20</span>%</div>
+        </div>
+        
+        <div class="control-group">
+            <label>外包矩形透明度</label>
+            <input type="range" id="boundingOpacity" min="0" max="100" value="15" step="1" oninput="updateBoundingOpacity(this.value)" style="width: 100%;">
+            <div style="text-align: center; font-size: 12px; color: #666; margin-top: 3px;"><span id="boundingOpacityValue">15</span>%</div>
+        </div>
+        
+        <div class="control-group">
+            <label>航线覆盖显示</label>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="toggleFlightPathVisibility(true)" style="flex: 1; padding: 8px; font-size: 13px;">👁️ 显示</button>
+                <button onclick="toggleFlightPathVisibility(false)" style="flex: 1; padding: 8px; font-size: 13px; background: #757575;">🚫 隐藏</button>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label>贴地航线航点显示</label>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="toggleGroundFlightPathPoints(true)" style="flex: 1; padding: 8px; font-size: 13px;">👁️ 显示</button>
+                <button onclick="toggleGroundFlightPathPoints(false)" style="flex: 1; padding: 8px; font-size: 13px; background: #757575;">🚫 隐藏</button>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label>贴地航点编号显示</label>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="toggleGroundFlightPathLabels(true)" style="flex: 1; padding: 8px; font-size: 13px;">👁️ 显示</button>
+                <button onclick="toggleGroundFlightPathLabels(false)" style="flex: 1; padding: 8px; font-size: 13px; background: #757575;">🚫 隐藏</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 右侧测区列表 -->
+    <div id="surveyPanel">
+        <h2>📍 测区列表</h2>
+        
+        <div id="surveyList">
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <div>暂无测区</div>
+            </div>
+        </div>
+        
+        <button id="clearAllBtn" class="clear-all-btn" onclick="clearAllSurveys()" style="display: none;">🗑️ 清空所有测区</button>
+    </div>
+
+    <!-- 配置文件 -->
+    <script src="config.js"></script>
+    
+    <script>
+        // 注意: HTML中的内嵌JavaScript是当前工作的实现
+        // 外部JS文件(app.js等)是新的模块化版本，但目前未激活
+        // 如需使用模块化版本，请将以下注释行的脚本取消注释，并注释掉内嵌代码
+        // 
+        // <script src="geometry-utils.js"></script>
+        // <script src="sensor-utils.js"></script>
+        // <script src="flight-path.js"></script>
+        // <script src="ui-manager.js"></script>
+        // <script src="app.js"></script>
+        
+    <script>
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YTI4MTIzMi00MTE5LTRmOGEtYTY5NS1jZjE2YjBmOTYzZTQiLCJpZCI6MTE2NzM0LCJpYXQiOjE2Njk4Nzk0MjB9.yXkpWK9u3aO99Yst1LYpbDRyy8LkOQ86bemQJ3xCQ0g';
+        
+        // 初始化Cesium Viewer
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            terrain: Cesium.Terrain.fromWorldTerrain(),
+            animation: false,
+            timeline: false,
+            baseLayerPicker: true,
+            geocoder: false,
+            homeButton: false,
+            sceneModePicker: false,
+            navigationHelpButton: false,
+            fullscreenButton: false
+        });
+
+        // 全局变量
+        let isDrawing = false;
+        let drawingPoints = [];
+        let drawingEntity = null;
+        let surveys = [];
+        let surveyIdCounter = 0;
+        let selectedSurveyId = null;
+        let drawingVertexEntities = []; // 追踪绘制时的顶点标记
+        
+        // 流程控制变量
+        let currentSurveyId = null;
+        let currentLongestEdge = null;
+        let currentBoundingRect = null;
+        let currentFlightPath = null;
+
+        // 相机/传感器参数计算函数
+        function updateFlightParams() {
+            // 获取传感器参数
+            const sensorWidth = parseFloat(document.getElementById('sensorWidth').value) || 35.9;
+            const sensorHeight = parseFloat(document.getElementById('sensorHeight').value) || 24.0;
+            const pixelWidth = parseFloat(document.getElementById('pixelWidth').value) || 6000;
+            const pixelHeight = parseFloat(document.getElementById('pixelHeight').value) || 4000;
+            const focalLength = parseFloat(document.getElementById('focalLength').value) || 50;
+            const gsd = parseFloat(document.getElementById('gsd').value) || 20.0; // mm/px
+            
+            // 计算飞行高度 (米)
+            // H = (GSD × f) / pixelSize
+            // pixelSize = sensorWidth / pixelWidth (mm/px)
+            const pixelSizeWidth = sensorWidth / pixelWidth; // mm/px
+            const pixelSizeHeight = sensorHeight / pixelHeight; // mm/px
+            const avgPixelSize = (pixelSizeWidth + pixelSizeHeight) / 2;
+            
+            const flightHeight = (gsd * focalLength) / avgPixelSize / 1000; // 转换为米
+            
+            // 计算地面覆盖尺寸 (米)
+            // groundWidth = pixelWidth × GSD / 1000
+            // groundHeight = pixelHeight × GSD / 1000
+            const rectangleWidth = (pixelWidth * gsd) / 1000; // 米
+            const rectangleHeight = (pixelHeight * gsd) / 1000; // 米
+            
+            // 更新只读字段
+            document.getElementById('flightHeight').value = flightHeight.toFixed(2);
+            document.getElementById('rectangleWidth').value = rectangleWidth.toFixed(2);
+            document.getElementById('rectangleHeight').value = rectangleHeight.toFixed(2);
+            
+            console.log('📊 飞行参数已更新:');
+            console.log(`  - 传感器尺寸: ${sensorWidth}×${sensorHeight} mm`);
+            console.log(`  - 像素尺寸: ${pixelWidth}×${pixelHeight} px`);
+            console.log(`  - 焦距: ${focalLength} mm`);
+            console.log(`  - 像元大小: ${avgPixelSize.toFixed(4)} mm/px`);
+            console.log(`  - GSD: ${gsd} mm/px`);
+            console.log(`  - 飞行高度: ${flightHeight.toFixed(2)} m`);
+            console.log(`  - 地面覆盖: ${rectangleWidth.toFixed(2)}×${rectangleHeight.toFixed(2)} m`);
+        }
+
+        // 工具函数：计算多边形面积（平面近似）
+        function calculatePolygonArea(positions) {
+            if (positions.length < 3) return 0;
+
+            // 转换为地理坐标
+            const cartographics = positions.map(pos => 
+                Cesium.Ellipsoid.WGS84.cartesianToCartographic(pos)
+            );
+
+            // 使用Shoelace公式计算面积（适用于小区域的平面近似）
+            let area = 0;
+            const n = cartographics.length;
+            
+            for (let i = 0; i < n; i++) {
+                const current = cartographics[i];
+                const next = cartographics[(i + 1) % n];
+                
+                // 转换为弧度
+                const lon1 = current.longitude;
+                const lat1 = current.latitude;
+                const lon2 = next.longitude;
+                const lat2 = next.latitude;
+                
+                // 计算梯形面积
+                area += (lon2 - lon1) * (lat2 + lat1) / 2;
+            }
+            
+            // 取绝对值并乘以地球半径平方的余弦修正
+            area = Math.abs(area);
+            const avgLat = cartographics.reduce((sum, c) => sum + c.latitude, 0) / n;
+            const earthRadius = 6371000; // 地球平均半径（米）
+            const cosAvgLat = Math.cos(avgLat);
+            
+            // 面积单位：平方米
+            const areaM2 = area * earthRadius * earthRadius * cosAvgLat;
+            
+            return areaM2;
+        }
+
+        // 工具函数：格式化面积
+        function formatArea(areaM2) {
+            if (areaM2 > 1000000) {
+                return (areaM2 / 1000000).toFixed(2) + ' km²';
+            } else if (areaM2 > 10000) {
+                return (areaM2 / 10000).toFixed(2) + ' 亩';
+            } else {
+                return areaM2.toFixed(0) + ' m²';
+            }
+        }
+
+        // 更新坐标显示
+        function updateCoordinatesDisplay() {
+            const countElement = document.getElementById('pointCount');
+            const coordsList = document.getElementById('coordinatesList');
+            
+            countElement.textContent = drawingPoints.length;
+            
+            if (drawingPoints.length === 0) {
+                coordsList.textContent = '暂无坐标';
+            } else {
+                let html = '';
+                drawingPoints.forEach((pos, index) => {
+                    const cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(pos);
+                    const lon = Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
+                    const lat = Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
+                    const height = cartographic.height.toFixed(1);
+                    html += `${index + 1}. [${lon}, ${lat}, ${height}m]<br>`;
+                });
+                coordsList.innerHTML = html;
+            }
+        }
+
+        // 更新绘制预览
+        function updateDrawingPreview() {
+            if (drawingPoints.length > 0) {
+                if (!drawingEntity) {
+                    // 创建绘制预览多边形
+                    drawingEntity = viewer.entities.add({
+                        polygon: {
+                            hierarchy: new Cesium.CallbackProperty(() => 
+                                new Cesium.PolygonHierarchy(drawingPoints), false),
+                            material: Cesium.Color.RED.withAlpha(0.3),
+                            outline: true,
+                            outlineColor: Cesium.Color.RED,
+                            outlineWidth: 2,
+                            outlineWidth: 2,
+                            clampToGround: true
+                        }
+                    });
+
+                    // 添加顶点显示
+                    drawingPoints.forEach((point, index) => {
+                        const vertexEntity = viewer.entities.add({
+                            position: point,
+                            point: {
+                                pixelSize: 8,
+                                color: Cesium.Color.RED,
+                                outlineColor: Cesium.Color.WHITE,
+                                outlineWidth: 2
+                            },
+                            isDrawingVertex: true  // 标记为绘制临时顶点
+                        });
+                        drawingVertexEntities.push(vertexEntity);
+                    });
+                }
+            }
+        }
+
+        // 步骤1：保存测区ROI
+        function saveROI() {
+            if (drawingPoints.length < 3) {
+                alert('请绘制至少包含3个顶点的多边形');
+                return;
+            }
+            
+            const surveyName = document.getElementById('surveyName').value || '测区';
+            const area = calculatePolygonArea(drawingPoints);
+            const id = ++surveyIdCounter;
+            
+            const survey = {
+                id: id,
+                name: surveyName,
+                points: [...drawingPoints],
+                area: area,
+                createdAt: new Date().toLocaleString('zh-CN')
+            };
+            
+            surveys.push(survey);
+            currentSurveyId = id;
+            
+            // 绘制测区多边形到场景（贴地显示）
+            viewer.entities.add({
+                id: `survey-${id}`,
+                polygon: {
+                    hierarchy: new Cesium.PolygonHierarchy(drawingPoints),
+                    material: Cesium.Color.RED.withAlpha(0.2),
+                    outline: true,
+                    outlineColor: Cesium.Color.RED,
+                    outlineWidth: 3,
+                    clampToGround: true
+                },
+                properties: {
+                    surveyId: id
+                }
+            });
+            
+            // 清除绘制预览
+            cancelDrawing();
+            
+            // 更新UI状态
+            document.getElementById('saveRoiBtn').style.display = 'none';
+            document.getElementById('findLongestEdgeBtn').disabled = false;
+            
+            // 更新列表
+            updateSurveyList();
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = `✓ 步骤1完成：ROI "${surveyName}" 已保存，请进行步骤2`;
+            
+            // 重置表单
+            document.getElementById('surveyName').value = '测区';
+        }
+
+        // 步骤2：查找并显示最长边
+        function findAndShowLongestEdge() {
+            if (!currentSurveyId) {
+                alert('请先保存测区ROI');
+                return;
+            }
+            
+            const survey = surveys.find(s => s.id === currentSurveyId);
+            if (!survey) return;
+            
+            const longestEdge = findLongestEdge(survey.points);
+            if (!longestEdge) {
+                alert('无法找到最长边');
+                return;
+            }
+            
+            currentLongestEdge = longestEdge;
+            
+            // 用蓝色高亮显示最长边
+            viewer.entities.add({
+                id: `survey-${currentSurveyId}-longest-edge`,
+                polyline: {
+                    positions: [longestEdge.start, longestEdge.end],
+                    width: 5,
+                    material: Cesium.Color.BLUE,
+                    clampToGround: true
+                },
+                properties: {
+                    surveyId: currentSurveyId,
+                    isLongestEdge: true
+                }
+            });
+            
+            // 显示最长边信息
+            document.getElementById('longestEdgeInfo').style.display = 'block';
+            document.getElementById('longestEdgeText').textContent = 
+                `最长边长度: ${longestEdge.distance.toFixed(2)} 米`;
+            
+            // 更新UI状态
+            document.getElementById('findLongestEdgeBtn').disabled = true;
+            document.getElementById('generateBoundingBtn').disabled = false;
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = `✓ 步骤2完成：已识别最长边 (${longestEdge.distance.toFixed(2)}m)，请进行步骤3`;
+        }
+
+        // 步骤3：生成外包矩形
+        function generateBoundingRect() {
+            if (!currentSurveyId || !currentLongestEdge) {
+                alert('请先完成前面的步骤');
+                return;
+            }
+            
+            const survey = surveys.find(s => s.id === currentSurveyId);
+            if (!survey) return;
+            
+            const rectangleCorners = generateBoundingRectangle(survey.points, currentLongestEdge);
+            if (!rectangleCorners) {
+                alert('无法生成外包矩形');
+                return;
+            }
+            
+            currentBoundingRect = rectangleCorners;
+            
+            // 用紫色显示外包矩形
+            viewer.entities.add({
+                id: `survey-${currentSurveyId}-bounding-rectangle`,
+                polygon: {
+                    hierarchy: new Cesium.PolygonHierarchy(rectangleCorners),
+                    material: Cesium.Color.PURPLE.withAlpha(0.15),
+                    outline: true,
+                    outlineColor: Cesium.Color.PURPLE,
+                    outlineWidth: 3,
+                    clampToGround: true
+                },
+                properties: {
+                    surveyId: currentSurveyId,
+                    isBoundingRectangle: true
+                }
+            });
+            
+            // 计算外包矩形面积
+            const rectArea = calculatePolygonArea(rectangleCorners);
+            
+            // 显示外包矩形信息
+            document.getElementById('boundingRectInfo').style.display = 'block';
+            document.getElementById('boundingRectText').textContent = 
+                `外包矩形面积: ${formatArea(rectArea)}`;
+            
+            // 更新UI状态
+            document.getElementById('generateBoundingBtn').disabled = true;
+            document.getElementById('generateFlightPathBtn').disabled = false;
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = `✓ 步骤3完成：外包矩形已生成，请进行步骤4`;
+        }
+
+        // 步骤4：生成航线规划
+        function generateFlightPathPlan() {
+            if (!currentSurveyId || !currentLongestEdge || !currentBoundingRect) {
+                alert('请先完成前面的步骤');
+                return;
+            }
+            
+            // 获取航线参数
+            const rectWidth = parseFloat(document.getElementById('rectangleWidth').value) || 50;
+            const rectHeight = parseFloat(document.getElementById('rectangleHeight').value) || 30;
+            const forwardOverlap = parseFloat(document.getElementById('forwardOverlap').value) || 70;
+            const sideOverlap = parseFloat(document.getElementById('sideOverlap').value) || 60;
+            
+            // 清除之前的航线（如果有）
+            if (currentFlightPath) {
+                const entitiesToRemove = [];
+                viewer.entities.values.forEach(entity => {
+                    if (entity.properties && entity.properties.surveyId && 
+                        entity.properties.surveyId.getValue() === currentSurveyId) {
+                        if (entity.properties.isFlightRect || entity.properties.isFlightLabel || 
+                            entity.properties.isFlightCenter || entity.properties.isFlightPath ||
+                            entity.properties.isClippedPath || entity.properties.isClippedRect) {
+                            entitiesToRemove.push(entity);
+                        }
+                    }
+                });
+                entitiesToRemove.forEach(entity => viewer.entities.remove(entity));
+            }
+            
+            const flightRectangles = generateFlightPath(
+                currentBoundingRect,
+                currentLongestEdge,
+                rectWidth,
+                rectHeight,
+                forwardOverlap,
+                sideOverlap
+            );
+            
+            currentFlightPath = flightRectangles;
+            
+            // 显示航线矩形
+            flightRectangles.forEach((rect, index) => {
+                viewer.entities.add({
+                    id: `survey-${currentSurveyId}-flight-rect-${index}`,
+                    polygon: {
+                        hierarchy: new Cesium.PolygonHierarchy(rect.corners),
+                        material: Cesium.Color.CYAN.withAlpha(0.2),
+                        outline: true,
+                        outlineColor: Cesium.Color.CYAN,
+                        outlineWidth: 1,
+                        clampToGround: true
+                    },
+                    properties: {
+                        surveyId: currentSurveyId,
+                        isFlightRect: true,
+                        sequence: rect.sequence
+                    }
+                });
+                
+                // 添加中心点
+                viewer.entities.add({
+                    id: `survey-${currentSurveyId}-flight-center-${index}`,
+                    position: rect.center,
+                    point: {
+                        pixelSize: 8,
+                        color: Cesium.Color.ORANGE,
+                        outlineColor: Cesium.Color.WHITE,
+                        outlineWidth: 2,
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY
+                    },
+                    properties: {
+                        surveyId: currentSurveyId,
+                        isFlightCenter: true,
+                        sequence: rect.sequence
+                    }
+                });
+                
+                // 添加序号标签
+                viewer.entities.add({
+                    id: `survey-${currentSurveyId}-flight-label-${index}`,
+                    position: rect.center,
+                    label: {
+                        text: `${rect.sequence + 1}`,
+                        font: '14px sans-serif',
+                        fillColor: Cesium.Color.WHITE,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 2,
+                        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                        verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                        pixelOffset: new Cesium.Cartesian2(0, 15),
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY
+                    },
+                    properties: {
+                        surveyId: currentSurveyId,
+                        isFlightLabel: true
+                    }
+                });
+            });
+            
+            // 生成航线路径（按照sequence顺序连接中心点）
+            const sortedRects = [...flightRectangles].sort((a, b) => a.sequence - b.sequence);
+            const pathPositions = sortedRects.map(rect => rect.center);
+            
+            // 添加航线路径
+            viewer.entities.add({
+                id: `survey-${currentSurveyId}-flight-path`,
+                polyline: {
+                    positions: pathPositions,
+                    width: 3,
+                    material: new Cesium.PolylineArrowMaterialProperty(Cesium.Color.ORANGE),
+                    clampToGround: true
+                },
+                properties: {
+                    surveyId: currentSurveyId,
+                    isFlightPath: true
+                }
+            });
+            
+            // 显示航线信息
+            document.getElementById('flightPathInfo').style.display = 'block';
+            document.getElementById('flightPathText').textContent = 
+                `共 ${flightRectangles.length} 个航点 | 宽度: ${rectWidth}m | 高度: ${rectHeight}m`;
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = `✓ 步骤4完成：Z字形航线已生成 (${flightRectangles.length}个航点)`;
+            
+            // 可以再次生成（更新参数）
+            document.getElementById('generateFlightPathBtn').textContent = '🔄 重新生成航线';
+            
+            // 启用裁剪按钮
+            document.getElementById('clipFlightPathBtn').disabled = false;
+        }
+
+        // 辅助函数：判断点是否在多边形内（射线法）
+        function isPointInPolygon(point, polygonPoints) {
+            const pos = Cesium.Ellipsoid.WGS84.cartesianToCartographic(point);
+            const x = pos.longitude;
+            const y = pos.latitude;
+            
+            let inside = false;
+            const polygon = polygonPoints.map(p => Cesium.Ellipsoid.WGS84.cartesianToCartographic(p));
+            
+            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                const xi = polygon[i].longitude, yi = polygon[i].latitude;
+                const xj = polygon[j].longitude, yj = polygon[j].latitude;
+                
+                const intersect = ((yi > y) !== (yj > y)) &&
+                    (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
+            }
+            
+            return inside;
+        }
+
+        // 辅助函数：为连接线段生成矩形覆盖
+        function generateRectanglesAlongSegment(startPoint, endPoint, rectWidth, rectHeight, forwardOverlap) {
+            const rectangles = [];
+            
+            // 计算线段长度
+            const segmentLength = Cesium.Cartesian3.distance(startPoint, endPoint);
+            
+            // 计算实际间距（考虑航向重叠度）
+            const forwardStep = rectHeight * (1 - forwardOverlap / 100);
+            
+            // 如果线段太短，只生成一个矩形
+            if (segmentLength < rectHeight) {
+                const midPoint = Cesium.Cartesian3.midpoint(startPoint, endPoint, new Cesium.Cartesian3());
+                const direction = Cesium.Cartesian3.subtract(endPoint, startPoint, new Cesium.Cartesian3());
+                Cesium.Cartesian3.normalize(direction, direction);
+                
+                const normal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(midPoint, new Cesium.Cartesian3());
+                const perpVector = Cesium.Cartesian3.cross(normal, direction, new Cesium.Cartesian3());
+                Cesium.Cartesian3.normalize(perpVector, perpVector);
+                
+                rectangles.push(createRectangle(midPoint, direction, perpVector, rectWidth, rectHeight));
+                return rectangles;
+            }
+            
+            // 计算需要的矩形数量
+            const numRectangles = Math.ceil(segmentLength / forwardStep);
+            
+            // 计算方向向量
+            const direction = Cesium.Cartesian3.subtract(endPoint, startPoint, new Cesium.Cartesian3());
+            Cesium.Cartesian3.normalize(direction, direction);
+            
+            // 计算垂直向量
+            const midPoint = Cesium.Cartesian3.midpoint(startPoint, endPoint, new Cesium.Cartesian3());
+            const normal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(midPoint, new Cesium.Cartesian3());
+            const perpVector = Cesium.Cartesian3.cross(normal, direction, new Cesium.Cartesian3());
+            Cesium.Cartesian3.normalize(perpVector, perpVector);
+            
+            // 生成矩形序列
+            for (let i = 0; i < numRectangles; i++) {
+                const offset = i * forwardStep;
+                const center = Cesium.Cartesian3.add(
+                    startPoint,
+                    Cesium.Cartesian3.multiplyByScalar(direction, offset, new Cesium.Cartesian3()),
+                    new Cesium.Cartesian3()
+                );
+                
+                rectangles.push(createRectangle(center, direction, perpVector, rectWidth, rectHeight));
+            }
+            
+            return rectangles;
+        }
+        
+        // 辅助函数：创建单个矩形
+        function createRectangle(center, direction, perpVector, width, height) {
+            const halfWidth = width / 2;
+            const halfHeight = height / 2;
+            
+            const corner1 = Cesium.Cartesian3.add(
+                center,
+                Cesium.Cartesian3.multiplyByScalar(direction, -halfHeight, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner1,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, -halfWidth, new Cesium.Cartesian3()),
+                corner1
+            );
+            
+            const corner2 = Cesium.Cartesian3.add(
+                center,
+                Cesium.Cartesian3.multiplyByScalar(direction, halfHeight, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner2,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, -halfWidth, new Cesium.Cartesian3()),
+                corner2
+            );
+            
+            const corner3 = Cesium.Cartesian3.add(
+                center,
+                Cesium.Cartesian3.multiplyByScalar(direction, halfHeight, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner3,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, halfWidth, new Cesium.Cartesian3()),
+                corner3
+            );
+            
+            const corner4 = Cesium.Cartesian3.add(
+                center,
+                Cesium.Cartesian3.multiplyByScalar(direction, -halfHeight, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner4,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, halfWidth, new Cesium.Cartesian3()),
+                corner4
+            );
+            
+            return {
+                corners: [corner1, corner2, corner3, corner4],
+                center: center
+            };
+        }
+
+        // 辅助函数：计算线段与多边形边的交点
+        function lineSegmentPolygonIntersections(p1, p2, polygonPoints) {
+            const intersections = [];
+            const cart1 = Cesium.Ellipsoid.WGS84.cartesianToCartographic(p1);
+            const cart2 = Cesium.Ellipsoid.WGS84.cartesianToCartographic(p2);
+            
+            const x1 = cart1.longitude, y1 = cart1.latitude;
+            const x2 = cart2.longitude, y2 = cart2.latitude;
+            
+            const polygon = polygonPoints.map(p => Cesium.Ellipsoid.WGS84.cartesianToCartographic(p));
+            
+            // 检查与多边形每条边的交点
+            for (let i = 0; i < polygon.length; i++) {
+                const j = (i + 1) % polygon.length;
+                const x3 = polygon[i].longitude, y3 = polygon[i].latitude;
+                const x4 = polygon[j].longitude, y4 = polygon[j].latitude;
+                
+                // 使用参数方程求交点
+                const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+                // 降低平行判定阈值，避免短线段被误判为平行 (1e-10 -> 1e-15)
+                if (Math.abs(denom) < 1e-15) continue; 
+                
+                const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
+                const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom;
+                
+                // 检查交点是否在两条线段上（使用容差处理浮点精度）
+                const TOLERANCE = 1e-6;
+                if (t >= -TOLERANCE && t <= 1 + TOLERANCE && u >= -TOLERANCE && u <= 1 + TOLERANCE) {
+                    // 夹紧t到[0,1]范围
+                    const tClamped = Math.max(0, Math.min(1, t));
+                    const lon = x1 + tClamped * (x2 - x1);
+                    const lat = y1 + tClamped * (y2 - y1);
+                    const height = cart1.height + tClamped * (cart2.height - cart1.height);
+                    
+                    const intersectionPoint = Cesium.Cartesian3.fromRadians(lon, lat, height);
+                    intersections.push({ point: intersectionPoint, t: tClamped });
+                }
+            }
+            
+            // 按t值排序，确保交点顺序正确
+            intersections.sort((a, b) => a.t - b.t);
+            return intersections.map(i => i.point);
+        }
+
+        // 辅助函数：二分法查找交点（作为备用方案）
+        function findIntersectionByBisection(p1, p2, polygonPoints) {
+            let start = 0;
+            let end = 1;
+            const isP1Inside = isPointInPolygon(p1, polygonPoints);
+            
+            // 迭代20次，精度约为 1e-6
+            for (let i = 0; i < 20; i++) {
+                const mid = (start + end) / 2;
+                const midPoint = Cesium.Cartesian3.lerp(p1, p2, mid, new Cesium.Cartesian3());
+                const isMidInside = isPointInPolygon(midPoint, polygonPoints);
+                
+                if (isMidInside === isP1Inside) {
+                    start = mid;
+                } else {
+                    end = mid;
+                }
+            }
+            
+            const t = (start + end) / 2;
+            const intersectionPoint = Cesium.Cartesian3.lerp(p1, p2, t, new Cesium.Cartesian3());
+            return intersectionPoint;
+        }
+
+        // 航线裁剪
+        async function clipFlightPath() {
+            if (!currentSurveyId || !currentFlightPath) {
+                alert('请先生成航线');
+                return;
+            }
+            
+            const survey = surveys.find(s => s.id === currentSurveyId);
+            if (!survey) return;
+            
+            // 获取航线参数和飞行高度
+            const rectWidth = parseFloat(document.getElementById('rectangleWidth').value) || 50;
+            const rectHeight = parseFloat(document.getElementById('rectangleHeight').value) || 30;
+            const forwardOverlap = parseFloat(document.getElementById('forwardOverlap').value) || 70;
+            const flightHeight = parseFloat(document.getElementById('flightHeight').value) || 100; // 相对地面高度
+            
+            // 清除已有的裁剪线、裁剪矩形和交点标记
+            const entitiesToRemove = [];
+            viewer.entities.values.forEach(entity => {
+                if (entity.properties && entity.properties.surveyId && 
+                    entity.properties.surveyId.getValue() === currentSurveyId && 
+                    (entity.properties.isClippedPath || entity.properties.isClippedRect || 
+                     entity.properties.isIntersectionPoint)) {
+                    entitiesToRemove.push(entity);
+                }
+            });
+            entitiesToRemove.forEach(e => viewer.entities.remove(e));
+            
+            // 按sequence排序获取航点
+            const sortedRects = [...currentFlightPath].sort((a, b) => a.sequence - b.sequence);
+            
+            // 构建裁剪后的路径，同时记录新增的连接线段和交点
+            const clippedPath = [];
+            const newConnectionSegments = []; // 记录新增连接线段 {start, end}
+            const intersectionPoints = []; // 记录所有交点位置
+            
+            console.log('开始裁剪航线，总航点数:', sortedRects.length);
+            
+            // 诊断信息：计算所有航点的ROI内外状态
+            const insideCount = sortedRects.filter(r => isPointInPolygon(r.center, survey.points)).length;
+            console.log(`ROI内航点: ${insideCount}, ROI外航点: ${sortedRects.length - insideCount}`);
+            
+            for (let i = 0; i < sortedRects.length; i++) {
+                const currentPoint = sortedRects[i].center;
+                const isCurrentInside = isPointInPolygon(currentPoint, survey.points);
+                
+                if (i === 0) {
+                    // 第一个点
+                    if (isCurrentInside) {
+                        clippedPath.push(currentPoint);
+                    }
+                } else {
+                    const prevPoint = sortedRects[i - 1].center;
+                    const isPrevInside = isPointInPolygon(prevPoint, survey.points);
+                    
+                    // 计算当前线段与ROI边界的交点
+                    let intersections = lineSegmentPolygonIntersections(prevPoint, currentPoint, survey.points);
+                    
+                    // 如果有状态切换但没找到交点，尝试使用二分法查找（备用方案）
+                    if (intersections.length === 0 && (isPrevInside !== isCurrentInside)) {
+                        const fallbackPoint = findIntersectionByBisection(prevPoint, currentPoint, survey.points);
+                        if (fallbackPoint) {
+                            intersections = [fallbackPoint];
+                            console.log(`  ⚠️ 参数方程未检测到交点，已通过二分法修复`);
+                        }
+                    }
+                    
+                    const segmentType = 
+                        (isPrevInside && isCurrentInside) ? '内->内' :
+                        (isPrevInside && !isCurrentInside) ? '内->外' :
+                        (!isPrevInside && isCurrentInside) ? '外->内' :
+                        '外->外';
+                    
+                    if (intersections.length > 0 || (isPrevInside !== isCurrentInside)) {
+                        console.log(`段 ${i-1}-${i} (${sortedRects[i-1].sequence}-${sortedRects[i].sequence}): ${segmentType}, 交点数=${intersections.length}`);
+                    }
+                    
+                    if (isPrevInside && isCurrentInside) {
+                        // 两点都在内部，直接连接
+                        clippedPath.push(currentPoint);
+                    } else if (isPrevInside && !isCurrentInside) {
+                        // 从内部到外部，添加出口交点
+                        if (intersections.length > 0) {
+                            const exitPoint = intersections[intersections.length - 1];
+                            clippedPath.push(exitPoint);
+                            intersectionPoints.push(exitPoint); // 记录交点
+                            console.log(`  ✓ 添加出口交点`);
+                        } else {
+                            // 检查是否是边界情况：当前点距离上一个点的距离很小
+                            const segmentDist = Cesium.Cartesian3.distance(prevPoint, currentPoint);
+                            console.warn(`  ⚠️ 从内到外却无交点（段长=${segmentDist.toFixed(2)}m，可能航点在边界附近）`);
+                            
+                            // 最后的兜底：如果二分法也失败（极罕见），强制使用当前点作为交点
+                            const exitPoint = currentPoint;
+                            clippedPath.push(exitPoint);
+                            intersectionPoints.push(exitPoint);
+                            console.log(`  ⚠️ 强制添加出口交点（使用当前点）`);
+                        }
+                    } else if (!isPrevInside && isCurrentInside) {
+                        // 从外部到内部，添加入口交点和当前点
+                        if (intersections.length > 0) {
+                            const entryPoint = intersections[0];
+                            
+                            // 如果前一个点存在，这是一个新增的连接线段
+                            if (clippedPath.length > 0) {
+                                newConnectionSegments.push({
+                                    start: clippedPath[clippedPath.length - 1],
+                                    end: entryPoint
+                                });
+                            }
+                            
+                            clippedPath.push(entryPoint);
+                            intersectionPoints.push(entryPoint); // 记录交点
+                            console.log(`  ✓ 添加入口交点`);
+                        } else {
+                            // 检查是否是边界情况
+                            const segmentDist = Cesium.Cartesian3.distance(prevPoint, currentPoint);
+                            console.warn(`  ⚠️ 从外到内却无交点（段长=${segmentDist.toFixed(2)}m，可能航点在边界附近）`);
+                            
+                            // 最后的兜底：强制使用当前点作为交点
+                            const entryPoint = currentPoint;
+                            if (clippedPath.length > 0) {
+                                newConnectionSegments.push({
+                                    start: clippedPath[clippedPath.length - 1],
+                                    end: entryPoint
+                                });
+                            }
+                            clippedPath.push(entryPoint);
+                            intersectionPoints.push(entryPoint);
+                            console.log(`  ⚠️ 强制添加入口交点（使用当前点）`);
+                        }
+                        clippedPath.push(currentPoint);
+                    } else {
+                        // 两点都在外部，检查是否穿过ROI
+                        if (intersections.length >= 2) {
+                            const entryPoint = intersections[0];
+                            const exitPoint = intersections[1];
+                            
+                            // 如果前一个点存在，从上一个点到入口点是新增连接段
+                            if (clippedPath.length > 0) {
+                                newConnectionSegments.push({
+                                    start: clippedPath[clippedPath.length - 1],
+                                    end: entryPoint
+                                });
+                            }
+                            
+                            clippedPath.push(entryPoint);
+                            clippedPath.push(exitPoint);
+                            intersectionPoints.push(entryPoint); // 记录入口交点
+                            intersectionPoints.push(exitPoint); // 记录出口交点
+                            console.log(`  ✓ 穿过ROI，添加入口和出口交点`);
+                        }
+                    }
+                }
+            }
+            
+            console.log('交点总数:', intersectionPoints.length, '裁剪路径点数:', clippedPath.length);
+            
+            if (clippedPath.length < 2) {
+                alert('裁剪后有效航线不足');
+                return;
+            }
+            
+            // 采样裁剪路径上所有点的地形高度
+            console.log('⏳ 正在采样地形高度...');
+            const terrainProvider = viewer.terrainProvider;
+            const cartographicPositions = clippedPath.map(p => 
+                Cesium.Ellipsoid.WGS84.cartesianToCartographic(p)
+            );
+            
+            try {
+                // 批量采样地形高度
+                const updatedCartographics = await Cesium.sampleTerrainMostDetailed(
+                    terrainProvider, 
+                    cartographicPositions
+                );
+                
+                console.log('✓ 地形高度采样完成');
+                
+                // 将裁剪路径点提升到指定飞行高度（相对于地形）
+                const elevatedClippedPath = updatedCartographics.map((carto, index) => {
+                    const terrainHeight = carto.height || 0;
+                    const absoluteHeight = terrainHeight + flightHeight;
+                    
+                    console.log(`  航点${index + 1}: 地形=${terrainHeight.toFixed(2)}m, 飞行高度=${flightHeight.toFixed(2)}m, 绝对高度=${absoluteHeight.toFixed(2)}m`);
+                    
+                    return Cesium.Cartesian3.fromRadians(
+                        carto.longitude,
+                        carto.latitude,
+                        absoluteHeight
+                    );
+                });
+                
+                // 同样处理交点位置
+                const intersectionCartographics = intersectionPoints.map(p =>
+                    Cesium.Ellipsoid.WGS84.cartesianToCartographic(p)
+                );
+                
+                const updatedIntersectionCartographics = await Cesium.sampleTerrainMostDetailed(
+                    terrainProvider,
+                    intersectionCartographics
+                );
+                
+                const elevatedIntersectionPoints = updatedIntersectionCartographics.map(carto => {
+                    const terrainHeight = carto.height || 0;
+                    const absoluteHeight = terrainHeight + flightHeight;
+                    
+                    return Cesium.Cartesian3.fromRadians(
+                        carto.longitude,
+                        carto.latitude,
+                        absoluteHeight
+                    );
+                });
+                
+                let newRectCount = 0;
+                
+                // 1. 为所有提升后的交点生成矩形覆盖
+                elevatedIntersectionPoints.forEach((point, pointIndex) => {
+                    // 计算该交点处的航线方向
+                    let direction = null;
+                    
+                    const pointIndexInPath = elevatedClippedPath.findIndex((p, idx) => {
+                        const origPoint = clippedPath[idx];
+                        const origIntersection = intersectionPoints[pointIndex];
+                        return Cesium.Cartesian3.distance(origPoint, origIntersection) < 0.1;
+                    });
+                    
+                    if (pointIndexInPath >= 0) {
+                        if (pointIndexInPath > 0) {
+                            direction = Cesium.Cartesian3.subtract(
+                                point, 
+                                elevatedClippedPath[pointIndexInPath - 1], 
+                                new Cesium.Cartesian3()
+                            );
+                        } else if (pointIndexInPath < elevatedClippedPath.length - 1) {
+                            direction = Cesium.Cartesian3.subtract(
+                                elevatedClippedPath[pointIndexInPath + 1], 
+                                point, 
+                                new Cesium.Cartesian3()
+                            );
+                        }
+                    }
+                    
+                    if (!direction || Cesium.Cartesian3.magnitude(direction) < 0.01) {
+                        direction = Cesium.Cartesian3.subtract(
+                            currentLongestEdge.end, 
+                            currentLongestEdge.start, 
+                            new Cesium.Cartesian3()
+                        );
+                    }
+                    
+                    Cesium.Cartesian3.normalize(direction, direction);
+                    
+                    const normal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(point, new Cesium.Cartesian3());
+                    const perpVector = Cesium.Cartesian3.cross(normal, direction, new Cesium.Cartesian3());
+                    Cesium.Cartesian3.normalize(perpVector, perpVector);
+                    
+                    const rect = createRectangle(point, direction, perpVector, rectWidth, rectHeight);
+                    
+                    // 使用深绿色显示交点矩形（不贴地）
+                    viewer.entities.add({
+                        id: `survey-${currentSurveyId}-intersection-rect-${pointIndex}`,
+                        polygon: {
+                            hierarchy: new Cesium.PolygonHierarchy(rect.corners),
+                            material: Cesium.Color.DARKGREEN.withAlpha(0.3),
+                            outline: true,
+                            outlineColor: Cesium.Color.DARKGREEN,
+                            outlineWidth: 2,
+                            heightReference: Cesium.HeightReference.NONE
+                        },
+                        properties: {
+                            surveyId: currentSurveyId,
+                            isClippedRect: true
+                        }
+                    });
+                    
+                    // 添加绿色交点标记和标签（带编号）
+                    viewer.entities.add({
+                        id: `survey-${currentSurveyId}-intersection-point-${pointIndex}`,
+                        position: point,
+                        point: {
+                            pixelSize: 12,
+                            color: Cesium.Color.LIME,
+                            outlineColor: Cesium.Color.WHITE,
+                            outlineWidth: 2,
+                            heightReference: Cesium.HeightReference.NONE,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                        },
+                        label: {
+                            text: `交点${pointIndex + 1}`,
+                            font: '14px bold Arial',
+                            fillColor: Cesium.Color.WHITE,
+                            outlineColor: Cesium.Color.BLACK,
+                            outlineWidth: 2,
+                            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                            pixelOffset: new Cesium.Cartesian2(0, -20),
+                            heightReference: Cesium.HeightReference.NONE,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                        },
+                        properties: {
+                            surveyId: currentSurveyId,
+                            isIntersectionPoint: true
+                        }
+                    });
+                    
+                    newRectCount++;
+                });
+            
+                // 2. 为新增连接线段生成矩形覆盖（提升到飞行高度）
+                for (let segIndex = 0; segIndex < newConnectionSegments.length; segIndex++) {
+                    const segment = newConnectionSegments[segIndex];
+                    
+                    // 找到对应的提升后的点
+                    const startIdx = clippedPath.findIndex(p => Cesium.Cartesian3.distance(p, segment.start) < 0.1);
+                    const endIdx = clippedPath.findIndex(p => Cesium.Cartesian3.distance(p, segment.end) < 0.1);
+                    
+                    if (startIdx >= 0 && endIdx >= 0) {
+                        const elevatedStart = elevatedClippedPath[startIdx];
+                        const elevatedEnd = elevatedClippedPath[endIdx];
+                        
+                        const rectangles = generateRectanglesAlongSegment(
+                            elevatedStart,
+                            elevatedEnd,
+                            rectWidth,
+                            rectHeight,
+                            forwardOverlap
+                        );
+                        
+                        rectangles.forEach((rect, rectIndex) => {
+                            viewer.entities.add({
+                                id: `survey-${currentSurveyId}-clipped-rect-${segIndex}-${rectIndex}`,
+                                polygon: {
+                                    hierarchy: new Cesium.PolygonHierarchy(rect.corners),
+                                    material: Cesium.Color.LIME.withAlpha(0.2),
+                                    outline: true,
+                                    outlineColor: Cesium.Color.LIME,
+                                    outlineWidth: 1,
+                                    heightReference: Cesium.HeightReference.NONE
+                                },
+                                properties: {
+                                    surveyId: currentSurveyId,
+                                    isClippedRect: true
+                                }
+                            });
+                            
+                            newRectCount++;
+                        });
+                    }
+                }
+                
+                // 绘制提升后的绿色航线路径（不贴地）
+                viewer.entities.add({
+                    id: `survey-${currentSurveyId}-clipped-path`,
+                    polyline: {
+                        positions: elevatedClippedPath,
+                        width: 5,
+                        material: Cesium.Color.GREEN,
+                        heightReference: Cesium.HeightReference.NONE
+                    },
+                    properties: {
+                        surveyId: currentSurveyId,
+                        isClippedPath: true
+                    }
+                });
+                
+                // 为裁剪后的航点添加编号标记
+                elevatedClippedPath.forEach((point, index) => {
+                    viewer.entities.add({
+                        id: `survey-${currentSurveyId}-clipped-waypoint-${index}`,
+                        position: point,
+                        point: {
+                            pixelSize: 8,
+                            color: Cesium.Color.ORANGE,
+                            outlineColor: Cesium.Color.WHITE,
+                            outlineWidth: 2,
+                            heightReference: Cesium.HeightReference.NONE,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                        },
+                        label: {
+                            text: `${index + 1}`,
+                            font: '12px bold Arial',
+                            fillColor: Cesium.Color.YELLOW,
+                            outlineColor: Cesium.Color.BLACK,
+                            outlineWidth: 2,
+                            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                            pixelOffset: new Cesium.Cartesian2(0, -15),
+                            heightReference: Cesium.HeightReference.NONE,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                        },
+                        properties: {
+                            surveyId: currentSurveyId,
+                            isClippedPath: true,
+                            isClippedWaypoint: true
+                        }
+                    });
+                });
+                
+                const statusBar = document.getElementById('statusBar');
+                statusBar.className = 'status-bar active';
+                
+                let statusMsg = '';
+                if (intersectionPoints.length === 0) {
+                    statusMsg = `✓ 航线裁剪完成 | 航点 ${elevatedClippedPath.length} 个 | 飞行高度 ${flightHeight.toFixed(2)}m | 新增 ${newRectCount} 矩形 | ⚠️ 未检测到交点`;
+                } else {
+                    statusMsg = `✓ 航线裁剪完成 | 航点 ${elevatedClippedPath.length} 个 | 飞行高度 ${flightHeight.toFixed(2)}m | 新增 ${newRectCount} 矩形 | 交点 ${intersectionPoints.length} 个 ✅`;
+                }
+                statusBar.textContent = statusMsg;
+                
+                console.log(statusMsg);
+                console.log(`✈️ 裁剪航线已提升到相对地面 ${flightHeight.toFixed(2)}m 的高度`);
+                
+            } catch (error) {
+                console.error('地形高度采样失败:', error);
+                alert('地形高度采样失败，请检查网络连接或地形服务');
+            }
+        }
+
+        // 开始绘制
+        function startDrawing() {
+            isDrawing = true;
+            drawingPoints = [];
+            
+            // 禁用 Cesium 默认的点击行为
+            viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+            
+            // 更新UI
+            document.getElementById('drawBtn').style.display = 'none';
+            document.getElementById('cancelBtn').style.display = 'block';
+            document.getElementById('drawingHintGroup').style.display = 'block';
+            document.getElementById('saveRoiBtn').style.display = 'none';
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar active';
+            statusBar.textContent = '📍 绘制中... 点击场景添加顶点';
+            
+            // 清除旧的绘制实体
+            if (drawingEntity) viewer.entities.remove(drawingEntity);
+            drawingEntity = null;
+            
+            updateCoordinatesDisplay();
+            
+            // 创建新的事件处理器（优先级高于默认处理器）
+            const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+            
+            // 存储当前鼠标位置用于动态预览
+            let currentMousePosition = null;
+            
+            // 创建动态预览多边形（包含鼠标位置）
+            let previewPolygon = null;
+            
+            // 鼠标移动时更新预览多边形
+            handler.setInputAction((move) => {
+                if (drawingPoints.length > 0) {
+                    const cartesian = viewer.scene.pickPosition(move.endPosition);
+                    let pickedPoint = null;
+                    
+                    if (!Cesium.defined(cartesian)) {
+                        const ray = viewer.scene.getPickRay(move.endPosition);
+                        if (!ray) return;
+                        
+                        pickedPoint = viewer.scene.globe.pick(ray, viewer.scene);
+                        if (!Cesium.defined(pickedPoint)) return;
+                    } else {
+                        pickedPoint = cartesian;
+                    }
+                    
+                    // 更新当前鼠标位置
+                    currentMousePosition = pickedPoint;
+                    
+                    // 创建或更新预览多边形
+                    if (!previewPolygon) {
+                        previewPolygon = viewer.entities.add({
+                            polygon: {
+                                hierarchy: new Cesium.CallbackProperty(() => {
+                                    if (drawingPoints.length > 0 && currentMousePosition) {
+                                        // 将当前鼠标位置加入到绘制点中形成闭合预览
+                                        const previewPoints = [...drawingPoints, currentMousePosition];
+                                        return new Cesium.PolygonHierarchy(previewPoints);
+                                    }
+                                    return new Cesium.PolygonHierarchy([]);
+                                }, false),
+                                material: Cesium.Color.YELLOW.withAlpha(0.3),
+                                outline: true,
+                                outlineColor: Cesium.Color.YELLOW,
+                                outlineWidth: 2,
+                                clampToGround: true
+                            }
+                        });
+                    }
+                }
+            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+            
+            // 左键点击添加顶点
+            handler.setInputAction((click) => {
+                // 阻止事件冒泡
+                const cartesian = viewer.scene.pickPosition(click.position);
+                if (!Cesium.defined(cartesian)) {
+                    // 尝试获取地球表面上的点
+                    const ray = viewer.scene.getPickRay(click.position);
+                    if (!ray) return;
+                    
+                    const cartesian3 = viewer.scene.globe.pick(ray, viewer.scene);
+                    if (!Cesium.defined(cartesian3)) return;
+                    
+                    drawingPoints.push(cartesian3);
+                } else {
+                    drawingPoints.push(cartesian);
+                }
+                
+                updateCoordinatesDisplay();
+                updateDrawingPreview();
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            
+            // 右键完成绘制
+            handler.setInputAction(() => {
+                finishDrawing();
+                
+                // 清理预览多边形
+                if (previewPolygon) {
+                    viewer.entities.remove(previewPolygon);
+                    previewPolygon = null;
+                }
+                
+                // 销毁事件处理器
+                handler.destroy();
+                
+                // 恢复 Cesium 默认的交互
+                viewer.cesiumWidget.screenSpaceEventHandler.setInputAction(function(click) {
+                    // Cesium 默认的选择行为
+                }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+            
+            // ESC键取消
+            const escHandler = function(event) {
+                if (event.key === 'Escape' && isDrawing) {
+                    // 清理预览多边形
+                    if (previewPolygon) {
+                        viewer.entities.remove(previewPolygon);
+                        previewPolygon = null;
+                    }
+                    
+                    // 销毁事件处理器
+                    handler.destroy();
+                    
+                    // 恢复 Cesium 默认的交互
+                    viewer.cesiumWidget.screenSpaceEventHandler.setInputAction(function(click) {
+                        // Cesium 默认的选择行为
+                    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+                    
+                    cancelDrawing();
+                    document.removeEventListener('keydown', escHandler);
+                }
+            };
+            document.addEventListener('keydown', escHandler);
+        }
+
+        // 完成绘制
+        function finishDrawing() {
+            if (drawingPoints.length < 3) {
+                alert('请至少绘制3个顶点形成多边形');
+                return;
+            }
+            
+            isDrawing = false;
+            
+            // 更新UI
+            document.getElementById('drawBtn').style.display = 'block';
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.getElementById('drawingHintGroup').style.display = 'none';
+            document.getElementById('saveRoiBtn').style.display = 'block';
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = `✓ 绘制完成 - ${drawingPoints.length}个顶点，请保存ROI`;
+        }
+
+        // 取消绘制
+        function cancelDrawing() {
+            isDrawing = false;
+            drawingPoints = [];
+            
+            // 清除绘制实体
+            if (drawingEntity) {
+                viewer.entities.remove(drawingEntity);
+                drawingEntity = null;
+            }
+            
+            // 清除绘制时的顶点标记
+            drawingVertexEntities.forEach(entity => {
+                viewer.entities.remove(entity);
+            });
+            drawingVertexEntities = [];
+            
+            // 更新UI
+            document.getElementById('drawBtn').style.display = 'block';
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.getElementById('drawingHintGroup').style.display = 'none';
+            document.getElementById('saveRoiBtn').style.display = 'none';
+            
+            updateCoordinatesDisplay();
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar error';
+            statusBar.textContent = '✕ 绘制已取消';
+        }
+
+        // 工具函数：计算两点间距离
+        function calculateDistance(point1, point2) {
+            const cartographic1 = Cesium.Ellipsoid.WGS84.cartesianToCartographic(point1);
+            const cartographic2 = Cesium.Ellipsoid.WGS84.cartesianToCartographic(point2);
+            
+            const geodesic = new Cesium.EllipsoidGeodesic(cartographic1, cartographic2);
+            return geodesic.surfaceDistance; // 返回表面距离（米）
+        }
+
+        // 工具函数：找到多边形最长边
+        function findLongestEdge(points) {
+            if (points.length < 2) return null;
+            
+            let maxDistance = 0;
+            let longestEdge = null;
+            
+            for (let i = 0; i < points.length; i++) {
+                const p1 = points[i];
+                const p2 = points[(i + 1) % points.length];
+                const distance = calculateDistance(p1, p2);
+                
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                    longestEdge = {
+                        start: p1,
+                        end: p2,
+                        distance: distance,
+                        index: i
+                    };
+                }
+            }
+            
+            return longestEdge;
+        }
+
+        // 工具函数：生成基于最长边的外包矩形
+        function generateBoundingRectangle(points, longestEdge) {
+            if (!longestEdge || points.length < 3) return null;
+            
+            // 将最长边的起点和终点转换为地理坐标
+            const cart1 = Cesium.Ellipsoid.WGS84.cartesianToCartographic(longestEdge.start);
+            const cart2 = Cesium.Ellipsoid.WGS84.cartesianToCartographic(longestEdge.end);
+            
+            // 计算最长边的方向向量（在3D空间中）
+            const edgeVector = Cesium.Cartesian3.subtract(longestEdge.end, longestEdge.start, new Cesium.Cartesian3());
+            Cesium.Cartesian3.normalize(edgeVector, edgeVector);
+            
+            // 计算垂直于最长边的向量（使用地球表面的法向量）
+            const midPoint = Cesium.Cartesian3.midpoint(longestEdge.start, longestEdge.end, new Cesium.Cartesian3());
+            const normal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(midPoint, new Cesium.Cartesian3());
+            const perpVector = Cesium.Cartesian3.cross(normal, edgeVector, new Cesium.Cartesian3());
+            Cesium.Cartesian3.normalize(perpVector, perpVector);
+            
+            // 计算所有点在最长边方向和垂直方向上的投影范围
+            let minAlong = Infinity, maxAlong = -Infinity;
+            let minPerp = Infinity, maxPerp = -Infinity;
+            
+            points.forEach(point => {
+                // 从最长边起点到当前点的向量
+                const toPoint = Cesium.Cartesian3.subtract(point, longestEdge.start, new Cesium.Cartesian3());
+                
+                // 在最长边方向上的投影
+                const alongProj = Cesium.Cartesian3.dot(toPoint, edgeVector);
+                minAlong = Math.min(minAlong, alongProj);
+                maxAlong = Math.max(maxAlong, alongProj);
+                
+                // 在垂直方向上的投影
+                const perpProj = Cesium.Cartesian3.dot(toPoint, perpVector);
+                minPerp = Math.min(minPerp, perpProj);
+                maxPerp = Math.max(maxPerp, perpProj);
+            });
+            
+            // 生成矩形的四个顶点
+            const corner1 = Cesium.Cartesian3.add(
+                longestEdge.start,
+                Cesium.Cartesian3.multiplyByScalar(edgeVector, minAlong, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner1,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, minPerp, new Cesium.Cartesian3()),
+                corner1
+            );
+            
+            const corner2 = Cesium.Cartesian3.add(
+                longestEdge.start,
+                Cesium.Cartesian3.multiplyByScalar(edgeVector, maxAlong, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner2,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, minPerp, new Cesium.Cartesian3()),
+                corner2
+            );
+            
+            const corner3 = Cesium.Cartesian3.add(
+                longestEdge.start,
+                Cesium.Cartesian3.multiplyByScalar(edgeVector, maxAlong, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner3,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, maxPerp, new Cesium.Cartesian3()),
+                corner3
+            );
+            
+            const corner4 = Cesium.Cartesian3.add(
+                longestEdge.start,
+                Cesium.Cartesian3.multiplyByScalar(edgeVector, minAlong, new Cesium.Cartesian3()),
+                new Cesium.Cartesian3()
+            );
+            Cesium.Cartesian3.add(
+                corner4,
+                Cesium.Cartesian3.multiplyByScalar(perpVector, maxPerp, new Cesium.Cartesian3()),
+                corner4
+            );
+            
+            return [corner1, corner2, corner3, corner4];
+        }
+
+        // 工具函数：生成Z字形航线矩形覆盖
+        function generateFlightPath(rectangleCorners, longestEdge, rectWidth, rectHeight, forwardOverlap, sideOverlap) {
+            if (!rectangleCorners || rectangleCorners.length !== 4) return [];
+            
+            // 计算最长边的方向向量和垂直向量
+            const edgeVector = Cesium.Cartesian3.subtract(longestEdge.end, longestEdge.start, new Cesium.Cartesian3());
+            Cesium.Cartesian3.normalize(edgeVector, edgeVector);
+            
+            const midPoint = Cesium.Cartesian3.midpoint(longestEdge.start, longestEdge.end, new Cesium.Cartesian3());
+            const normal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(midPoint, new Cesium.Cartesian3());
+            const perpVector = Cesium.Cartesian3.cross(normal, edgeVector, new Cesium.Cartesian3());
+            Cesium.Cartesian3.normalize(perpVector, perpVector);
+            
+            // 使用外包矩形的第一个角点作为起点
+            const corner1 = rectangleCorners[0];
+            const corner2 = rectangleCorners[1];
+            const corner4 = rectangleCorners[3];
+            
+            const lengthAlong = Cesium.Cartesian3.distance(corner1, corner2);
+            const lengthPerp = Cesium.Cartesian3.distance(corner1, corner4);
+            
+            // 计算实际间距（考虑重叠度）
+            const forwardStep = rectHeight * (1 - forwardOverlap / 100);
+            const sideStep = rectWidth * (1 - sideOverlap / 100);
+            
+            // 计算需要的矩形数量
+            const numAlong = Math.ceil(lengthAlong / forwardStep);
+            const numPerp = Math.ceil(lengthPerp / sideStep);
+            
+            const flightRectangles = [];
+            
+            // 生成Z字形航线
+            for (let i = 0; i < numPerp; i++) {
+                for (let j = 0; j < numAlong; j++) {
+                    // Z字形：偶数行正向，奇数行反向
+                    const alongIndex = (i % 2 === 0) ? j : (numAlong - 1 - j);
+                    
+                    // 计算矩形中心点位置（从外包矩形corner1开始）
+                    // 第一个矩形的中心点与corner1重合
+                    const alongOffset = alongIndex * forwardStep;
+                    const perpOffset = i * sideStep;
+                    
+                    const center = Cesium.Cartesian3.add(
+                        corner1,
+                        Cesium.Cartesian3.multiplyByScalar(edgeVector, alongOffset, new Cesium.Cartesian3()),
+                        new Cesium.Cartesian3()
+                    );
+                    Cesium.Cartesian3.add(
+                        center,
+                        Cesium.Cartesian3.multiplyByScalar(perpVector, perpOffset, new Cesium.Cartesian3()),
+                        center
+                    );
+                    
+                    // 生成矩形的四个角点（矩形航向与最长边一致）
+                    const halfWidth = rectWidth / 2;
+                    const halfHeight = rectHeight / 2;
+                    
+                    const rect1 = Cesium.Cartesian3.add(
+                        center,
+                        Cesium.Cartesian3.multiplyByScalar(edgeVector, -halfHeight, new Cesium.Cartesian3()),
+                        new Cesium.Cartesian3()
+                    );
+                    Cesium.Cartesian3.add(
+                        rect1,
+                        Cesium.Cartesian3.multiplyByScalar(perpVector, -halfWidth, new Cesium.Cartesian3()),
+                        rect1
+                    );
+                    
+                    const rect2 = Cesium.Cartesian3.add(
+                        center,
+                        Cesium.Cartesian3.multiplyByScalar(edgeVector, halfHeight, new Cesium.Cartesian3()),
+                        new Cesium.Cartesian3()
+                    );
+                    Cesium.Cartesian3.add(
+                        rect2,
+                        Cesium.Cartesian3.multiplyByScalar(perpVector, -halfWidth, new Cesium.Cartesian3()),
+                        rect2
+                    );
+                    
+                    const rect3 = Cesium.Cartesian3.add(
+                        center,
+                        Cesium.Cartesian3.multiplyByScalar(edgeVector, halfHeight, new Cesium.Cartesian3()),
+                        new Cesium.Cartesian3()
+                    );
+                    Cesium.Cartesian3.add(
+                        rect3,
+                        Cesium.Cartesian3.multiplyByScalar(perpVector, halfWidth, new Cesium.Cartesian3()),
+                        rect3
+                    );
+                    
+                    const rect4 = Cesium.Cartesian3.add(
+                        center,
+                        Cesium.Cartesian3.multiplyByScalar(edgeVector, -halfHeight, new Cesium.Cartesian3()),
+                        new Cesium.Cartesian3()
+                    );
+                    Cesium.Cartesian3.add(
+                        rect4,
+                        Cesium.Cartesian3.multiplyByScalar(perpVector, halfWidth, new Cesium.Cartesian3()),
+                        rect4
+                    );
+                    
+                    flightRectangles.push({
+                        corners: [rect1, rect2, rect3, rect4],
+                        center: center,
+                        row: i,
+                        col: alongIndex,
+                        sequence: i * numAlong + j
+                    });
+                }
+            }
+            
+            return flightRectangles;
+        }
+
+        // 更新测区ROI透明度
+        function updateROIOpacity(value) {
+            const opacity = parseFloat(value) / 100;
+            document.getElementById('roiOpacityValue').textContent = value;
+            
+            // 更新当前测区的透明度
+            if (currentSurveyId) {
+                const entity = viewer.entities.getById(`survey-${currentSurveyId}`);
+                if (entity && entity.polygon) {
+                    entity.polygon.material = Cesium.Color.RED.withAlpha(opacity);
+                }
+            }
+        }
+        
+        // 更新裁剪航点大小
+        function updateClippedWaypointSize(value) {
+            const size = parseFloat(value);
+            document.getElementById('clippedWaypointSizeValue').textContent = value;
+            
+            // 更新所有裁剪航线的航点大小
+            if (currentSurveyId) {
+                viewer.entities.values.forEach(entity => {
+                    if (entity.properties && entity.properties.surveyId && 
+                        entity.properties.surveyId.getValue() === currentSurveyId &&
+                        entity.properties.isClippedWaypoint &&
+                        entity.properties.isClippedWaypoint.getValue() === true) {
+                        if (entity.point) {
+                            entity.point.pixelSize = size;
+                        }
+                    }
+                });
+            }
+        }
+        
+        // 切换裁剪航点编号标签显示/隐藏
+        function toggleClippedWaypointLabels(visible) {
+            if (!currentSurveyId) return;
+            
+            viewer.entities.values.forEach(entity => {
+                if (entity.properties && entity.properties.surveyId && 
+                    entity.properties.surveyId.getValue() === currentSurveyId &&
+                    entity.properties.isClippedWaypoint &&
+                    entity.properties.isClippedWaypoint.getValue() === true) {
+                    if (entity.label) {
+                        entity.label.show = visible;
+                    }
+                }
+            });
+        }
+        
+        // 更新外包矩形透明度
+        function updateBoundingOpacity(value) {
+            const opacity = parseFloat(value) / 100;
+            document.getElementById('boundingOpacityValue').textContent = value;
+            
+            // 更新当前测区的外包矩形透明度
+            if (currentSurveyId) {
+                const entity = viewer.entities.getById(`survey-${currentSurveyId}-bounding-rectangle`);
+                if (entity && entity.polygon) {
+                    entity.polygon.material = Cesium.Color.PURPLE.withAlpha(opacity);
+                }
+            }
+        }
+        
+        // 切换航线覆盖显示/隐藏
+        function toggleFlightPathVisibility(visible) {
+            if (!currentSurveyId) return;
+            
+            viewer.entities.values.forEach(entity => {
+                if (entity.properties && entity.properties.surveyId && 
+                    entity.properties.surveyId.getValue() === currentSurveyId) {
+                    if (entity.properties.isFlightRect || entity.properties.isFlightLabel || 
+                        entity.properties.isFlightCenter || entity.properties.isFlightPath ||
+                        entity.properties.isClippedPath || entity.properties.isClippedRect) {
+                        entity.show = visible;
+                    }
+                }
+            });
+        }
+        
+        // 切换贴地航线航点显示/隐藏
+        function toggleGroundFlightPathPoints(visible) {
+            if (!currentSurveyId) return;
+            
+            viewer.entities.values.forEach(entity => {
+                if (entity.properties && entity.properties.surveyId && 
+                    entity.properties.surveyId.getValue() === currentSurveyId) {
+                    // 控制贴地航线路径和航点（不包括标签）
+                    if (entity.properties.isFlightPath && entity.properties.isFlightPath.getValue() === true) {
+                        entity.show = visible;
+                    }
+                    if (entity.properties.isFlightCenter && entity.properties.isFlightCenter.getValue() === true) {
+                        if (entity.point) {
+                            entity.point.show = visible;
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 切换贴地航点编号标签显示/隐藏
+        function toggleGroundFlightPathLabels(visible) {
+            if (!currentSurveyId) return;
+            
+            viewer.entities.values.forEach(entity => {
+                if (entity.properties && entity.properties.surveyId && 
+                    entity.properties.surveyId.getValue() === currentSurveyId) {
+                    // 只控制贴地航点的标签
+                    if (entity.properties.isFlightLabel && entity.properties.isFlightLabel.getValue() === true) {
+                        entity.show = visible;
+                    }
+                }
+            });
+        }
+
+        // 更新测区列表显示
+        function updateSurveyList() {
+            const surveyList = document.getElementById('surveyList');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            
+            if (surveys.length === 0) {
+                surveyList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><div>暂无测区</div></div>';
+                clearAllBtn.style.display = 'none';
+            } else {
+                clearAllBtn.style.display = 'block';
+                surveyList.innerHTML = surveys.map(survey => `
+                    <div class="survey-item ${selectedSurveyId === survey.id ? 'selected' : ''}" onclick="selectSurvey(${survey.id})">
+                        <div class="survey-name">🗺️ ${survey.name}</div>
+                        <div class="survey-info">
+                            <div class="survey-info-row">
+                                <span class="survey-label">ID:</span>
+                                <span class="survey-value">#${survey.id}</span>
+                            </div>
+                            <div class="survey-info-row">
+                                <span class="survey-label">面积:</span>
+                                <span class="survey-value">${formatArea(survey.area)}</span>
+                            </div>
+                            <div class="survey-info-row">
+                                <span class="survey-label">顶点数:</span>
+                                <span class="survey-value">${survey.points.length}</span>
+                            </div>
+                            <div class="survey-info-row">
+                                <span class="survey-label">创建时间:</span>
+                                <span class="survey-value" style="font-size: 11px;">${survey.createdAt}</span>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteSurvey(${survey.id}, event)">🗑️ 删除</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 选择测区并定位
+        function selectSurvey(surveyId) {
+            selectedSurveyId = surveyId;
+            const survey = surveys.find(s => s.id === surveyId);
+            
+            if (!survey) return;
+            
+            // 设置为当前工作测区
+            currentSurveyId = surveyId;
+            
+            // 检查该测区的完成状态
+            const hasLongestEdge = viewer.entities.getById(`survey-${surveyId}-longest-edge`);
+            const hasBoundingRect = viewer.entities.getById(`survey-${surveyId}-bounding-rectangle`);
+            const hasFlightPath = viewer.entities.values.some(e => 
+                e.properties && e.properties.surveyId && 
+                e.properties.surveyId.getValue() === surveyId && 
+                e.properties.isFlightRect
+            );
+            
+            // 更新UI状态
+            document.getElementById('findLongestEdgeBtn').disabled = hasLongestEdge !== undefined;
+            document.getElementById('generateBoundingBtn').disabled = !hasLongestEdge || hasBoundingRect !== undefined;
+            document.getElementById('generateFlightPathBtn').disabled = !hasBoundingRect;
+            
+            if (hasLongestEdge) {
+                currentLongestEdge = findLongestEdge(survey.points);
+                document.getElementById('longestEdgeInfo').style.display = 'block';
+                document.getElementById('longestEdgeText').textContent = 
+                    `最长边长度: ${currentLongestEdge.distance.toFixed(2)} 米`;
+            } else {
+                currentLongestEdge = null;
+                document.getElementById('longestEdgeInfo').style.display = 'none';
+            }
+            
+            if (hasBoundingRect) {
+                currentBoundingRect = generateBoundingRectangle(survey.points, currentLongestEdge);
+                const rectArea = calculatePolygonArea(currentBoundingRect);
+                document.getElementById('boundingRectInfo').style.display = 'block';
+                document.getElementById('boundingRectText').textContent = 
+                    `外包矩形面积: ${formatArea(rectArea)}`;
+            } else {
+                currentBoundingRect = null;
+                document.getElementById('boundingRectInfo').style.display = 'none';
+            }
+            
+            if (hasFlightPath) {
+                const flightCount = viewer.entities.values.filter(e => 
+                    e.properties && e.properties.surveyId && 
+                    e.properties.surveyId.getValue() === surveyId && 
+                    e.properties.isFlightRect
+                ).length;
+                document.getElementById('flightPathInfo').style.display = 'block';
+                document.getElementById('flightPathText').textContent = 
+                    `共 ${flightCount} 个航点`;
+                document.getElementById('generateFlightPathBtn').textContent = '🔄 重新生成航线';
+                document.getElementById('clipFlightPathBtn').disabled = false;
+            } else {
+                document.getElementById('flightPathInfo').style.display = 'none';
+                document.getElementById('generateFlightPathBtn').textContent = '✈️ 生成航线规划';
+                document.getElementById('clipFlightPathBtn').disabled = true;
+            }
+            
+            // 更新列表样式
+            updateSurveyList();
+            
+            // 计算测区的包围盒
+            if (survey.points.length === 0) return;
+            
+            // 创建包围盒
+            const boundingSphere = Cesium.BoundingSphere.fromPoints(survey.points);
+            
+            // 俯视定位到测区
+            viewer.camera.flyToBoundingSphere(boundingSphere, {
+                duration: 1.0,
+                offset: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-90), 0)
+            });
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar active';
+            statusBar.textContent = `📍 已选择测区 "${survey.name}"`;
+        }
+
+        // 删除测区
+        function deleteSurvey(surveyId, event) {
+            event.stopPropagation();
+            
+            if (!confirm('确定要删除该测区吗？')) {
+                return;
+            }
+            
+            // 从数组中移除
+            surveys = surveys.filter(s => s.id !== surveyId);
+            
+            // 从场景中移除多边形
+            const entity = viewer.entities.getById(`survey-${surveyId}`);
+            if (entity) {
+                viewer.entities.remove(entity);
+            }
+            
+            // 从场景中移除最长边高亮线
+            const edgeEntity = viewer.entities.getById(`survey-${surveyId}-longest-edge`);
+            if (edgeEntity) {
+                viewer.entities.remove(edgeEntity);
+            }
+            
+            // 从场景中移除外包矩形
+            const rectEntity = viewer.entities.getById(`survey-${surveyId}-bounding-rectangle`);
+            if (rectEntity) {
+                viewer.entities.remove(rectEntity);
+            }
+            
+            // 从场景中移除所有航线矩形和标签
+            const entitiesToRemove = [];
+            viewer.entities.values.forEach(entity => {
+                if (entity.properties && entity.properties.surveyId && entity.properties.surveyId.getValue() === surveyId) {
+                    if (entity.properties.isFlightRect || entity.properties.isFlightLabel || 
+                        entity.properties.isFlightCenter || entity.properties.isFlightPath ||
+                        entity.properties.isClippedPath || entity.properties.isClippedRect) {
+                        entitiesToRemove.push(entity);
+                    }
+                }
+            });
+            entitiesToRemove.forEach(entity => viewer.entities.remove(entity));
+            
+            // 如果删除的是当前工作测区，重置流程状态
+            if (currentSurveyId === surveyId) {
+                currentSurveyId = null;
+                currentLongestEdge = null;
+                currentBoundingRect = null;
+                currentFlightPath = null;
+                
+                // 重置UI
+                document.getElementById('findLongestEdgeBtn').disabled = true;
+                document.getElementById('generateBoundingBtn').disabled = true;
+                document.getElementById('generateFlightPathBtn').disabled = true;
+                document.getElementById('clipFlightPathBtn').disabled = true;
+                document.getElementById('longestEdgeInfo').style.display = 'none';
+                document.getElementById('boundingRectInfo').style.display = 'none';
+                document.getElementById('flightPathInfo').style.display = 'none';
+            }
+            
+            // 取消选中
+            if (selectedSurveyId === surveyId) {
+                selectedSurveyId = null;
+            }
+            
+            // 更新列表
+            updateSurveyList();
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = '✓ 测区已删除';
+        }
+
+        // 清空所有测区
+        function clearAllSurveys() {
+            if (!confirm('确定要清空所有测区吗？此操作无法撤销。')) {
+                return;
+            }
+            
+            // 从场景中移除所有测区多边形和最长边高亮线
+            surveys.forEach(survey => {
+                const entity = viewer.entities.getById(`survey-${survey.id}`);
+                if (entity) {
+                    viewer.entities.remove(entity);
+                }
+                
+                const edgeEntity = viewer.entities.getById(`survey-${survey.id}-longest-edge`);
+                if (edgeEntity) {
+                    viewer.entities.remove(edgeEntity);
+                }
+                
+                const rectEntity = viewer.entities.getById(`survey-${survey.id}-bounding-rectangle`);
+                if (rectEntity) {
+                    viewer.entities.remove(rectEntity);
+                }
+                
+                // 从场景中移除所有航线矩形和标签
+                const entitiesToRemove = [];
+                viewer.entities.values.forEach(entity => {
+                    if (entity.properties && entity.properties.surveyId && entity.properties.surveyId.getValue() === survey.id) {
+                        if (entity.properties.isFlightRect || entity.properties.isFlightLabel || 
+                            entity.properties.isFlightCenter || entity.properties.isFlightPath ||
+                            entity.properties.isClippedPath || entity.properties.isClippedRect) {
+                            entitiesToRemove.push(entity);
+                        }
+                    }
+                });
+                entitiesToRemove.forEach(entity => viewer.entities.remove(entity));
+            });
+            
+            // 清空数组
+            surveys = [];
+            selectedSurveyId = null;
+            
+            // 更新列表
+            updateSurveyList();
+            
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar';
+            statusBar.textContent = '✓ 所有测区已清空';
+        }
+
+        // 初始化场景
+        viewer.camera.setView({
+            destination: Cesium.Cartesian3.fromDegrees(116.3974, 39.9087, 5000),
+            orientation: {
+                heading: 0,
+                pitch: Cesium.Math.toRadians(-90),
+                roll: 0
+            }
+        });
+        
+        // 初始化飞行参数计算
+        updateFlightParams();
+    </script>
+</body>
+</html>

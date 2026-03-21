@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>CesiumJS - Tag - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/en/tags/cesiumjs/</link>
+        <description>CesiumJS - Tag - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/en/tags/cesiumjs/" rel="self" type="application/rss+xml" /><item>
+    <title>Ara Coverage Flight Path: CesiumJS-based UAV Flight Path Planning Tool</title>
+    <link>https://Doormandd.github.io/en/posts/ara-coverage-flight-path/</link>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/en/posts/ara-coverage-flight-path/</guid>
+    <description><![CDATA[Project Overview Ara Coverage Flight Path is a web-based UAV flight path planning tool developed with CesiumJS. It provides an intuitive visualization interface to help users quickly plan efficient flight paths for various aerial photogrammetry and remote sensing applications.
+Core Features 1. ROI Drawing Interactive polygon drawing support Real-time coordinate and area calculation display Flexible editing and adjustment capabilities 2. Intelligent Path Planning Automatic longest flight edge identification Bounding rectangle coverage generation Z-shaped flight path optimization 3.]]></description>
+</item>
+</channel>
+</rss>

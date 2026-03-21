@@ -1,0 +1,27 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>无人机 - 标签 - DR&#39;s个人网页</title>
+        <link>https://Doormandd.github.io/tags/%E6%97%A0%E4%BA%BA%E6%9C%BA/</link>
+        <description>无人机 - 标签 - DR&#39;s个人网页</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>dr1012324010@qq.com (DR)</managingEditor>
+            <webMaster>dr1012324010@qq.com (DR)</webMaster><lastBuildDate>Sun, 12 Oct 2025 20:09:10 &#43;0800</lastBuildDate><atom:link href="https://Doormandd.github.io/tags/%E6%97%A0%E4%BA%BA%E6%9C%BA/" rel="self" type="application/rss+xml" /><item>
+    <title>YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目</title>
+    <link>https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/</link>
+    <pubDate>Sun, 12 Oct 2025 20:09:10 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/</guid>
+    <description><![CDATA[项目概述 本项目实现了一个实时无人机目标跟踪系统，结合了多种最先进的计算机视觉技术。系统能够实时处理来自无人机的视频帧，使用 YOLO 检测车辆，通过 DeepOCSORT（DeepSORT 的改进版本）在帧间跟踪目标，并通过基于 WebSocket 的接口可视化结果。
+核心特性 实时目标检测 YOLO (You Only Look Once) 实现快速准确的目标检测 专门针对车辆检测（VisDrone 数据集中的汽车） 可配置的置信度阈值以获得最佳检测性能 基于尺寸和宽高比的高效无效检测过滤 高级目标跟踪 BoxMOT 框架中的 DeepOCSORT 跟踪算法 使用 OSNet-x0.25-MSMT17 模型的 ReID（重识别）特征 相机运动补偿以提高跟踪准确性 自适应加权实现鲁棒的轨迹关联 可配置参数：最大寿命、最小命中数、IOU 阈值 实时通信 用于实时帧处理的 WebSocket 服务器 Base64 编码的图像传输 用于目标选择的双向通信 基于 JSON 的控制消息协议 用户界面 交互式 Web 界面（demo.html） 实时可视化跟踪结果 目标选择功能 轨迹历史可视化 颜色编码的边界框（普通目标绿色，选中目标红色） 技术架构 客户端（Web 浏览器） ↓ WebSocket (Base64 图像) 服务器 (track_server.py) ↓ 1. 图像解码 ↓ 2. YOLO 检测 ↓ 3. DeepOCSORT 跟踪 ↓ 4.]]></description>
+</item>
+<item>
+    <title>Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具</title>
+    <link>https://Doormandd.github.io/posts/ara-coverage-flight-path/</link>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 &#43;0800</pubDate>
+    <author>DR</author>
+    <guid>https://Doormandd.github.io/posts/ara-coverage-flight-path/</guid>
+    <description><![CDATA[项目概述 Ara Coverage Flight Path 是一款基于 CesiumJS 开发的 Web 端无人机航测路径规划工具。它提供了直观的可视化界面，帮助用户快速规划高效的飞行路径，适用于各种航空摄影测量和遥感应用场景。
+核心功能 1. 测区ROI绘制 支持交互式多边形绘制 实时显示坐标和面积计算 灵活的编辑和调整功能 2. 智能路径规划 自动识别最长飞行边 生成边界矩形覆盖区域 Z字形飞行路径优化 3. 专业参数配置 传感器参数自定义 地面采样距离(GSD)计算 航向/旁向重叠度设置 4. 路径裁剪优化 ROI内外路径智能裁剪 精确的交点计算 可视化裁剪效果 技术实现 技术栈 前端框架: 原生 JavaScript + HTML5 3D可视化: CesiumJS 1.115 几何算法: 自定义地理计算库 UI设计: 响应式布局 + 现代交互 架构设计 模块化架构确保代码可维护性和可扩展性：
+app.js - 主应用程序逻辑 geometry-utils.js - 地理几何计算 flight-path.js - 航线生成算法 sensor-utils.js - 传感器参数计算 ui-manager.js - 用户界面管理 应用场景 1. 农业测绘 农作物生长监测 灌溉系统规划 精准农业管理 2.]]></description>
+</item>
+</channel>
+</rss>

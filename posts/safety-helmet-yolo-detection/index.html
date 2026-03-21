@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Safety Helmet YOLO：基于深度学习的安全帽检测系统 - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="Safety Helmet YOLO：基于深度学习的安全帽检测系统">
+  <meta property="og:description" content="项目概述 Safety Helmet YOLO 是一个基于深度学习的安全帽检测系统，使用 YOLOv8 架构实现了高精度的实时安全帽检测。该项目旨在提高工业建筑、工厂车间等场景下的工作安全性，通过自动检测工作人员是否佩戴安全帽，实现智能化安全管理。
+项目背景 在建筑工地、工厂车间、矿山等工业环境中，安全帽是保护工作人员头部安全的重要装备。然而，人工监督所有工作人员的安全帽佩戴情况既不现实也效率低下。通过计算机视觉技术实现自动化安全帽检测，可以：
+实时监控：24小时不间断监控工作人员的安全状况 及时预警：发现未佩戴安全帽的情况立即发出警报 数据统计：记录和分析安全帽佩戴率 降低成本：减少人工监管的人力成本 ">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-20T00:00:00+08:00">
+    <meta property="article:modified_time" content="2025-09-20T00:00:00+08:00">
+    <meta property="article:tag" content="YOLOv8">
+    <meta property="article:tag" content="目标检测">
+    <meta property="article:tag" content="深度学习">
+    <meta property="article:tag" content="计算机视觉">
+    <meta property="article:tag" content="工业安全">
+    <meta property="article:tag" content="项目分享">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Safety Helmet YOLO：基于深度学习的安全帽检测系统">
+  <meta name="twitter:description" content="项目概述 Safety Helmet YOLO 是一个基于深度学习的安全帽检测系统，使用 YOLOv8 架构实现了高精度的实时安全帽检测。该项目旨在提高工业建筑、工厂车间等场景下的工作安全性，通过自动检测工作人员是否佩戴安全帽，实现智能化安全管理。
+项目背景 在建筑工地、工厂车间、矿山等工业环境中，安全帽是保护工作人员头部安全的重要装备。然而，人工监督所有工作人员的安全帽佩戴情况既不现实也效率低下。通过计算机视觉技术实现自动化安全帽检测，可以：
+实时监控：24小时不间断监控工作人员的安全状况 及时预警：发现未佩戴安全帽的情况立即发出警报 数据统计：记录和分析安全帽佩戴率 降低成本：减少人工监管的人力成本 ">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" /><link rel="prev" href="https://Doormandd.github.io/posts/vibe-coding-basics/" /><link rel="next" href="https://Doormandd.github.io/posts/yolo-deepsort-hunyuan3d-drone-tracking/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Safety Helmet YOLO：基于深度学习的安全帽检测系统",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/posts\/safety-helmet-yolo-detection\/"
+        },"genre": "posts","keywords": "YOLOv8, 目标检测, 深度学习, 计算机视觉, 工业安全, 项目分享","wordcount":  487 ,
+        "url": "https:\/\/Doormandd.github.io\/posts\/safety-helmet-yolo-detection\/","datePublished": "2025-09-20T00:00:00+08:00","dateModified": "2025-09-20T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="查看所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="按标签浏览文章"> 标签 </a><a class="menu-item" href="/categories/" title="按分类浏览文章"> 分类 </a><a class="menu-item" href="/about/" title="关于本站"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/safety-helmet-yolo-detection/">English</option><option value="/posts/safety-helmet-yolo-detection/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="查看所有文章">所有文章</a><a class="menu-item" href="/tags/" title="按标签浏览文章">标签</a><a class="menu-item" href="/categories/" title="按分类浏览文章">分类</a><a class="menu-item" href="/about/" title="关于本站">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/safety-helmet-yolo-detection/">English</option><option value="/posts/safety-helmet-yolo-detection/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Safety Helmet YOLO：基于深度学习的安全帽检测系统</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>技术</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-09-20">2025-09-20</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;约 487 字&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#项目概述">项目概述</a>
+      <ul>
+        <li><a href="#项目背景">项目背景</a></li>
+      </ul>
+    </li>
+    <li><a href="#技术方案">技术方案</a>
+      <ul>
+        <li><a href="#为什么选择-yolov8">为什么选择 YOLOv8？</a></li>
+        <li><a href="#系统架构">系统架构</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据集处理">数据集处理</a>
+      <ul>
+        <li><a href="#数据集规模">数据集规模</a></li>
+        <li><a href="#数据特点">数据特点</a></li>
+        <li><a href="#标注流程">标注流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#模型训练">模型训练</a>
+      <ul>
+        <li><a href="#训练环境配置">训练环境配置</a></li>
+        <li><a href="#数据增强策略">数据增强策略</a></li>
+        <li><a href="#训练过程">训练过程</a></li>
+      </ul>
+    </li>
+    <li><a href="#实验结果">实验结果</a>
+      <ul>
+        <li><a href="#性能指标">性能指标</a></li>
+        <li><a href="#混淆矩阵分析">混淆矩阵分析</a></li>
+        <li><a href="#检测结果可视化">检测结果可视化</a></li>
+      </ul>
+    </li>
+    <li><a href="#模型特点">模型特点</a>
+      <ul>
+        <li><a href="#1-高精度检测">1. 高精度检测</a></li>
+        <li><a href="#2-实时性能">2. 实时性能</a></li>
+        <li><a href="#3-鲁棒性强">3. 鲁棒性强</a></li>
+      </ul>
+    </li>
+    <li><a href="#实际应用">实际应用</a>
+      <ul>
+        <li><a href="#1-智能监控系统">1. 智能监控系统</a></li>
+        <li><a href="#2-移动端应用">2. 移动端应用</a></li>
+        <li><a href="#3-云端分析平台">3. 云端分析平台</a></li>
+      </ul>
+    </li>
+    <li><a href="#技术实现">技术实现</a>
+      <ul>
+        <li><a href="#核心检测代码">核心检测代码</a></li>
+        <li><a href="#视频实时处理">视频实时处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#部署方案">部署方案</a>
+      <ul>
+        <li><a href="#1-边缘设备部署">1. 边缘设备部署</a></li>
+        <li><a href="#2-云服务器部署">2. 云服务器部署</a></li>
+        <li><a href="#3-移动端部署">3. 移动端部署</a></li>
+      </ul>
+    </li>
+    <li><a href="#项目开源">项目开源</a>
+      <ul>
+        <li><a href="#项目内容">项目内容</a></li>
+      </ul>
+    </li>
+    <li><a href="#未来改进方向">未来改进方向</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="项目概述">项目概述</h2>
+<p>Safety Helmet YOLO 是一个基于深度学习的安全帽检测系统，使用 YOLOv8 架构实现了高精度的实时安全帽检测。该项目旨在提高工业建筑、工厂车间等场景下的工作安全性，通过自动检测工作人员是否佩戴安全帽，实现智能化安全管理。</p>
+<h3 id="项目背景">项目背景</h3>
+<p>在建筑工地、工厂车间、矿山等工业环境中，安全帽是保护工作人员头部安全的重要装备。然而，人工监督所有工作人员的安全帽佩戴情况既不现实也效率低下。通过计算机视觉技术实现自动化安全帽检测，可以：</p>
+<ul>
+<li><strong>实时监控</strong>：24小时不间断监控工作人员的安全状况</li>
+<li><strong>及时预警</strong>：发现未佩戴安全帽的情况立即发出警报</li>
+<li><strong>数据统计</strong>：记录和分析安全帽佩戴率</li>
+<li><strong>降低成本</strong>：减少人工监管的人力成本</li>
+</ul>
+<h2 id="技术方案">技术方案</h2>
+<h3 id="为什么选择-yolov8">为什么选择 YOLOv8？</h3>
+<p>YOLOv8（You Only Look Once version 8）是 Ultralytics 公司推出的最新目标检测架构，具有以下优势：</p>
+<ul>
+<li><strong>速度与精度的最佳平衡</strong>：在保持高精度的同时提供实时推理速度</li>
+<li><strong>易于使用</strong>：统一的命令行接口和简洁的 Python API</li>
+<li><strong>模型多样性</strong>：提供 nano、small、medium、large、extra-large 等多种尺寸</li>
+<li><strong>活跃的社区</strong>：丰富的文档和持续更新的生态系统</li>
+</ul>
+<h3 id="系统架构">系统架构</h3>
+<p>Safety Helmet YOLO 系统采用模块化设计，主要包含以下组件：</p>
+<pre tabindex="0"><code>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   数据采集层   │    │   模型训练层   │    │   推理部署层   │
+├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+│ • 图像采集     │    │ • 数据预处理     │    │ • 实时推理     │
+│ • 数据标注     │    │ • 模型训练     │    │ • 结果可视化     │
+│ • 数据增强     │    │ • 性能评估     │    │ • 报警系统     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+</code></pre><h2 id="数据集处理">数据集处理</h2>
+<h3 id="数据集规模">数据集规模</h3>
+<p>我们构建了一个包含 5000 张图片的大规模安全帽检测数据集：</p>
+<table>
+<thead>
+<tr>
+<th>数据集划分</th>
+<th>图片数量</th>
+<th>占比</th>
+<th>对象数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练集</td>
+<td>3500张</td>
+<td>70%</td>
+<td>约 5000个安全帽</td>
+</tr>
+<tr>
+<td>验证集</td>
+<td>1000张</td>
+<td>20%</td>
+<td>约 1500个安全帽</td>
+</tr>
+<tr>
+<td>测试集</td>
+<td>500张</td>
+<td>10%</td>
+<td>约 750个安全帽</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数据特点">数据特点</h3>
+<ul>
+<li><strong>多样性</strong>：包含不同光照条件、天气、季节的场景</li>
+<li><strong>真实性</strong>：来自真实工作环境，包括建筑工地、工厂车间等</li>
+<li><strong>挑战性</strong>：包含小目标、遮挡、多角度等复杂情况</li>
+<li><strong>标注质量</strong>：经过多轮人工检查和校对</li>
+</ul>
+<h3 id="标注流程">标注流程</h3>
+<ol>
+<li><strong>数据收集</strong>：从多个工业场景收集原始图像数据</li>
+<li><strong>初步筛选</strong>：去除模糊、过曝、严重遮挡的图像</li>
+<li><strong>专业标注</strong>：使用 Label Studio 进行精确边界框标注</li>
+<li><strong>质量检查</strong>：多人交叉验证标注结果</li>
+<li><strong>数据增强</strong>：通过旋转、缩放、颜色调整等方式增加数据多样性</li>
+</ol>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/02-construction-site.png" title="安全帽数据集样本" data-thumbnail="/images/safety-helmet-yolo/02-construction-site.png" data-sub-html="<h2>来自真实建筑工地的安全帽检测样本</h2><p>安全帽数据集样本</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/02-construction-site.png"
+            data-srcset="/images/safety-helmet-yolo/02-construction-site.png, /images/safety-helmet-yolo/02-construction-site.png 1.5x, /images/safety-helmet-yolo/02-construction-site.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/02-construction-site.png" />
+    </a><figcaption class="image-caption">来自真实建筑工地的安全帽检测样本</figcaption>
+    </figure>
+<h2 id="模型训练">模型训练</h2>
+<h3 id="训练环境配置">训练环境配置</h3>
+<ul>
+<li><strong>硬件配置</strong>：NVIDIA RTX 3080 (10GB VRAM)</li>
+<li><strong>软件环境</strong>：Python 3.9, PyTorch 2.0, Ultralytics YOLOv8</li>
+<li><strong>训练参数</strong>：
+<ul>
+<li>输入尺寸：640×640 像素</li>
+<li>批量大小：16</li>
+<li>训练轮数：100 epochs</li>
+<li>学习率：0.01</li>
+<li>优化器：AdamW</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据增强策略">数据增强策略</h3>
+<p>为了提高模型的泛化能力，我们应用了多种数据增强技术：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 数据增强参数配置</span>
+</span></span><span style="display:flex;"><span>augmentation_params <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;hsv_h&#39;</span>: <span style="color:#ae81ff">0.015</span>,        <span style="color:#75715e"># 色调变化</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;hsv_s&#39;</span>: <span style="color:#ae81ff">0.7</span>,          <span style="color:#75715e"># 饱和度变化</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;hsv_v&#39;</span>: <span style="color:#ae81ff">0.4</span>,          <span style="color:#75715e"># 明度变化</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;degrees&#39;</span>: <span style="color:#ae81ff">0.0</span>,         <span style="color:#75715e"># 旋转角度</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;translate&#39;</span>: <span style="color:#ae81ff">0.1</span>,        <span style="color:#75715e"># 平移</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;scale&#39;</span>: <span style="color:#ae81ff">0.5</span>,           <span style="color:#75715e"># 缩放</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;shear&#39;</span>: <span style="color:#ae81ff">0.0</span>,          <span style="color:#75715e"># 剪切</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;perspective&#39;</span>: <span style="color:#ae81ff">0.0</span>,     <span style="color:#75715e"># 透视变换</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;flipud&#39;</span>: <span style="color:#ae81ff">0.0</span>,         <span style="color:#75715e"># 垂直翻转</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;fliplr&#39;</span>: <span style="color:#ae81ff">0.5</span>,         <span style="color:#75715e"># 水平翻转</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;mosaic&#39;</span>: <span style="color:#ae81ff">1.0</span>,         <span style="color:#75715e"># 马赛克增强</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;mixup&#39;</span>: <span style="color:#ae81ff">0.0</span>           <span style="color:#75715e"># 混合增强</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="训练过程">训练过程</h3>
+<p>训练过程采用分阶段学习率调整策略：</p>
+<ol>
+<li><strong>预热阶段</strong>（前3个epoch）：学习率从0逐渐增加到0.01</li>
+<li><strong>主训练阶段</strong>（第4-80个epoch）：保持稳定学习率</li>
+<li><strong>衰减阶段</strong>（第81-100个epoch）：学习率逐渐降低至0.001</li>
+</ol>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/04-training-curves.png" title="模型训练曲线" data-thumbnail="/images/safety-helmet-yolo/04-training-curves.png" data-sub-html="<h2>训练损失和验证指标变化情况</h2><p>模型训练曲线</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/04-training-curves.png"
+            data-srcset="/images/safety-helmet-yolo/04-training-curves.png, /images/safety-helmet-yolo/04-training-curves.png 1.5x, /images/safety-helmet-yolo/04-training-curves.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/04-training-curves.png" />
+    </a><figcaption class="image-caption">训练损失和验证指标变化情况</figcaption>
+    </figure>
+<h2 id="实验结果">实验结果</h2>
+<h3 id="性能指标">性能指标</h3>
+<p>在测试集上，Safety Helmet YOLO 模型达到了优秀的检测性能：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>精确度 (Precision)</strong></td>
+<td>96.8%</td>
+<td>检测出的安全帽中真正是安全帽的比例</td>
+</tr>
+<tr>
+<td><strong>召回率 (Recall)</strong></td>
+<td>94.2%</td>
+<td>所有安全帽中被正确检测出的比例</td>
+</tr>
+<tr>
+<td><strong><a href="mailto:mAP@0.5" rel="">mAP@0.5</a></strong></td>
+<td>95.5%</td>
+<td>IoU阈值0.5时的平均精度</td>
+</tr>
+<tr>
+<td><strong><a href="mailto:mAP@0.5" rel="">mAP@0.5</a>:0.95</strong></td>
+<td>78.3%</td>
+<td>IoU阈值0.5到0.95的平均精度</td>
+</tr>
+<tr>
+<td><strong>推理速度</strong></td>
+<td>45 FPS</td>
+<td>在RTX 3080上的实时检测速度</td>
+</tr>
+</tbody>
+</table>
+<h3 id="混淆矩阵分析">混淆矩阵分析</h3>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/02-confusion-matrix.png" title="混淆矩阵分析" data-thumbnail="/images/safety-helmet-yolo/02-confusion-matrix.png" data-sub-html="<h2>模型在测试集上的分类性能</h2><p>混淆矩阵分析</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/02-confusion-matrix.png"
+            data-srcset="/images/safety-helmet-yolo/02-confusion-matrix.png, /images/safety-helmet-yolo/02-confusion-matrix.png 1.5x, /images/safety-helmet-yolo/02-confusion-matrix.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/02-confusion-matrix.png" />
+    </a><figcaption class="image-caption">模型在测试集上的分类性能</figcaption>
+    </figure>
+<h3 id="检测结果可视化">检测结果可视化</h3>
+<p>模型在多种复杂场景下均能准确检测安全帽，包括小目标、遮挡、多角度等挑战性情况。</p>
+<h2 id="模型特点">模型特点</h2>
+<h3 id="1-高精度检测">1. 高精度检测</h3>
+<ul>
+<li><strong>小目标检测</strong>：能够检测距离较远的安全帽</li>
+<li><strong>遮挡处理</strong>：部分遮挡的安全帽仍能被检测到</li>
+<li><strong>多角度识别</strong>：支持各种角度的安全帽检测</li>
+</ul>
+<h3 id="2-实时性能">2. 实时性能</h3>
+<ul>
+<li><strong>高效推理</strong>：单张图片检测仅需22ms</li>
+<li><strong>轻量部署</strong>：模型文件仅6.2MB</li>
+<li><strong>低资源消耗</strong>：适合边缘设备部署</li>
+</ul>
+<h3 id="3-鲁棒性强">3. 鲁棒性强</h3>
+<ul>
+<li><strong>光照适应</strong>：在不同光照条件下保持稳定性能</li>
+<li><strong>复杂场景</strong>：在背景复杂的环境中准确检测</li>
+<li><strong>多场景适用</strong>：适用于建筑、工厂、矿区等多种场景</li>
+</ul>
+<h2 id="实际应用">实际应用</h2>
+<h3 id="1-智能监控系统">1. 智能监控系统</h3>
+<p>集成到现有的监控系统中，实现：</p>
+<ul>
+<li>实时安全帽佩戴检测</li>
+<li>违规行为自动报警</li>
+<li>历史数据记录和统计</li>
+</ul>
+<h3 id="2-移动端应用">2. 移动端应用</h3>
+<p>开发移动应用程序，提供：</p>
+<ul>
+<li>现场快速检测功能</li>
+<li>安全隐患排查工具</li>
+<li>检查结果即时分享</li>
+</ul>
+<h3 id="3-云端分析平台">3. 云端分析平台</h3>
+<p>构建云端服务，支持：</p>
+<ul>
+<li>批量图片分析</li>
+<li>视频流处理</li>
+<li>API接口服务</li>
+</ul>
+<h2 id="技术实现">技术实现</h2>
+<h3 id="核心检测代码">核心检测代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> ultralytics <span style="color:#f92672">import</span> YOLO
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SafetyHelmetDetector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, model_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;best.pt&#39;</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;初始化安全帽检测器&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> YOLO(model_path)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">detect</span>(self, image, conf_threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">0.25</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        检测安全帽
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            image: 输入图像
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            conf_threshold: 置信度阈值
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            list: 检测结果列表
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        results <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(image, conf<span style="color:#f92672">=</span>conf_threshold)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> results[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>boxes
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">draw_results</span>(self, image, boxes):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        在图像上绘制检测结果
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            image: 原始图像
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            boxes: 检测框
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            image: 标注后的图像
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        annotated_image <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> box <span style="color:#f92672">in</span> boxes:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 获取边界框坐标</span>
+</span></span><span style="display:flex;"><span>            x1, y1, x2, y2 <span style="color:#f92672">=</span> box<span style="color:#f92672">.</span>xyxy[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>            conf <span style="color:#f92672">=</span> box<span style="color:#f92672">.</span>conf[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 绘制边界框</span>
+</span></span><span style="display:flex;"><span>            cv2<span style="color:#f92672">.</span>rectangle(annotated_image, 
+</span></span><span style="display:flex;"><span>                        (int(x1), int(y1)), 
+</span></span><span style="display:flex;"><span>                        (int(x2), int(y2)), 
+</span></span><span style="display:flex;"><span>                        (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 添加标签</span>
+</span></span><span style="display:flex;"><span>            label <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Safety Hat: </span><span style="color:#e6db74">{</span>conf<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            cv2<span style="color:#f92672">.</span>putText(annotated_image, label,
+</span></span><span style="display:flex;"><span>                       (int(x1), int(y1)<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>),
+</span></span><span style="display:flex;"><span>                       cv2<span style="color:#f92672">.</span>FONT_HERSHEY_SIMPLEX, <span style="color:#ae81ff">0.5</span>,
+</span></span><span style="display:flex;"><span>                       (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> annotated_image
+</span></span></code></pre></div><h3 id="视频实时处理">视频实时处理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">real_time_detection</span>(video_source<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;实时安全帽检测&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    detector <span style="color:#f92672">=</span> SafetyHelmetDetector()
+</span></span><span style="display:flex;"><span>    cap <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>VideoCapture(video_source)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        ret, frame <span style="color:#f92672">=</span> cap<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> ret:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 检测安全帽</span>
+</span></span><span style="display:flex;"><span>        boxes <span style="color:#f92672">=</span> detector<span style="color:#f92672">.</span>detect(frame)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 绘制结果</span>
+</span></span><span style="display:flex;"><span>        annotated_frame <span style="color:#f92672">=</span> detector<span style="color:#f92672">.</span>draw_results(frame, boxes)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 显示结果</span>
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>imshow(<span style="color:#e6db74">&#39;Safety Helmet Detection&#39;</span>, annotated_frame)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> cv2<span style="color:#f92672">.</span>waitKey(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span> <span style="color:#f92672">==</span> ord(<span style="color:#e6db74">&#39;q&#39;</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    cap<span style="color:#f92672">.</span>release()
+</span></span><span style="display:flex;"><span>    cv2<span style="color:#f92672">.</span>destroyAllWindows()
+</span></span></code></pre></div><h2 id="部署方案">部署方案</h2>
+<h3 id="1-边缘设备部署">1. 边缘设备部署</h3>
+<ul>
+<li><strong>硬件要求</strong>：NVIDIA Jetson Nano/TX2 或类似边缘计算设备</li>
+<li><strong>模型优化</strong>：使用 TensorRT 进行模型加速</li>
+<li><strong>功耗控制</strong>：平衡检测精度与功耗</li>
+</ul>
+<h3 id="2-云服务器部署">2. 云服务器部署</h3>
+<ul>
+<li><strong>容器化</strong>：使用 Docker 打装应用</li>
+<li><strong>负载均衡</strong>：支持多实例并发处理</li>
+<li><strong>自动扩缩</strong>：根据负载自动调整资源</li>
+</ul>
+<h3 id="3-移动端部署">3. 移动端部署</h3>
+<ul>
+<li><strong>模型压缩</strong>：使用量化技术减小模型体积</li>
+<li><strong>离线推理</strong>：支持无网络环境下的本地检测</li>
+<li><strong>电池优化</strong>：降低移动设备功耗</li>
+</ul>
+<h2 id="项目开源">项目开源</h2>
+<p>完整的项目代码、数据集和训练好的模型已经开源：</p>
+<p>🔗 <strong><a href="https://github.com/Doormandd/safety-helmet-yolo" target="_blank" rel="noopener noreffer ">Safety Helmet YOLO 项目地址</a></strong></p>
+<h3 id="项目内容">项目内容</h3>
+<ul>
+<li>✅ 完整的源代码（训练、推理、验证）</li>
+<li>✅ 预训练模型权重文件</li>
+<li>✅ 详细的数据集和标注文件</li>
+<li>✅ 完整的技术文档和使用说明</li>
+<li>✅ 多平台部署示例</li>
+</ul>
+<figure><a class="lightgallery" href="/images/safety-helmet-yolo/03-workers-site.png" title="实际应用场景" data-thumbnail="/images/safety-helmet-yolo/03-workers-site.png" data-sub-html="<h2>建筑工地的实际安全帽检测场景</h2><p>实际应用场景</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="/images/safety-helmet-yolo/03-workers-site.png"
+            data-srcset="/images/safety-helmet-yolo/03-workers-site.png, /images/safety-helmet-yolo/03-workers-site.png 1.5x, /images/safety-helmet-yolo/03-workers-site.png 2x"
+            data-sizes="auto"
+            alt="/images/safety-helmet-yolo/03-workers-site.png" />
+    </a><figcaption class="image-caption">建筑工地的实际安全帽检测场景</figcaption>
+    </figure>
+<h2 id="未来改进方向">未来改进方向</h2>
+<ul>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>多类别检测</strong>：扩展检测不同类型的安全装备</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>行为分析</strong>：分析工作人员的行为模式</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>多场景适配</strong>：针对不同行业场景进行优化</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> <strong>端到端解决方案</strong>：提供完整的智能安全监控系统</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>Safety Helmet YOLO 项目成功实现了高精度的实时安全帽检测，为工业安全管理提供了有效的技术手段。通过深度学习技术的应用，我们不仅提高了安全监督的效率，也为构建智能化的安全生产环境奠定了基础。</p>
+<p>该项目展示了计算机视觉技术在工业安全领域的应用潜力，为相关从业者提供了宝贵的技术参考和实践经验。</p>
+<hr>
+<p><strong>相关标签</strong>: #YOLOv8 #目标检测 #深度学习 #计算机视觉 #工业安全 #项目分享</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2025-09-20</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/safety-helmet-yolo-detection/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO：基于深度学习的安全帽检测系统" data-hashtags="YOLOv8,目标检测,深度学习,计算机视觉,工业安全,项目分享"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" data-hashtag="YOLOv8"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO：基于深度学习的安全帽检测系统"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO：基于深度学习的安全帽检测系统"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/posts/safety-helmet-yolo-detection/" data-title="Safety Helmet YOLO：基于深度学习的安全帽检测系统"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/yolov8/">YOLOv8</a>,&nbsp;<a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a>,&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>,&nbsp;<a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">计算机视觉</a>,&nbsp;<a href="/tags/%E5%B7%A5%E4%B8%9A%E5%AE%89%E5%85%A8/">工业安全</a>,&nbsp;<a href="/tags/%E9%A1%B9%E7%9B%AE%E5%88%86%E4%BA%AB/">项目分享</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/vibe-coding-basics/" class="prev" rel="prev" title="Vibe Coding基础"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Vibe Coding基础</a>
+            <a href="/posts/yolo-deepsort-hunyuan3d-drone-tracking/" class="next" rel="next" title="YOLO&#43;DeepSORT&#43;Hunyuan3D 实现无人机实时目标跟踪项目">YOLO+DeepSORT+Hunyuan3D 实现无人机实时目标跟踪项目<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

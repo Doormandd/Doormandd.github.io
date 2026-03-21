@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具 - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/posts/ara-coverage-flight-path/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具">
+  <meta property="og:description" content="项目概述 Ara Coverage Flight Path 是一款基于 CesiumJS 开发的 Web 端无人机航测路径规划工具。它提供了直观的可视化界面，帮助用户快速规划高效的飞行路径，适用于各种航空摄影测量和遥感应用场景。
+核心功能 1. 测区ROI绘制 支持交互式多边形绘制 实时显示坐标和面积计算 灵活的编辑和调整功能 2. 智能路径规划 自动识别最长飞行边 生成边界矩形覆盖区域 Z字形飞行路径优化 3. 专业参数配置 传感器参数自定义 地面采样距离(GSD)计算 航向/旁向重叠度设置 4. 路径裁剪优化 ROI内外路径智能裁剪 精确的交点计算 可视化裁剪效果 技术实现 技术栈 前端框架: 原生 JavaScript &#43; HTML5 3D可视化: CesiumJS 1.115 几何算法: 自定义地理计算库 UI设计: 响应式布局 &#43; 现代交互 架构设计 模块化架构确保代码可维护性和可扩展性：
+app.js - 主应用程序逻辑 geometry-utils.js - 地理几何计算 flight-path.js - 航线生成算法 sensor-utils.js - 传感器参数计算 ui-manager.js - 用户界面管理 应用场景 1. 农业测绘 农作物生长监测 灌溉系统规划 精准农业管理 2.">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-03-09T00:00:00+08:00">
+    <meta property="article:modified_time" content="2024-03-09T00:00:00+08:00">
+    <meta property="article:tag" content="CesiumJS">
+    <meta property="article:tag" content="无人机">
+    <meta property="article:tag" content="航测">
+    <meta property="article:tag" content="路径规划">
+    <meta property="article:tag" content="地理信息系统">
+    <meta property="article:tag" content="WebGIS">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具">
+  <meta name="twitter:description" content="项目概述 Ara Coverage Flight Path 是一款基于 CesiumJS 开发的 Web 端无人机航测路径规划工具。它提供了直观的可视化界面，帮助用户快速规划高效的飞行路径，适用于各种航空摄影测量和遥感应用场景。
+核心功能 1. 测区ROI绘制 支持交互式多边形绘制 实时显示坐标和面积计算 灵活的编辑和调整功能 2. 智能路径规划 自动识别最长飞行边 生成边界矩形覆盖区域 Z字形飞行路径优化 3. 专业参数配置 传感器参数自定义 地面采样距离(GSD)计算 航向/旁向重叠度设置 4. 路径裁剪优化 ROI内外路径智能裁剪 精确的交点计算 可视化裁剪效果 技术实现 技术栈 前端框架: 原生 JavaScript &#43; HTML5 3D可视化: CesiumJS 1.115 几何算法: 自定义地理计算库 UI设计: 响应式布局 &#43; 现代交互 架构设计 模块化架构确保代码可维护性和可扩展性：
+app.js - 主应用程序逻辑 geometry-utils.js - 地理几何计算 flight-path.js - 航线生成算法 sensor-utils.js - 传感器参数计算 ui-manager.js - 用户界面管理 应用场景 1. 农业测绘 农作物生长监测 灌溉系统规划 精准农业管理 2.">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/posts/ara-coverage-flight-path/" /><link rel="prev" href="https://Doormandd.github.io/posts/smart-one-piece-video-analysis/" /><link rel="next" href="https://Doormandd.github.io/posts/gis-introduction/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/posts\/ara-coverage-flight-path\/"
+        },"genre": "posts","keywords": "CesiumJS, 无人机, 航测, 路径规划, 地理信息系统, WebGIS","wordcount":  180 ,
+        "url": "https:\/\/Doormandd.github.io\/posts\/ara-coverage-flight-path\/","datePublished": "2024-03-09T00:00:00+08:00","dateModified": "2024-03-09T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="查看所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="按标签浏览文章"> 标签 </a><a class="menu-item" href="/categories/" title="按分类浏览文章"> 分类 </a><a class="menu-item" href="/about/" title="关于本站"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/ara-coverage-flight-path/">English</option><option value="/posts/ara-coverage-flight-path/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="查看所有文章">所有文章</a><a class="menu-item" href="/tags/" title="按标签浏览文章">标签</a><a class="menu-item" href="/categories/" title="按分类浏览文章">分类</a><a class="menu-item" href="/about/" title="关于本站">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/ara-coverage-flight-path/">English</option><option value="/posts/ara-coverage-flight-path/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>技术</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-03-09">2024-03-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;约 180 字&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#项目概述">项目概述</a></li>
+    <li><a href="#核心功能">核心功能</a>
+      <ul>
+        <li><a href="#1-测区roi绘制">1. 测区ROI绘制</a></li>
+        <li><a href="#2-智能路径规划">2. 智能路径规划</a></li>
+        <li><a href="#3-专业参数配置">3. 专业参数配置</a></li>
+        <li><a href="#4-路径裁剪优化">4. 路径裁剪优化</a></li>
+      </ul>
+    </li>
+    <li><a href="#技术实现">技术实现</a>
+      <ul>
+        <li><a href="#技术栈">技术栈</a></li>
+        <li><a href="#架构设计">架构设计</a></li>
+      </ul>
+    </li>
+    <li><a href="#应用场景">应用场景</a>
+      <ul>
+        <li><a href="#1-农业测绘">1. 农业测绘</a></li>
+        <li><a href="#2-城市规划">2. 城市规划</a></li>
+        <li><a href="#3-环境监测">3. 环境监测</a></li>
+        <li><a href="#4-基础设施巡检">4. 基础设施巡检</a></li>
+      </ul>
+    </li>
+    <li><a href="#演示体验">演示体验</a>
+      <ul>
+        <li><a href="#快速体验步骤">快速体验步骤</a></li>
+      </ul>
+    </li>
+    <li><a href="#项目代码">项目代码</a></li>
+    <li><a href="#项目亮点">项目亮点</a>
+      <ul>
+        <li><a href="#1-专业的地理计算">1. 专业的地理计算</a></li>
+        <li><a href="#2-直观的用户界面">2. 直观的用户界面</a></li>
+        <li><a href="#3-高效的路径算法">3. 高效的路径算法</a></li>
+        <li><a href="#4-开放的技术架构">4. 开放的技术架构</a></li>
+      </ul>
+    </li>
+    <li><a href="#技术挑战与解决方案">技术挑战与解决方案</a>
+      <ul>
+        <li><a href="#1-复杂几何计算">1. 复杂几何计算</a></li>
+        <li><a href="#2-路径优化算法">2. 路径优化算法</a></li>
+        <li><a href="#3-用户交互体验">3. 用户交互体验</a></li>
+      </ul>
+    </li>
+    <li><a href="#详细功能说明">详细功能说明</a>
+      <ul>
+        <li><a href="#测区绘制与管理">测区绘制与管理</a></li>
+        <li><a href="#智能路径生成">智能路径生成</a></li>
+        <li><a href="#传感器参数计算">传感器参数计算</a></li>
+        <li><a href="#路径裁剪优化">路径裁剪优化</a></li>
+      </ul>
+    </li>
+    <li><a href="#未来计划">未来计划</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="项目概述">项目概述</h2>
+<p>Ara Coverage Flight Path 是一款基于 CesiumJS 开发的 Web 端无人机航测路径规划工具。它提供了直观的可视化界面，帮助用户快速规划高效的飞行路径，适用于各种航空摄影测量和遥感应用场景。</p>
+<h2 id="核心功能">核心功能</h2>
+<h3 id="1-测区roi绘制">1. 测区ROI绘制</h3>
+<ul>
+<li>支持交互式多边形绘制</li>
+<li>实时显示坐标和面积计算</li>
+<li>灵活的编辑和调整功能</li>
+</ul>
+<h3 id="2-智能路径规划">2. 智能路径规划</h3>
+<ul>
+<li>自动识别最长飞行边</li>
+<li>生成边界矩形覆盖区域</li>
+<li>Z字形飞行路径优化</li>
+</ul>
+<h3 id="3-专业参数配置">3. 专业参数配置</h3>
+<ul>
+<li>传感器参数自定义</li>
+<li>地面采样距离(GSD)计算</li>
+<li>航向/旁向重叠度设置</li>
+</ul>
+<h3 id="4-路径裁剪优化">4. 路径裁剪优化</h3>
+<ul>
+<li>ROI内外路径智能裁剪</li>
+<li>精确的交点计算</li>
+<li>可视化裁剪效果</li>
+</ul>
+<h2 id="技术实现">技术实现</h2>
+<h3 id="技术栈">技术栈</h3>
+<ul>
+<li><strong>前端框架</strong>: 原生 JavaScript + HTML5</li>
+<li><strong>3D可视化</strong>: CesiumJS 1.115</li>
+<li><strong>几何算法</strong>: 自定义地理计算库</li>
+<li><strong>UI设计</strong>: 响应式布局 + 现代交互</li>
+</ul>
+<h3 id="架构设计">架构设计</h3>
+<p>模块化架构确保代码可维护性和可扩展性：</p>
+<ul>
+<li><code>app.js</code> - 主应用程序逻辑</li>
+<li><code>geometry-utils.js</code> - 地理几何计算</li>
+<li><code>flight-path.js</code> - 航线生成算法</li>
+<li><code>sensor-utils.js</code> - 传感器参数计算</li>
+<li><code>ui-manager.js</code> - 用户界面管理</li>
+</ul>
+<h2 id="应用场景">应用场景</h2>
+<h3 id="1-农业测绘">1. 农业测绘</h3>
+<ul>
+<li>农作物生长监测</li>
+<li>灌溉系统规划</li>
+<li>精准农业管理</li>
+</ul>
+<h3 id="2-城市规划">2. 城市规划</h3>
+<ul>
+<li>建筑物三维建模</li>
+<li>城市更新监测</li>
+<li>基础设施规划</li>
+</ul>
+<h3 id="3-环境监测">3. 环境监测</h3>
+<ul>
+<li>森林资源调查</li>
+<li>水域污染监测</li>
+<li>自然灾害评估</li>
+</ul>
+<h3 id="4-基础设施巡检">4. 基础设施巡检</h3>
+<ul>
+<li>电力线路巡检</li>
+<li>管道检测</li>
+<li>道路网络监测</li>
+</ul>
+<h2 id="演示体验">演示体验</h2>
+<p>我们提供了完整的在线演示，让您无需安装任何软件即可体验 Ara Coverage Flight Path 的强大功能：</p>
+<p>🔗 <a href="/demo/ara-flight-planner/" rel=""><strong>在线演示地址</strong></a></p>
+<h3 id="快速体验步骤">快速体验步骤</h3>
+<ol>
+<li>打开演示页面</li>
+<li>点击&quot;开始绘制多边形&quot;创建测区</li>
+<li>调整传感器参数和重叠度</li>
+<li>生成并优化飞行路径</li>
+<li>查看路径裁剪效果</li>
+</ol>
+<!-- raw HTML omitted -->
+<h2 id="项目代码">项目代码</h2>
+<p>本项目已在GitHub上开源，欢迎访问、Star和贡献代码：</p>
+<p>🔗 <a href="https://github.com/Doormandd/Ara_Coverage_Flight_Path" target="_blank" rel="noopener noreffer "><strong>GitHub仓库地址</strong></a></p>
+<ul>
+<li>完整的源代码</li>
+<li>详细的README文档</li>
+<li>持续更新的功能</li>
+</ul>
+<h2 id="项目亮点">项目亮点</h2>
+<h3 id="1-专业的地理计算">1. 专业的地理计算</h3>
+<ul>
+<li>精确的球面几何计算</li>
+<li>地球曲率补偿算法</li>
+<li>多边形面积计算</li>
+</ul>
+<h3 id="2-直观的用户界面">2. 直观的用户界面</h3>
+<ul>
+<li>响应式设计适配各种设备</li>
+<li>直观的拖拽交互</li>
+<li>实时视觉反馈</li>
+</ul>
+<h3 id="3-高效的路径算法">3. 高效的路径算法</h3>
+<ul>
+<li>自动化路径生成</li>
+<li>最优重叠度计算</li>
+<li>智能路径裁剪</li>
+</ul>
+<h3 id="4-开放的技术架构">4. 开放的技术架构</h3>
+<ul>
+<li>模块化设计</li>
+<li>易于扩展</li>
+<li>完整的API文档</li>
+</ul>
+<h2 id="技术挑战与解决方案">技术挑战与解决方案</h2>
+<h3 id="1-复杂几何计算">1. 复杂几何计算</h3>
+<p><strong>挑战</strong>: 球面坐标系下的多边形操作、线段相交计算
+<strong>解决方案</strong>: 结合 CesiumJS 内置几何函数和自定义算法，确保计算精度</p>
+<h3 id="2-路径优化算法">2. 路径优化算法</h3>
+<p><strong>挑战</strong>: 在保证覆盖完整性的前提下最小化飞行距离
+<strong>解决方案</strong>: 实现Z字形路径算法，并添加ROI裁剪功能优化路径</p>
+<h3 id="3-用户交互体验">3. 用户交互体验</h3>
+<p><strong>挑战</strong>: 在3D环境下提供直观的2D绘制体验
+<strong>解决方案</strong>: 智能的地形跟随和视觉提示系统</p>
+<h2 id="详细功能说明">详细功能说明</h2>
+<h3 id="测区绘制与管理">测区绘制与管理</h3>
+<p>系统支持灵活的测区绘制方式，用户可以通过点击地图创建多边形顶点来定义感兴趣区域(ROI)。绘制完成后，系统会自动计算并显示测区的坐标信息和面积大小，支持多种面积单位（平方米、亩、平方公里）的显示。</p>
+<h3 id="智能路径生成">智能路径生成</h3>
+<p>基于测区ROI，系统会自动识别最长边作为主飞行方向，生成覆盖整个测区的边界矩形。用户可以根据传感器参数（如像素大小、焦距等）和飞行需求（如重叠度）来精确控制飞行路径的生成。</p>
+<h3 id="传感器参数计算">传感器参数计算</h3>
+<p>工具内置了专业的传感器参数计算模块，支持根据地面采样距离(GSD)、传感器尺寸、像素数量和焦距等参数自动计算飞行高度和地面覆盖范围，确保航拍数据的精度和质量。</p>
+<h3 id="路径裁剪优化">路径裁剪优化</h3>
+<p>针对不规则形状的测区，系统提供了智能路径裁剪功能，可以自动识别并保留ROI区域内的飞行路径段，减少不必要的飞行距离和时间，提高作业效率。</p>
+<!-- raw HTML omitted -->
+<h2 id="未来计划">未来计划</h2>
+<ul>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> 支持多测区管理</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> 添加地形分析功能</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> 实现路径导出为标准格式</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> 增加云端存储支持</li>
+<li><i class="far fa-square fa-fw" aria-hidden="true"></i> 开发移动端应用</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>Ara Coverage Flight Path 项目展示了现代WebGIS技术在专业领域的应用潜力。通过结合 CesiumJS 的强大3D可视化能力和自定义的地理算法，我们创建了一个功能完整、用户友好的航测规划工具。</p>
+<p>这个项目不仅解决了实际的航测规划需求，也为WebGIS开发者提供了宝贵的技术参考。专业的几何算法、直观的用户界面和高效的路径规划能力，使其成为无人机航测领域的实用工具。</p>
+<hr>
+<p><strong>相关标签</strong>: #CesiumJS #无人机 #航测 #路径规划 #地理信息系统 #WebGIS</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2024-03-09</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/ara-coverage-flight-path/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具" data-hashtags="CesiumJS,无人机,航测,路径规划,地理信息系统,WebGIS"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/posts/ara-coverage-flight-path/" data-hashtag="CesiumJS"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://Doormandd.github.io/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/posts/ara-coverage-flight-path/" data-title="Ara Coverage Flight Path：基于CesiumJS的无人机航测路径规划工具"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/cesiumjs/">CesiumJS</a>,&nbsp;<a href="/tags/%E6%97%A0%E4%BA%BA%E6%9C%BA/">无人机</a>,&nbsp;<a href="/tags/%E8%88%AA%E6%B5%8B/">航测</a>,&nbsp;<a href="/tags/%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92/">路径规划</a>,&nbsp;<a href="/tags/%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F/">地理信息系统</a>,&nbsp;<a href="/tags/webgis/">WebGIS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/smart-one-piece-video-analysis/" class="prev" rel="prev" title="智能视频分析系统：从相机AI到UAV流估计"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>智能视频分析系统：从相机AI到UAV流估计</a>
+            <a href="/posts/gis-introduction/" class="next" rel="next" title="GIS地理信息系统介绍">GIS地理信息系统介绍<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

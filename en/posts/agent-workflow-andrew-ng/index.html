@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Andrew Ng: Agent Workflows and Four Main Design Patterns - DR&#39;s个人网页</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/">
+  <meta property="og:site_name" content="DR&#39;s个人网页">
+  <meta property="og:title" content="Andrew Ng: Agent Workflows and Four Main Design Patterns">
+  <meta property="og:description" content="In this sharing session, Professor Andrew Ng introduced the development trends of Agents and four main Agent design patterns. These design patterns represent significant progress in the field of artificial intelligence and will dramatically expand the capabilities of AI.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-01T00:00:00+08:00">
+    <meta property="article:modified_time" content="2025-02-01T00:00:00+08:00">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="Agent">
+    <meta property="article:tag" content="Andrew Ng">
+    <meta property="article:tag" content="LLM">
+    <meta property="article:tag" content="Artificial Intelligence">
+    <meta property="article:tag" content="Workflow">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Andrew Ng: Agent Workflows and Four Main Design Patterns">
+  <meta name="twitter:description" content="In this sharing session, Professor Andrew Ng introduced the development trends of Agents and four main Agent design patterns. These design patterns represent significant progress in the field of artificial intelligence and will dramatically expand the capabilities of AI.">
+<meta name="application-name" content="DR&#39;s个人网页">
+<meta name="apple-mobile-web-app-title" content="DR&#39;s个人网页"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" /><link rel="prev" href="https://Doormandd.github.io/en/posts/gis-introduction/" /><link rel="next" href="https://Doormandd.github.io/en/posts/yolov8-phone-holder-detection/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Andrew Ng: Agent Workflows and Four Main Design Patterns",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Doormandd.github.io\/en\/posts\/agent-workflow-andrew-ng\/"
+        },"genre": "posts","keywords": "AI, Agent, Andrew Ng, LLM, Artificial Intelligence, Workflow","wordcount":  860 ,
+        "url": "https:\/\/Doormandd.github.io\/en\/posts\/agent-workflow-andrew-ng\/","datePublished": "2025-02-01T00:00:00+08:00","dateModified": "2025-02-01T00:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "DR"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/" title="View all posts"> Posts </a><a class="menu-item" href="/en/tags/" title="Browse by tags"> Tags </a><a class="menu-item" href="/en/categories/" title="Browse by categories"> Categories </a><a class="menu-item" href="/en/about/" title="About this site"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/agent-workflow-andrew-ng/" selected>English</option><option value="/posts/agent-workflow-andrew-ng/">简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="DR&#39;s个人网页">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="View all posts">Posts</a><a class="menu-item" href="/en/tags/" title="Browse by tags">Tags</a><a class="menu-item" href="/en/categories/" title="Browse by categories">Categories</a><a class="menu-item" href="/en/about/" title="About this site">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/agent-workflow-andrew-ng/" selected>English</option><option value="/posts/agent-workflow-andrew-ng/">简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Andrew Ng: Agent Workflows and Four Main Design Patterns</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/en/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>DR</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/technology/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Technology</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-02-01">2025-02-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;860 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/01-andrew-ng.jpg"
+        data-srcset="/images/agent-workflow/01-andrew-ng.jpg, /images/agent-workflow/01-andrew-ng.jpg 1.5x, /images/agent-workflow/01-andrew-ng.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/01-andrew-ng.jpg"
+        title="/images/agent-workflow/01-andrew-ng.jpg" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#four-main-agent-design-patterns">Four Main Agent Design Patterns</a>
+      <ul>
+        <li><a href="#1-reflection">1. Reflection</a></li>
+        <li><a href="#2-tool-use">2. Tool Use</a></li>
+        <li><a href="#3-planning">3. Planning</a></li>
+        <li><a href="#4-multi-agent-collaboration">4. Multi-Agent Collaboration</a></li>
+      </ul>
+    </li>
+    <li><a href="#key-insights">Key Insights</a>
+      <ul>
+        <li><a href="#1-performance-beyond-the-model-itself">1. Performance Beyond the Model Itself</a></li>
+        <li><a href="#2-need-to-change-usage-habits">2. Need to Change Usage Habits</a></li>
+        <li><a href="#3-importance-of-fast-token-generation">3. Importance of Fast Token Generation</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-outlook">Future Outlook</a>
+      <ul>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#the-journey-to-agi">The Journey to AGI</a></li>
+      </ul>
+    </li>
+    <li><a href="#recommended-reading">Recommended Reading</a>
+      <ul>
+        <li><a href="#academic-papers">Academic Papers</a></li>
+        <li><a href="#open-source-projects">Open Source Projects</a></li>
+      </ul>
+    </li>
+    <li><a href="#resource-download">Resource Download</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>In this sharing session, Professor Andrew Ng introduced the development trends of Agents and four main Agent design patterns. These design patterns represent significant progress in the field of artificial intelligence and will dramatically expand the capabilities of AI.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Andrew Ng shared his insights about Agent trends at the Sequoia China AI event. He pointed out that unlike the traditional way of using LLMs, the Agent workflow is more iterative and conversational. This means AI is no longer simply outputting answers in one go, but can think, reflect, revise, and gradually improve results.</p>
+<h2 id="four-main-agent-design-patterns">Four Main Agent Design Patterns</h2>
+<p>Andrew Ng introduced four key Agent design patterns:</p>
+<h3 id="1-reflection">1. Reflection</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/01-andrew-ng.jpg"
+        data-srcset="/images/agent-workflow/01-andrew-ng.jpg, /images/agent-workflow/01-andrew-ng.jpg 1.5x, /images/agent-workflow/01-andrew-ng.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/01-andrew-ng.jpg"
+        title="/images/agent-workflow/01-andrew-ng.jpg" /></p>
+<p>Let the Agent leverage and optimize its own generated output. This is one of the <strong>most important design patterns</strong>. LLMs can review their output, critique it, and then modify it.</p>
+<p><strong>Real-world impact</strong>: By having LLMs think→generate→critique→revise in a loop, output quality can be significantly improved. Even using older models, the reflection pattern can achieve performance close to the latest models.</p>
+<p><strong>Related Research</strong>:</p>
+<ul>
+<li>Self-Refine: Towards Reflexive Language Models</li>
+<li>Reflexion: Language Agents with Verbal Reinforcement Learning</li>
+<li>OpenAI&rsquo;s o1 series has built-in this capability</li>
+</ul>
+<h3 id="2-tool-use">2. Tool Use</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/02-four-design-patterns.jpg"
+        data-srcset="/images/agent-workflow/02-four-design-patterns.jpg, /images/agent-workflow/02-four-design-patterns.jpg 1.5x, /images/agent-workflow/02-four-design-patterns.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/02-four-design-patterns.jpg"
+        title="/images/agent-workflow/02-four-design-patterns.jpg" /></p>
+<p>LLMs generate code and call APIs to perform actual operations. This enables AI to extend its capability boundaries and perform complex tasks.</p>
+<p><strong>Typical Applications</strong>:</p>
+<ul>
+<li>Web search and information analysis</li>
+<li>Image processing and object detection</li>
+<li>Calling external APIs to complete tasks</li>
+</ul>
+<p><strong>Evolution</strong>: Early tool use focused primarily on computer vision because LLMs couldn&rsquo;t understand images. Now with multimodal models like GPT-4, tool use is more widespread and powerful.</p>
+<h3 id="3-planning">3. Planning</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/06-planning-example.jpg"
+        data-srcset="/images/agent-workflow/06-planning-example.jpg, /images/agent-workflow/06-planning-example.jpg 1.5x, /images/agent-workflow/06-planning-example.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/06-planning-example.jpg"
+        title="/images/agent-workflow/06-planning-example.jpg" /></p>
+<p>Let the Agent handle complex tasks and execute according to a plan. Agents can break down large tasks into multiple steps and complete them gradually.</p>
+<p><strong>Example</strong>: Generate an image where a girl is reading a book, with the same pose as the boy in example.jpg, and describe the new image with voice. The Agent needs to:</p>
+<ol>
+<li>Determine the boy&rsquo;s pose</li>
+<li>Find the correct pose model</li>
+<li>Synthesize a girl&rsquo;s image</li>
+<li>Use image detection</li>
+<li>Use text-to-speech</li>
+</ol>
+<p><strong>Characteristics</strong>: While not always reliable, when it works, the effect is amazing. When it fails, the Agent can try other approaches with self-healing capabilities.</p>
+<h3 id="4-multi-agent-collaboration">4. Multi-Agent Collaboration</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/07-multiagent-collaboration.jpg"
+        data-srcset="/images/agent-workflow/07-multiagent-collaboration.jpg, /images/agent-workflow/07-multiagent-collaboration.jpg 1.5x, /images/agent-workflow/07-multiagent-collaboration.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/07-multiagent-collaboration.jpg"
+        title="/images/agent-workflow/07-multiagent-collaboration.jpg" /></p>
+<p>Multiple Agents collaborate by playing different roles to complete tasks together. This simulates how real teams work.</p>
+<p><strong>Performance Improvement</strong> (Du et al., 2023):</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Single Agent</th>
+<th>Multi-Agent Collaboration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Biographies</td>
+<td>66.0%</td>
+<td>73.8%</td>
+</tr>
+<tr>
+<td>MMLU</td>
+<td>63.9%</td>
+<td>71.1%</td>
+</tr>
+<tr>
+<td>Chess move</td>
+<td>29.3%</td>
+<td>45.2%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Real-world Application</strong>: The ChatDev project simulates a software company with Agents playing roles as CEO, software engineer, product manager, and tester. They can collaboratively develop complex software programs.</p>
+<h2 id="key-insights">Key Insights</h2>
+<h3 id="1-performance-beyond-the-model-itself">1. Performance Beyond the Model Itself</h3>
+<p><strong>Surprising Discovery</strong>: GPT-3.5 using an agentic workflow can outperform zero-shot GPT-4 on some tasks.</p>
+<p><strong>Coding Benchmark Test (HumanEval)</strong>:</p>
+<ul>
+<li>GPT-3.5 (zero-shot): 48% accuracy</li>
+<li>GPT-4 (zero-shot): 67.7% accuracy</li>
+<li><strong>GPT-3.5 (agentic workflow): &gt;67.7% accuracy</strong></li>
+</ul>
+<h3 id="2-need-to-change-usage-habits">2. Need to Change Usage Habits</h3>
+<p><strong>From Instant Feedback to Patient Waiting</strong>:</p>
+<ul>
+<li>Traditional web search: Expect response within 30 minutes</li>
+<li>Agentic workflow: May take hours or even longer</li>
+</ul>
+<p><strong>Advice</strong>: Learn to delegate tasks to AI agents and wait patiently. Don&rsquo;t demand instant feedback like you would from humans.</p>
+<h3 id="3-importance-of-fast-token-generation">3. Importance of Fast Token Generation</h3>
+<p><strong>Key Conclusion</strong>: Fast token generation is very important. Even on lower-quality LLMs, generating more tokens can achieve results comparable to fewer tokens from higher-quality LLMs.</p>
+<h2 id="future-outlook">Future Outlook</h2>
+<h3 id="summary">Summary</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/agent-workflow/08-conclusion.jpg"
+        data-srcset="/images/agent-workflow/08-conclusion.jpg, /images/agent-workflow/08-conclusion.jpg 1.5x, /images/agent-workflow/08-conclusion.jpg 2x"
+        data-sizes="auto"
+        alt="/images/agent-workflow/08-conclusion.jpg"
+        title="/images/agent-workflow/08-conclusion.jpg" /></p>
+<p>Andrew Ng&rsquo;s four core points:</p>
+<ol>
+<li><strong>Dramatic Expansion of Tasks</strong>: Because of agentic workflows, the tasks AI can complete will expand dramatically in the coming years</li>
+<li><strong>Learn to Delegate</strong>: We need to get used to delegating tasks to AI agents and patiently waiting for responses</li>
+<li><strong>Speed Matters</strong>: Fast token generation; even generating more tokens from a lower-quality LLM can give good results</li>
+<li><strong>No Need to Wait for New Models</strong>: If you&rsquo;re looking forward to GPT-5/Claude 4/Gemini 2.0, you might already be able to get similar performance with agentic reasoning on earlier models</li>
+</ol>
+<h3 id="the-journey-to-agi">The Journey to AGI</h3>
+<p>Andrew Ng frankly admits that the road to AGI (Artificial General Intelligence) feels more like a <strong>journey than a destination</strong>. But these four Agent workflows may help us take a big step forward on this long journey.</p>
+<p><strong>Technical Reality</strong>: These design patterns don&rsquo;t always work perfectly. Sometimes they fail, sometimes they&rsquo;re amazing. But the technology is constantly improving, and each improvement makes AI more powerful.</p>
+<h2 id="recommended-reading">Recommended Reading</h2>
+<h3 id="academic-papers">Academic Papers</h3>
+<ul>
+<li><strong>Gorilla</strong>: Large Language Model Connected with Massive APIs, Patil et al. (2023)</li>
+<li><strong>MM-REACT</strong>: Prompting ChatGPT for Multimodal Reasoning and Action, Yang et al. (2023)</li>
+<li><strong>Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</strong>, Wei et al. (2022)</li>
+<li><strong>HuggingGPT</strong>: Solving AI Tasks with ChatGPT and its Friends in Hugging Face, Shen et al. (2023)</li>
+<li><strong>Communicative Agents for Software Development</strong>, Qian et al. (2023)</li>
+<li><strong>AutoGen</strong>: Enabling Next-Gen LLM Applications via Multi-Agent Conversation, Wu et al. (2023)</li>
+</ul>
+<h3 id="open-source-projects">Open Source Projects</h3>
+<ul>
+<li><strong>ChatDev</strong>: Multi-agent system for software development</li>
+<li><strong>OpenAI o1</strong>: Built-in reflection capability</li>
+<li>Various Agent frameworks supporting tool use and planning</li>
+</ul>
+<h2 id="resource-download">Resource Download</h2>
+<p>📄 <strong><a href="/files/agent-workflow-andrew-ng.pdf" rel="">Download Complete PDF Version</a></strong></p>
+<p>The PDF contains the complete presentation content, all slides, and example code, suitable for in-depth study and sharing.</p>
+<hr>
+<p><strong>Special Thanks</strong>: Joaquin Dominguez and John Santerre for help with analysis.</p>
+<p><strong>Author</strong>: Andrew Ng</p>
+<p><strong>Sharing Date</strong>: February 1, 2025</p>
+<p><strong>Tags</strong>: #AI #Agent #AndrewNg #LLM #ArtificialIntelligence #Workflow</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-02-01</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/en/posts/agent-workflow-andrew-ng/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" data-title="Andrew Ng: Agent Workflows and Four Main Design Patterns" data-hashtags="AI,Agent,Andrew Ng,LLM,Artificial Intelligence,Workflow"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" data-hashtag="AI"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" data-title="Andrew Ng: Agent Workflows and Four Main Design Patterns"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" data-title="Andrew Ng: Agent Workflows and Four Main Design Patterns"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://Doormandd.github.io/en/posts/agent-workflow-andrew-ng/" data-title="Andrew Ng: Agent Workflows and Four Main Design Patterns" data-image="/images/agent-workflow/01-andrew-ng.jpg"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/ai/">AI</a>,&nbsp;<a href="/en/tags/agent/">Agent</a>,&nbsp;<a href="/en/tags/andrew-ng/">Andrew Ng</a>,&nbsp;<a href="/en/tags/llm/">LLM</a>,&nbsp;<a href="/en/tags/artificial-intelligence/">Artificial Intelligence</a>,&nbsp;<a href="/en/tags/workflow/">Workflow</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/gis-introduction/" class="prev" rel="prev" title="Introduction to Geographic Information Systems (GIS)"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Introduction to Geographic Information Systems (GIS)</a>
+            <a href="/en/posts/yolov8-phone-holder-detection/" class="next" rel="next" title="YOLOv8 Phone Holder Detection Project">YOLOv8 Phone Holder Detection Project<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.131.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">DR</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/en/index.json","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

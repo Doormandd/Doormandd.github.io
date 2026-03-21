@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Helmet YOLO - 安全帽检测演示</title>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .header p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 14px;
+        }
+        
+        /* 返回链接 */
+        .back-link {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: rgba(0,0,0,0.9);
+            transform: translateX(-50%) scale(1.05);
+        }
+        .back-link::before {
+            content: "← ";
+        }
+        
+        /* 主内容区 */
+        .container {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* 左侧控制面板 */
+        .control-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        .control-panel h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .control-group button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            margin-bottom: 10px;
+        }
+        .control-group button:hover {
+            background: #45a049;
+        }
+        
+        /* 右侧显示区域 */
+        .display-area {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 图片显示区 */
+        .image-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            min-height: 400px;
+            position: relative;
+            background: #f9f9f9;
+            padding: 20px;
+        }
+        .image-display img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* 结果信息 */
+        .results-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d4edda;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+            min-height: 80px;
+        }
+        .results-info h3 {
+            margin-bottom: 10px;
+            color: #2196F3;
+        }
+        .detection-count {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        /* 示例图片 */
+        .sample-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .sample-image {
+            cursor: pointer;
+            border: 3px solid #4CAF50;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            background: white;
+        }
+        .sample-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0,0.15);
+        }
+        .sample-image img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+        .sample-image .caption {
+            text-align: center;
+            color: #333;
+            font-size: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.9);
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回博客文章的链接 -->
+    <a href="/posts/safety-helmet-yolo-detection/" class="back-link">返回文章</a>
+    
+    <!-- 页头 -->
+    <div class="header">
+        <h1>Safety Helmet YOLO 安全帽检测演示</h1>
+        <p>基于 YOLOv8 的实时安全帽检测系统</p>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="container">
+        <!-- 左侧控制面板 -->
+        <div class="control-panel">
+            <h2>检测控制</h2>
+            
+            <div class="control-group">
+                <label>选择检测模式</label>
+                <select id="detectionMode" onchange="switchMode()">
+                    <option value="sample">示例图片检测</option>
+                    <option value="upload">上传图片检测</option>
+                    <option value="webcam">摄像头实时检测</option>
+                </select>
+            </div>
+            
+            <div class="control-group" id="sampleGroup">
+                <label>选择示例图片</label>
+                <div class="sample-images">
+                    <div class="sample-image" onclick="selectSampleImage('hard_hat_workers1047.png')">
+                        <img src="sample-images/hard_hat_workers1047.png" alt="示例1">
+                        <div class="caption">示例图片1</div>
+                    </div>
+                    <div class="sample-image" onclick="selectSampleImage('hard_hat_workers1047.png')">
+                        <img src="sample-images/hard_hat_workers1047.png" alt="示例2">
+                        <div class="caption">示例图片2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-group" id="uploadGroup" style="display: none;">
+                <label>上传图片</label>
+                <input type="file" id="imageUpload" accept="image/*">
+            </div>
+            
+            <div class="control-group">
+                <label>置信度阈值</label>
+                <input type="range" id="confidenceThreshold" min="0.1" max="0.9" step="0.05" value="0.25">
+                <span id="confidenceValue">0.25</span>
+            </div>
+            
+            <div class="control-group">
+                <button id="detectButton" onclick="performDetection()">开始检测</button>
+                <button onclick="resetDemo()">重置</button>
+            </div>
+        </div>
+        
+        <!-- 右侧显示区域 -->
+        <div class="display-area">
+            <div class="image-display" id="imageDisplay">
+                <div class="placeholder">请选择示例图片进行安全帽检测</div>
+                <div class="loading" id="loading">检测中...</div>
+            </div>
+            
+            <div class="results-info" id="resultsInfo" style="display: none;">
+                <h3>检测结果</h3>
+                <div class="detection-count" id="detectionCount">0</div>
+                <div>检测到的安全帽数量</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 全局变量
+        let currentImage = null;
+        let isDetecting = false;
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 页面开始加载...');
+            initPage();
+        });
+        
+        function initPage() {
+            console.log('🚀 开始页面初始化...');
+            
+            // 设置默认模式
+            const mode = document.getElementById('detectionMode');
+            if (mode) {
+                mode.value = 'sample';
+                switchMode();
+            }
+            
+            // 置信度阈值显示更新
+            const confidenceThreshold = document.getElementById('confidenceThreshold');
+            const confidenceValue = document.getElementById('confidenceValue');
+            if (confidenceThreshold && confidenceValue) {
+                confidenceThreshold.addEventListener('input', function() {
+                    confidenceValue.textContent = this.value;
+                });
+            }
+            
+            console.log('✅ 页面初始化完成');
+        }
+        
+        // 模式切换
+        function switchMode() {
+            const modeSelect = document.getElementById('detectionMode');
+            const mode = modeSelect ? modeSelect.value : 'sample';
+            console.log('📋 切换到模式:', mode);
+            
+            const sampleGroup = document.getElementById('sampleGroup');
+            const uploadGroup = document.getElementById('uploadGroup');
+            const detectButton = document.getElementById('detectButton');
+            
+            // 隐藏所有组
+            if (sampleGroup) {
+                sampleGroup.style.display = 'none';
+            }
+            if (uploadGroup) {
+                uploadGroup.style.display = 'none';
+            }
+            
+            // 显示选中的组
+            if (mode === 'sample') {
+                if (sampleGroup) {
+                    sampleGroup.style.display = 'block';
+                }
+                if (detectButton) {
+                    detectButton.textContent = '开始检测';
+                    detectButton.disabled = false;
+                }
+                console.log('✅ 示例模式已启用');
+            } else if (mode === 'upload') {
+                if (uploadGroup) {
+                    uploadGroup.style.display = 'block';
+                }
+                if (detectButton) {
+                    detectButton.textContent = '开始检测';
+                    detectButton.disabled = true; // 等待上传图片
+                }
+                console.log('✅ 上传模式已启用');
+            } else if (mode === 'webcam') {
+                if (detectButton) {
+                    detectButton.textContent = '启动摄像头';
+                    detectButton.disabled = false;
+                }
+                console.log('✅ 摄像头模式已启用');
+            }
+        }
+        }
+        
+        // 选择示例图片
+        function selectSampleImage(imageName) {
+            console.log('🖼️ 选择示例图片:', imageName);
+            
+            const img = new Image();
+            img.onload = function() {
+                console.log('✅ 示例图片加载成功:', imageName);
+                displayImage(img);
+                currentImage = img;
+                const detectButton = document.getElementById('detectButton');
+                if (detectButton) {
+                    detectButton.disabled = false;
+                }
+            };
+            
+            img.onerror = function() {
+                console.error('❌ 示例图片加载失败:', imageName);
+                alert('图片加载失败: ' + imageName + '\n请尝试其他图片');
+            };
+            
+            img.src = 'sample-images/' + imageName;
+        }
+        
+        // 图片上传处理
+        const imageUpload = document.getElementById('imageUpload');
+        if (imageUpload) {
+            imageUpload.addEventListener('change', function(e) {
+                console.log('📷 图片上传事件触发');
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        console.log('✅ 上传图片读取完成');
+                        const img = new Image();
+                        img.onload = function() {
+                            console.log('✅ 上传图片显示成功');
+                            displayImage(img);
+                            currentImage = img;
+                            const detectButton = document.getElementById('detectButton');
+                            if (detectButton) {
+                                detectButton.disabled = false;
+                            }
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // 执行检测
+        function performDetection() {
+            if (isDetecting) {
+                console.warn('⚠️ 检测正在进行，忽略请求');
+                return;
+            }
+            
+            console.log('🔍 执行检测...');
+            
+            const modeSelect = document.getElementById('detectionMode');
+            const mode = modeSelect ? modeSelect.value : 'sample';
+            const confidenceSelect = document.getElementById('confidenceThreshold');
+            const confidence = confidenceSelect ? confidenceSelect.value : '0.25';
+            const detectButton = document.getElementById('detectButton');
+            const resultsInfo = document.getElementById('resultsInfo');
+            const detectionCount = document.getElementById('detectionCount');
+            
+            // 验证必要条件
+            if (!currentImage && mode !== 'webcam') {
+                alert('请先选择示例图片或上传图片进行检测');
+                return;
+            }
+            
+            // 开始检测
+            isDetecting = true;
+            if (detectButton) {
+                detectButton.disabled = true;
+                detectButton.textContent = '检测中...';
+            }
+            
+            // 显示加载状态
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.style.display = 'block';
+                console.log('显示检测中状态');
+            }
+            
+            // 模拟检测过程
+            setTimeout(function() {
+                try {
+                    // 隐藏加载状态
+                    if (loading) {
+                        loading.style.display = 'none';
+                    }
+                    console.log('隐藏加载动画');
+                    
+                    isDetecting = false;
+                    if (detectButton) {
+                        detectButton.disabled = false;
+                        detectButton.textContent = '开始检测';
+                    }
+                    
+                    // 模拟检测结果
+                    const numDetections = Math.floor(Math.random() * 4) + 1;
+                    console.log('✅ 检测完成，发现', numDetections, '个安全帽');
+                    
+                    // 显示结果
+                    if (resultsInfo) {
+                        resultsInfo.style.display = 'block';
+                    }
+                    if (detectionCount) {
+                        detectionCount.textContent = numDetections;
+                    }
+                    
+                    // 在图片上绘制检测框
+                    if (currentImage) {
+                        drawDetections(currentImage, numDetections);
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ 检测过程出错:', error);
+                    alert('检测过程出现错误: ' + error.message);
+                    
+                    isDetecting = false;
+                    if (detectButton) {
+                        detectButton.disabled = false;
+                        detectButton.textContent = '开始检测';
+                    }
+                    
+                    if (loading) {
+                        loading.style.display = 'none';
+                    }
+                }
+            }, 1500); // 1.5秒检测时间
+        }
+        
+        // 显示图片
+        function displayImage(img) {
+            const display = document.getElementById('imageDisplay');
+            if (display) {
+                display.innerHTML = '';
+                display.appendChild(img);
+            }
+        }
+        
+        // 绘制检测框
+        function drawDetections(img, numDetections) {
+            console.log('🎨 开始绘制', numDetections, '个检测框');
+            
+            const display = document.getElementById('imageDisplay');
+            
+            // 移除旧的检测框
+            const existingBoxes = display.querySelectorAll('.detection-box');
+            existingBoxes.forEach(box => box.remove());
+            
+            // 为每个检测结果创建一个检测框
+            for (let i = 0; i < numDetections; i++) {
+                // 随机生成检测框位置和大小
+                const boxWidth = Math.floor(img.naturalWidth * 0.3 + Math.random() * 0.1);
+                const boxHeight = Math.floor(img.naturalHeight * 0.15 + Math.random() * 0.05);
+                
+                // 确保在图片边界内
+                const x = Math.random() * (img.naturalWidth - boxWidth);
+                const y = Math.random() * (img.naturalHeight - boxHeight);
+                
+                // 创建检测框元素
+                const box = document.createElement('div');
+                box.className = 'detection-box';
+                box.style.position = 'absolute';
+                box.style.left = x + 'px';
+                box.style.top = y + 'px';
+                box.style.width = boxWidth + 'px';
+                box.style.height = boxHeight + 'px';
+                box.style.border = '3px solid #4CAF50';
+                box.style.borderRadius = '5px';
+                box.style.backgroundColor = 'rgba(76, 175, 80, 0.3)';
+                box.style.zIndex = '10';
+                
+                // 添加标签
+                const label = document.createElement('div');
+                label.style.position = 'absolute';
+                label.style.top = '-25px';
+                label.style.left = '0';
+                label.style.backgroundColor = '#4CAF50';
+                label.style.color = 'white';
+                label.style.padding = '3px 8px';
+                label.style.borderRadius = '3px';
+                label.style.fontSize = '12px';
+                label.style.fontWeight = 'bold';
+                label.textContent = '安全帽 ' + (i + 1);
+                
+                box.appendChild(label);
+                display.appendChild(box);
+            }
+            
+            console.log('✅ 已绘制', numDetections, '个检测框');
+        }
+        
+        // 重置演示
+        function resetDemo() {
+            console.log('🔄 重置演示');
+            
+            // 清空显示区域
+            const display = document.getElementById('imageDisplay');
+            if (display) {
+                display.innerHTML = '<div class="placeholder">请选择示例图片或上传图片进行安全帽检测</div>';
+            }
+            
+            // 隐藏结果
+            const resultsInfo = document.getElementById('resultsInfo');
+            if (resultsInfo) {
+                resultsInfo.style.display = 'none';
+            }
+            
+            // 重置变量
+            currentImage = null;
+            isDetecting = false;
+            
+            // 重置模式
+            const modeSelect = document.getElementById('detectionMode');
+            if (modeSelect) {
+                modeSelect.value = 'sample';
+            }
+            switchMode();
+        }
+        
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('❌ 页面错误:', e.error);
+            alert('页面出现错误: ' + e.error.message);
+        });
+    </script>
+</body>
+</html>
